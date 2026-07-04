@@ -3,7 +3,7 @@
     <body style="margin: 0; display: flex; justify-content: center; ;">
         <main style="min-height: calc(100vh - 1rem); width: 75%; display: grid; grid-template-columns: auto auto auto auto auto; padding-top: 1rem; gap: 1rem;">
             <?php
-                require_once '../models/Game.php';
+                require_once 'models/Game.php';
 
                 $games = [
                     new Game('Game 1', 'This is game 1.', '', [Platform::Windows]),
@@ -25,7 +25,7 @@
 
                 foreach ($games as $game)
                 {
-                    include '../components/game-card.php';
+                    include 'components/game-card.php';
                 }
             ?>
         </main>
