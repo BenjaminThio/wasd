@@ -1,33 +1,22 @@
-<!DOCTYPE html>
-<html style="font-family: monospace">
-    <body style="margin: 0; display: flex; justify-content: center; ;">
-        <main style="min-height: calc(100vh - 1rem); width: 75%; display: grid; grid-template-columns: auto auto auto auto auto; padding-top: 1rem; gap: 1rem;">
-            <?php
-                require_once 'models/Game.php';
+<link rel="stylesheet" href="./css/game-listing.css">
+<main class="main-container">
+    <?php
+        use Random\Randomizer;
+        require_once 'models/Game.php';
 
-                $games = [
-                    new Game('Game 1', 'This is game 1.', '', [Platform::Windows]),
-                    new Game('Game 2', 'This is idk.', '', [Platform::Windows, Platform::Linux]),
-                    new Game('Game 3', 'This is a game.', '', [Platform::Android]),
-                    new Game('Game 4', 'This is Benjamin.', '', [Platform::Linux, Platform::MacOS, Platform::Browser]),
-                    new Game('Game 5', 'Hello Mum!', '', [Platform::Browser]),
-                    new Game('Game 5', 'Hello Mum!', '', [Platform::Browser]),
-                    new Game('Game 5', 'Hello Mum!', '', [Platform::Browser]),
-                    new Game('Game 5', 'Hello Mum!', '', [Platform::Browser]),
-                    new Game('Game 5', 'Hello Mum!', '', [Platform::Browser]),
-                    new Game('Game 5', 'Hello Mum!', '', [Platform::Browser]),
-                    new Game('Game 5', 'Hello Mum!', '', [Platform::Browser]),
-                    new Game('Game 5', 'Hello Mum!', '', [Platform::Browser]),
-                    new Game('Game 5', 'Hello Mum!', '', [Platform::Browser]),
-                    new Game('Game 5', 'Hello Mum!', '', [Platform::Browser]),
-                    new Game('Game 5', 'Hello Mum!', '', [Platform::Browser])
-                ];
+        $randomizer = new Randomizer();
+        $games = [];
 
-                foreach ($games as $game)
-                {
-                    include 'components/game-card.php';
-                }
-            ?>
-        </main>
-    </body>
-</html>
+        for ($i = 1; $i <= 11; $i++)
+        {
+            $games[] = new Game("Game $i", 'This is a game that able to let you feel happy. I have to test the text overflow Ellipsis for awhile.', '', $randomizer->getFloat(0.0, 520.0), []);
+        }
+
+        foreach ($games as $game)
+        {
+            $randomArt = rand(1, 8);
+            $randomStatus = rand(0, 2);
+            include 'components/game-card.php';
+        }
+    ?>
+</main>

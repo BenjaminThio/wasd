@@ -1,0 +1,183 @@
+@import url('global.css');
+
+:root
+{
+    --magenta: rgb(223, 0, 111);
+    --dark-magenta: rgba(209, 28, 130, 0.4);
+    --green: rgb(21, 193, 81);
+    --dark-green: rgba(15, 185, 34, 0.355);
+    --blue: rgb(100, 172, 255);
+    --dark-blue: rgba(29, 161, 255, 0.403);
+    --yellow: rgb(255, 183, 100);
+    --dark-yellow: rgba(255, 172, 29, 0.403);
+    --purple: rgb(146, 37, 255);
+    --dark-purple: rgba(91, 6, 134, 0.403);
+}
+
+.light-bulb {
+	background: #00000000;
+	height: 0.5rem;
+	aspect-ratio: 1;
+	border-radius: 50%;
+	box-shadow: inset 0 0 0.12rem 0.12rem #c8c8c8;
+}
+
+.red-light-bulb {
+	background: #ff0000;
+	height: 0.5rem;
+	aspect-ratio: 1;
+	border-radius: 50%;
+	box-shadow: inset 0 0 0.12rem 0.12rem #ffc8c8, 0 0 0.5rem 0.25rem #ff0000ff;
+}
+
+.orange-light-bulb {
+	background: #ffa500;
+	height: 0.5rem;
+	aspect-ratio: 1;
+	border-radius: 50%;
+	box-shadow: inset 0 0 0.12rem 0.12rem #ffffc8, 0 0 0.5rem 0.25rem #ffa500ff;
+}
+
+.green-light-bulb {
+	background: #00ff7f;
+	height: 0.5rem;
+	aspect-ratio: 1;
+	border-radius: 50%;
+	box-shadow: inset 0 0 0.12rem 0.12rem #c8ffff, 0 0 0.5rem 0.25rem #00ff7fff;
+}
+
+.green {
+    background-color: var(--dark-green);
+    color: var(--green);
+    border: 1px solid var(--green);
+}
+
+.magenta {
+    background-color: var(--dark-magenta);
+    color: var(--magenta);
+    border: 1px solid var(--magenta);
+}
+
+.blue {
+    background-color: var(--dark-blue);
+    color: var(--blue);
+    border: 1px solid var(--blue);
+}
+
+.yellow {
+    background-color: var(--dark-yellow);
+    color: var(--yellow);
+    border: 1px solid var(--yellow);
+}
+
+.purple {
+    background-color: var(--dark-purple);
+    color: var(--purple);
+    border: 1px solid var(--purple);
+}
+
+.main-container {
+    width: 100vw;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+    gap: 1rem;
+}
+
+.game-card
+{
+    height: 24rem;
+    max-width: 20rem;
+    background-color: var(--card-bg);
+    border-radius: 1rem;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid var(--stroke);
+    justify-self: center;
+}
+
+.game-title {
+    font-family: var(--header-font);
+    font-weight:600;
+}
+
+.game-desc {
+    font-family: 'Outfit';
+    font-weight:400;
+    color:var(--muted);
+    font-size: 15px;
+    flex: 1;
+    min-height: 0;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
+}
+
+.game-img
+{
+    height: 50%;
+    position:relative
+}
+
+.traffic-light {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.5);
+    right: 0.7rem;
+    top: 0.7rem;
+    padding: 0.7rem;
+    display: flex;
+    gap: 0.7rem;
+    border-radius: 1rem;
+    border: 1px solid var(--stroke);
+}
+
+.game-info {
+    flex: 1;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.game-tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    font-family: 'JetBrains Mono';
+}
+
+.game-tag {
+    display: inline-block;
+    border-radius: 0.4rem;
+    font-size: 12px;
+    padding-top: 0.1rem;
+    padding-bottom: 0.1rem;
+    padding-left: 0.4rem;
+    padding-right: 0.4rem;
+}
+
+.game-price {
+    font-family: 'JetBrains Mono';
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.game-old-price-tag {
+    font-size: 12px;
+    text-decoration: line-through;
+    color: var(--dim)
+}
+
+.game-price-tag {
+    color: cyan;
+    font-size: small;
+}
+
+.game-title .game-desc .game-tags-container {
+    flex-shrink: 0;
+}

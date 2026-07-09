@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html>
+    <head>
+        <link rel="stylesheet" href="./css/global.css">
+    </head>
     <body>
         <?php
-            $currentYear = date("Y");
-            echo "<div>Hello mum, it's $currentYear!</div>";
+            include('./game-listing.php')
         ?>
-        <a href="game-listing.php">Game Listing Page</a>
     </body>
 </html>
