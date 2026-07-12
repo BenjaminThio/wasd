@@ -2,14 +2,14 @@
 <html>
 
 <head>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/log-in.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 </head>
 
 <body class="page-container">
 
     <video autoplay muted loop playsinline class="video-bg">
-        <source src="./public/gif.mp4" type="video/mp4">
+        <source src="public/gif.mp4" type="video/mp4">
     </video>
 
     <div class="box font">
