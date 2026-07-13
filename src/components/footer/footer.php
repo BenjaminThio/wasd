@@ -1,4 +1,4 @@
-<footer>
+<footer style="width:100%">
     <div class="footer-container">
         <div class="footer-wasd-box">
             <div class="W">W</div>

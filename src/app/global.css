@@ -1,24 +1,50 @@
-@import url('fonts.css');
+@font-face {
+    font-family: 'Unbounded';
+    font-style: 'normal';
+    font-weight: 400 800;
+    font-display: swap;
+    src: url('../../public/fonts/Unbounded-Variable.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'Outfit';
+    font-style: 'normal';
+    font-weight: 300 700;
+    font-display: swap;
+    src: url('../../public/fonts/Outfit-Variable.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'JetBrains Mono';
+    font-style: 'normal';
+    font-weight: 400 500;
+    font-display: swap;
+    src: url('../../public/fonts/JetBrainsMono-Variable.woff2') format('woff2');
+}
 
 :root {
     --bg: #06060d;
     --card-bg: #0b0b18;
     --color: white;
     --border: 1px solid white;
-    --header-font: 'Unbounded', 'sans-serif';
+    --header-font: 'Unbounded';
     --normal-font: 'Oufit';
-    --mono-font: '';
+    --mono-font: 'JetBrains Mono';
     --dim: #5b5f7d;
     --muted: #8e93b4;
     --stroke: rgba(255, 255, 255, 0.15);
+    --light-stroke: rgba(255, 255, 255, 0.2);
 }
 
 body {
+    width: 100%;
     background-color: var(--bg);
     color: var(--color);
     margin: 0;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    font-family: 'JetBrains Mono';
 }
 
 .art-1{background:radial-gradient(circle at 30% 25%,#22e4ff59,transparent 55%),radial-gradient(circle at 80% 80%,#8b5cf67d,transparent 55%),linear-gradient(150deg,#0e1b3a,#060612)}

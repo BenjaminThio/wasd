@@ -1,15 +1,6 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-    <link rel="stylesheet" href="css/login.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-</head>
-
-<body class="page-container">
-
+<div class="page-container">
     <video autoplay muted loop playsinline class="video-bg">
-        <source src="public/gif.mp4" type="video/mp4">
+        <source src="<?= BASE_URL ?>/public/assets/gif.mp4" type="video/mp4">
     </video>
 
     <div class="box font">
@@ -37,16 +28,17 @@
         </div>
 
         <div class="social-container">
-            <i class="fa-brands fa-facebook"></i>
-            <i class="fa-brands fa-google"></i>
-            <i class="fa-brands fa-discord"></i>
+            <?php
+                require './models/Icon.php';
+
+                echo Icon::get('facebook', 32);
+                echo Icon::get('google', 32);
+                echo Icon::get('discord', 32);
+            ?>
         </div>
 
         <div class="signup-link">
-            New to WASD? <a href="#">SIGN UP</a>
+            New to WASD? <a href="<?= BASE_URL ?>/sign-up">SIGN UP</a>
         </div>
-
-
-</body>
-
-</html>
+    </div>
+</div>
