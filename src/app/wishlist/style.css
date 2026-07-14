@@ -1,0 +1,243 @@
+:root {
+    --magenta: rgb(223, 0, 111);
+    --dark-magenta: rgba(209, 28, 130, 0.4);
+    --green: rgb(21, 193, 81);
+    --dark-green: rgba(15, 185, 34, 0.355);
+    --blue: rgb(100, 172, 255);
+    --dark-blue: rgba(29, 161, 255, 0.403);
+    --yellow: rgb(255, 183, 100);
+    --dark-yellow: rgba(255, 172, 29, 0.403);
+    --purple: rgb(146, 37, 255);
+    --dark-purple: rgba(91, 6, 134, 0.403);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.page {
+    width: 80%;
+}
+
+.page-header {
+	font-family: var(--header-font);
+}
+
+.main {
+    margin: 24px auto;
+}
+
+.controls-bar {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+    margin: 16px 0 20px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.search-input {
+    flex: 1;
+}
+
+.search-input input {
+    width: 100%;
+    padding: 10px 14px;
+    background-color: var(--card-bg);
+    border: 1px solid var(--stroke);
+    color: #fff;
+    border-radius: 6px;
+    outline: none;
+}
+
+.search-input input:focus {
+    border-color: var(--magenta);
+}
+
+.filter-dropdown button, .sort-by-dropdown button {
+    display: flex;
+    align-items: center;
+    padding: 0 14px;
+    height: 40px;
+    cursor: pointer;
+    background: var(--card-bg);
+    color: #fff;
+    border: 1px solid var(--stroke);
+    border-radius: 6px;
+    transition: 0.2s;
+}
+
+.filter-dropdown button:hover, .sort-by-dropdown button:hover {
+    border-color: var(--magenta);
+}
+
+.sort-by-dropdown {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+	font-size: 14px;
+}
+
+.wishlist {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.game-card {
+    background: var(--card-bg);
+    border: 1px solid var(--stroke);
+    border-radius: 10px;
+    display: flex;
+    gap: 15px;
+    padding: 12px;
+    align-items: center;
+    transition: 0.2s;
+}
+
+.game-card:hover {
+    border-color: var(--magenta);
+}
+
+.game-pic img {
+    width: 245px;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 6px;
+    background: #333;
+    display: block;
+}
+
+.game-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 6px 0;
+    align-self: stretch;
+}
+
+.game-info h3 {
+    font-family: var(--header-font);
+}
+
+.game-genre {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.game-tag, .game-price .discount {
+    display: inline-block;
+    border-radius: 0.4rem;
+    font-size: 11px;
+    font-weight: bold;
+    padding: 2px 7px;
+    border: 1px solid;
+}
+
+.magenta, .game-price .discount {
+    background-color: var(--dark-magenta);
+    color: var(--magenta);
+    border-color: var(--magenta);
+}
+
+.game-extra {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    margin: 4px 0;
+}
+
+.extra-row {
+    font-size: 12px;
+    line-height: 1.3;
+}
+
+.extra-row .label {
+    color: #777;
+    font-size: 11px;
+    margin-right: 4px;
+}
+
+.extra-row .value {
+    color: #ccc;
+}
+
+.value.review-negative {
+    color: #ff0000;
+}
+
+.value.review-mixed {
+    color: #ffa500;
+}
+
+.value.review-positive {
+    color: #00ff7f;
+}
+
+.game-platform {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.game-price {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    min-width: 110px;
+    text-align: right;
+    padding: 0 16px;
+}
+
+.game-price .original {
+    font-size: 11px;
+    color: #777;
+    text-decoration: line-through;
+    margin-top: 4px;
+}
+
+.game-price .current {
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+}
+
+.actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 120px;
+}
+
+.cart-btn, .remove-btn {
+    border: none;
+    padding: 9px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.cart-btn {
+    background: var(--magenta);
+    color: #fff;
+}
+
+.cart-btn:hover {
+    background: rgb(183, 0, 91);
+}
+
+.remove-btn {
+    background: transparent;
+    color: #888;
+    border: 1px solid var(--stroke);
+}
+
+.remove-btn:hover {
+    color: #ff5a5a;
+    border-color: #ff5a5a;
+}
