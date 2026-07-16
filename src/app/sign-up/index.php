@@ -43,7 +43,7 @@
         </div>
 
         <div class="signup-link">
-            Already have an account? <a href="<?= BASE_URL ?>/sign-in">SIGN IN</a>
+            Already have an account? <a href="<?= BASE_URL ?>/login">LOGIN</a>
         </div>
     </div>
 </div>

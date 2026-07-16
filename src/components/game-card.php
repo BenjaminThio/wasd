@@ -1,4 +1,4 @@
-<a class="game-card" href="<?= BASE_URL ?>/game">
+<a class="game-card">
     <div class="game-img art-<?= $randomArt ?>">
         <div class="traffic-light">
             <div class="<?= $randomStatus === 0 ? 'red-' : '' ?>light-bulb">

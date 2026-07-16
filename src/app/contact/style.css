@@ -1,0 +1,103 @@
+.contact{
+   max-width: 1200px;
+    margin: auto;
+    padding: 50px 20px;
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: calc(60vh - 60px);
+    box-sizing: boarder-box;
+
+}
+
+.contact-heading h2 {
+    font-size: 2.5rem;
+    text-transform: uppercase;
+    margin-bottom: 50px;
+}
+.contact-heading p {
+    color: #a0aec0;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-bottom: 50px; 
+}
+.cards-layout-wrapper {
+    display: flex;
+    justify-content: space-between;
+    gap: 100px; 
+}
+
+.contact-box, 
+.support-box, 
+.press-Box {
+    flex: 1; 
+}
+
+.Contact-support_Box,
+.Contact-partners_Box,
+.Contact-press_Box {
+    background-color: #050e26; 
+    padding: 40px 25px;
+    border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    box-sizing: border-box;
+    border: 1px solid rgba(0, 242, 254, 0.3);
+    transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+}
+
+.Contact-support_Box img,
+.Contact-partners_Box img,
+.Contact-press_Box img {
+    height: 45px;
+    width: auto;
+    margin-bottom: 20px;
+}
+
+.Contact-support_Box h2,
+.Contact-partners_Box h2,
+.Contact-press_Box h2 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    color: #ffffff;
+    font-weight: 700;
+}
+
+.Contact-support_Box p,
+.Contact-partners_Box p,
+.Contact-press_Box p {
+    color:white;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.Contact-support_Box a,
+.Contact-partners_Box a,
+.Contact-press_Box a {
+    color: rgb(212, 5, 5);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+@keyframes softBounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px); 
+  }
+}
+.Contact-support_Box a:hover,
+.Contact-partners_Box a:hover,
+.Contact-press_Box a:hover {
+    transform: translateY(-8px);
+    border-color: rgba(0, 242, 254, 0.8);
+    box-shadow: 0 10px 30px rgba(0, 242, 254, 0.15);
+    animation: softBounce 0.4s ease infinite;
+}
