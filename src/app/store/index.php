@@ -1,9 +1,17 @@
 <main style="display:flex;flex-direction:column;gap:2rem;">
-    <div style="font-family:Outfit;background-color:rgba(255, 255, 255, 0.05);padding:1rem;border-radius:1rem;border:1px solid var(--stroke)">
-        <input type="text" placeholder="test" style="background-color:var(--bg);border:none;outline:none;padding:0.5rem;border:1px solid var(--stroke);border-radius:0.5rem;color:white;">
-        <select style="">
+    <div style="display:flex;gap:1rem;font-family:Outfit;background-color:rgba(255, 255, 255, 0.05);padding:1rem;border-radius:1rem;border:1px solid var(--stroke)">
+        <input type="text" placeholder="test" style="flex:1;background-color:var(--bg);border:none;outline:none;padding:0.5rem;border:1px solid var(--stroke);border-radius:0.5rem;color:white;">
+        <select style="font-family:monospace;min-width:9rem;padding-left:0.5rem;padding-right:0.5rem;border-radius:0.5rem;">
+            <option>Test</option>
             <option>Test</option>
         </select>
+        <select style="font-family:monospace;min-width:9rem;padding-left:0.5rem;padding-right:0.5rem;border-radius:0.5rem;">
+            <option>Test</option>
+            <option>Test</option>
+        </select>
+        <button style="min-width:5rem;border-radius:0.5rem;">
+            Test
+        </button>
     </div>
     <div class="main-container">
         <?php
