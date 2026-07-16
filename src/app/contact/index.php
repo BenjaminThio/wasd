@@ -13,7 +13,7 @@
         <!--This is the first box-->
         <div class="contact-box">
         <div class="Contact-support_Box">
-            <img src="Logo_Img/Support_Logo.png" alt="Support Logo">
+            <img  src="src/app/contact/logo_img/Support_Logo.png" alt="Support Logo">
             <h2>SUPPORT</h2>
             <p> Need assistance with your problem? Our support team is ready to help you. Reach us out adn let us help you!</p>
             <a href ="src/app/support/index.php">supportXcontactus</a>
@@ -24,7 +24,7 @@
         <!--This is the second Box-->
         <div class="support-box">
         <div class="Contact-partners_Box">
-            <img src="Logo_Img/Partnes_Logo.png">
+            <img  src="src/app/contact/logo_img/Partnes_Logo.png" alt="Partners Logo">
             <h2>PARTNERS</h2>
             <p>Powered by great partnerships.Built for amazing players.</P>
             <a href ="src/app/partneshipX/index.php">partnersXcontactus</a>
@@ -33,7 +33,7 @@
         <!--This is the third box-->
         <div class="press-Box">
         <div class="Contact-press_Box">
-            <img src="Logo_Img/Press_Logo.png" alt="Press Logo">
+            <img  src="src/app/contact/logo_img/Press_Logo.png" alt="Press Logo">
             <h2>PRESS</h2>
             <p>Discover the latest updates,game releases, and exiciting news from our team.</p>
             <a href="src/app/press/index.php">pressXcontactus</a>

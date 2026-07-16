@@ -1,8 +1,10 @@
-<body>
+
 
  <!--this is the main heading-->
  <div class="headingcont">
     <h1>Welcome to the Support Center ! </h1>
+</div>
+
 
     <!-- Account Section -->
     <div class="item-1"> 
@@ -135,6 +137,4 @@
         <title> ⟐ Who should I contact if I need assistance? </title>
         <p> If you experience any issues while using the system, please contact the administrator or customer support team for assistance. </p>
     </div>
- </div>
 
-</body>
