@@ -1,21 +1,29 @@
 <div class="page-box">
   
-  <!-- News part---->
+  <!-- Latest Posts Section -->
   <section class="news-section">
     <h2 class="section-title">OUR LATEST POSTS:</h2>
-    <p class="section-subtitle">Pork chop pastrami meatball, porchetta salami capicola drumstick strip steak.</p>
+    <p class="section-subtitle">Discover the newest games, fresh experiences, and upcoming adventures. Explore the latest releases from our creators, featuring innovative gameplay, immersive worlds, and unique stories waiting to be discovered.</p>
     
     <div class="news-grid">
       <!-- News 1 -->
       <article class="news-card">
-        <div class="card-image" style="background-image: url('#');"></div>
+        <div class="card-img">
+          <?php
+            $image = __DIR__ . "/press_img/game1.png";
+            if (file_exists($image)) {
+                echo '<img src="/wasd/src/app/press/press_img/game1.png" alt="beast">';
+            } else {
+                echo "Image not found";
+            } ?>
+        </div>
         <div class="card-content">
           <div class="card-meta">
             <span class="category xbox">XBOX</span>
             <span class="date">MAR 14, 2026</span>
           </div>
           <h3 class="card-title">Shadow Protocol: Version 2.0 (Coming Soon)</h3>
-          <p class="card-text">Shadow Protocol: Version 2.0 introduces an enhanced open-world experience with upgraded graphics, improved AI, and an expanded multiplayer mode. Players can explore new missions, unlock advanced weapons, and experience dynamic weather effects that create a more immersive and realistic battlefield. Launching soon for PC and next-generation consoles.</p>
+          <p class="card-text">Shadow Protocol: Version 2.0 introduces an enhanced open-world experience with upgraded graphics, improved AI, and an expanded multiplayer mode.</p>
           <div class="card-footer">
             <span>👤 by Admin</span>
             <span>💬 17K</span>
@@ -25,14 +33,22 @@
 
       <!-- News 2 -->
       <article class="news-card">
-        <div class="card-image" style="background-image: url('https://picsum.photos/400/250?random=2');"></div>
+        <div class="card-img"> 
+          <?php
+            $image = __DIR__ . "/press_img/game2.png";
+            if (file_exists($image)) {
+                echo '<img src="/wasd/src/app/press/press_img/game2.png" alt="beast">';
+            } else {
+                echo "Image not found";
+            } ?>
+        </div>
         <div class="card-content">
           <div class="card-meta">
             <span class="category ps">PS 5</span>
             <span class="date">MAR 18, 2026</span>
           </div>
           <h3 class="card-title">Legends of Aether: Reborn (Coming Soon)</h3>
-          <p class="card-text">Legends of Aether: Reborn is the next evolution of the popular fantasy RPG series. The new version features a redesigned combat system, larger open-world environments, new character classes, and cooperative online gameplay. Powered by the latest game engine technology, it delivers stunning visuals and smoother performance for an unforgettable adventure.</p>
+          <p class="card-text">Legends of Aether: Reborn is the next evolution of the popular fantasy RPG series. The new version features a redesigned combat system.</p>
           <div class="card-footer">
             <span>👤 by Admin</span>
             <span>💬 432</span>
@@ -40,16 +56,49 @@
         </div>
       </article>
 
-      <!-- News 3 -->
+      <!-- News 3 (Added your missing card slot!) -->
       <article class="news-card">
-        <div class="card-image" style="background-image: url('#');"></div>
+        <div class="card-img">
+           <?php
+            $image = __DIR__ . "/press_img/game3.png";
+            if (file_exists($image)) {
+                echo '<img src="/wasd/src/app/press/press_img/game3.png" alt="beast">';
+            } else {
+                echo "Image not found";
+            } ?>
+        </div>
         <div class="card-content">
           <div class="card-meta">
-            <span class="category pc">PC VITA</span>
-            <span class="date">MAR 23, 2026</span>
+            <span class="category pc">PC</span>
+            <span class="date">MAR 20, 2026</span>
           </div>
           <h3 class="card-title">Cyber Nexus: Evolution (Coming Soon)</h3>
-          <p class="card-text">Cyber Nexus: Evolution is an action-packed sci-fi adventure that brings players into a futuristic cyber world filled with advanced technology, challenging missions, and immersive storytelling. The upcoming release introduces a new character progression system, enhanced combat mechanics, larger multiplayer maps, and AI-powered enemies, delivering a more engaging and dynamic gaming experience.</p>
+          <p class="card-text">Cyber Nexus: Evolution is an action-packed sci-fi adventure that brings players into a futuristic cyber world filled with advanced technology.</p>
+          <div class="card-footer">
+            <span>👤 by Admin</span>
+            <span>💬 562</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- News 4 -->
+      <article class="news-card">
+        <div class="card-img">
+           <?php
+            $image = __DIR__ . "/press_img/game4.png";
+            if (file_exists($image)) {
+                echo '<img src="/wasd/src/app/press/press_img/game4.png" alt="beast">';
+            } else {
+                echo "Image not found";
+            } ?>
+        </div>
+        <div class="card-content">
+          <div class="card-meta">
+            <span class="category android">ANDROID</span>
+            <span class="date">MAR 23, 2026</span>
+          </div>
+          <h3 class="card-title">Last Transmissionn: RELEASE DATE 12 DEC 2026</h3>
+          <p class="card-text">After Earth’s first deep-space mission goes silent, a special operative is sent to recover the lost crew. Inside the spacecraft, they discover an experimental AI system.</p>
           <div class="card-footer">
             <span>👤 by Admin</span>
             <span>💬 362</span>
@@ -58,44 +107,99 @@
       </article>
     </div>
   </section>
+</div>
 
-  <!--------------B O X v L O G P A R T ------------------->
-  <section class="testimonial-section">
-    <h2 class="section-title">TESTIMONIALS:</h2>
+  </section>
+
+  <!-- comunity Section -->
+  <section class="com-section">
+  <h2 class="section-title text-center">Community Feedback</h2>
+  
+  <div class="com-slider-container">
+    <!-- Pinned Side Arrow Buttons -->
+    <button class="slider-arrow left" onclick="scrollSlider(-1)">‹</button>
     
-    <div class="testimonial-slider-container">
-      <button class="slider-arrow left">‹</button>
-      
-      <div class="testimonial-flex">
-        <!-- BOX 1 -->
-        <div class="testimonial-card">
-          <div class="avatar-container">
-            <img src="#" alt="User Avatar" class="user-avatar">
-          </div>
-          <h4 class="user-name">Sarah Lim</h4>
-          <span class="user-tag">GAMER</span>
-          <p class="user-quote">"The attention to detail in WSD Co.'s games is exceptional. From immersive environments to responsive gameplay, every title feels polished and enjoyable. Their continuous updates and active community support make them one of my favorite game developers"</p>
+    <div class="com-flex">
+      <!-- BOX 1 -->
+      <div class="com-card">
+        <div class="human-container">
+          <?php
+              $image = __DIR__ . "/press_img/beast.png";
+              if (file_exists($image)) {
+                  echo '<img src="/wasd/src/app/press/press_img/beast.png" alt="beast">';
+              } else {
+                  echo "Image not found";
+              } ?>
         </div>
-
-        <!-- Box 2 -->
-        <div class="testimonial-card">
-          <div class="avatar-container">
-            <img src="#" alt="User Avatar" class="user-avatar">
-          </div>
-          <h4 class="user-name">MIGUEL Tan</h4>
-          <span class="user-tag">VLOGGER</span>
-          <p class="user-quote">"WSD Co. consistently delivers high-quality games with outstanding graphics and smooth performance. Every update introduces exciting new features that keep the gameplay fresh and engaging. I highly recommend their games to anyone looking for a premium gaming experience"</p>
-        </div>
+        <h4 class="user-name">MICHAEL</h4>
+        <span class="user-tag">GAMER</span>
+        <p class="user-quote">"The attention to detail in WSD Co.'s games is exceptional. From immersive environments to responsive gameplay, every title feels polished and enjoyable."</p>
       </div>
-      
-      <button class="slider-arrow right"></button>
-    </div>
+
+      <!-- Box 2 -->
+      <div class="com-card">
+        <div class="human-container">
+             <?php
+              $image = __DIR__ . "/press_img/pew.png";
+              if (file_exists($image)) {
+                  echo '<img src="/wasd/src/app/press/press_img/pew.png" alt="pew">';
+              } else {
+                  echo "Image not found";
+              } ?>
+        </div>
+        <h4 class="user-name">MIGUEL CARPENTER</h4>
+        <span class="user-tag">GAMER</span>
+        <p class="user-quote">"WSD Co. consistently delivers high-quality games with outstanding graphics and smooth performance. Every update introduces exciting new features."</p>
+      </div>
+
+      <!-- Box 3 -->
+      <div class="com-card">
+        <div class="human-container">
+             <?php
+              $image = __DIR__ . "/press_img/jack.png";
+              if (file_exists($image)) {
+                  echo '<img src="/wasd/src/app/press/press_img/jack.png" alt="jack">';
+              } else {
+                  echo "Image not found";
+              } ?>
+        </div>
+        <h4 class="user-name">Jack.M</h4>
+        <span class="user-tag">GAMER</span>
+        <p class="user-quote">"After spending some time with this game, I can confidently say that it has a lot of potential. The first thing that caught my attention was the incredible art direction."</p>
+      </div>
+    </div> <!-- /com-flex -->
     
-    <div class="slider-dots">
-      <span class="dot active"></span>
-      <span class="dot"></span>
-      <span class="dot"></span>
+    <button class="slider-arrow right" onclick="scrollSlider(1)">›</button>
+  </div>
+
+</div> 
+      
+  
+  <!-- TO MAKE THE BUTTON WORK-->
+  <script>
+  function scrollSlider(direction) {
+  const container = document.querySelector('.com-flex');
+  const card = document.querySelector('.com-card');
+  
+  if (container && card) {
+    
+    const gap = 30; 
+    const scrollAmount = (card.offsetWidth + gap) * direction;
+    
+    container.scrollBy({
+      left: scrollAmount,
+      behavior: 'smooth'
+    });
+  }
+}
+</script>
     </div>
+
+    <div class="slide-dots">
+    <span class="dot active" onclick="currentSlide(0)"></span>
+    <span class="dot" onclick="currentSlide(1)"></span>
+    <span class="dot" onclick="currentSlide(2)"></span>
+  </div>
   </section>
 
 </div>

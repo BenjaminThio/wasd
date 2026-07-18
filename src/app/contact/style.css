@@ -4,26 +4,55 @@
     padding: 50px 20px;
     text-align: center;
     font-family: 'JetBrains Mono', monospace;
-
+    padding-top: 40px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content:flex-start;;
     min-height: calc(60vh - 60px);
     box-sizing: border-box;
 
 }
+.contact-heading {
+    margin-top: 20px;
+    margin-bottom: 80px; 
+} 
 
 .contact-heading h2 {
-    font-size: 2.5rem;
+    font-size: 4rem;             
+    letter-spacing: 5px;          
     text-transform: uppercase;
-    margin-bottom: 50px;
+    margin-bottom: 10px;
+    color: #ffffff;              
+    text-shadow: 0 0 10px rgba(224, 51, 51, 0.236),
+                 0 0 20px rgba(29, 213, 241, 0.6),
+                 0 0 40px rgba(29, 213, 241, 0.4);
+    
+    transition: all 0.4s ease;
 }
+
+.contact-heading:hover h2 {
+  text-shadow: 0 0 15px rgb(29, 213, 241), 
+               0 0 30px rgba(29, 213, 241, 0.5);
+    text-shadow: 0 0 8px rgba(220, 38, 38, 0.6); 
+  transition: all 0.4s ease;
+}
+
 .contact-heading p {
-    color: #a0aec0;
-    font-size: 0.95rem;
-    line-height: 1.5;
-    margin-bottom: 50px; 
+  color: #a0aec0;
+  font-size: 1.5rem;
+  line-height: 1.5;
+  margin-bottom: 0px;
+  transition: color 0.3s ease;
+  text-shadow: 0 0 8px rgba(29, 213, 241, 0.3);
 }
+
+.contact-heading:hover p {
+  color: #ffffff;
+  text-shadow: 0 0 10px rgba(29, 213, 241, 0.5);
+  text-shadow: 0 0 8px rgba(220, 38, 38, 0.6);
+  transition: all 0.4s ease;
+}
+
 .cards-layout-wrapper {
     display: flex;
     justify-content: space-between;
@@ -39,7 +68,7 @@
 .Contact-support_Box,
 .Contact-partners_Box,
 .Contact-press_Box {
-    background-color: #050e26; 
+  background-color: #050e26; 
     padding: 40px 25px;
     border-radius: 14px;
     display: flex;
@@ -47,8 +76,45 @@
     align-items: center;
     height: 100%;
     box-sizing: border-box;
-    border: 1px solid rgba(0, 242, 254, 0.3);
-    transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+    border: 2px solid rgba(220, 38, 38, 0.5);  
+    box-shadow: 0 0 50px rgba(211, 7, 229, 0.8),
+                0 0 70px rgba(170, 31, 240, 0.5),
+                0 0 90px rgba(138, 4, 143, 0.3);
+    
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.Contact-support_Box:hover,
+.Contact-partners_Box:hover,
+.Contact-press_Box:hover {
+
+    transform: translateY(-15px) rotateX(10deg);
+    border-color: #00f2fe;
+    box-shadow:0 0 100px #00f2fe,
+                0 0 30px #00f2fe,
+                0 0 60px rgba(0, 242, 254, 0.6);
+ }
+
+ /*THIS IS THE ICON SEC*/
+.Contact-support_Box .icon,
+.Contact-partners_Box .icon,
+.Contact-press_Box .icon {
+    height: 90px;
+    width: 90px;
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.4s ease;
+}
+.Contact-support_Box .icon { filter: drop-shadow(0 0 8px rgba(236, 0, 0, 0.8)); }
+.Contact-partners_Box .icon { filter: drop-shadow(0 0 8px rgba(14, 0, 206, 0.8)); }
+.Contact-press_Box .icon { filter: drop-shadow(0 0 8px rgb(0, 233, 78)); }
+
+.Contact-support_Box:hover .icon,
+.Contact-partners_Box:hover .icon,
+.Contact-press_Box:hover .icon {
+    filter: drop-shadow(0 0 20px rgba(0, 242, 254, 1)) !important;
 }
 
 .Contact-support_Box img,
@@ -57,7 +123,9 @@
     height: 90px;
     width: 90px;
     margin-bottom: 25px;
+    transition: filter 0.4s ease;
 }
+
 
 .Contact-support_Box h2,
 .Contact-partners_Box h2,
@@ -66,6 +134,8 @@
     margin-bottom: 15px;
     color: #ffffff;
     font-weight: 700;
+    text-shadow: 0 0 8px rgba(220, 38, 38, 0.6);
+  transition: all 0.4s ease;
 }
 
 .Contact-support_Box p,
@@ -77,12 +147,30 @@
     margin-bottom: 20px;
 }
 
+.Contact-support_Box:hover h2,
+.Contact-partners_Box:hover h2,
+.Contact-press_Box:hover h2,
+.Contact-support_Box:hover p,
+.Contact-partners_Box:hover p,
+.Contact-press_Box:hover p {
+    color: #ffffff;
+    text-shadow: 0 0 10px #00f2fe, 0 0 20px #00f2fe;
+}
+
 .Contact-support_Box a,
 .Contact-partners_Box a,
 .Contact-press_Box a {
     color: rgb(212, 5, 5);
     text-decoration: none;
     font-weight: bold;
+    transition: all 0.4s ease;
+}
+
+.Contact-support_Box:hover a,
+.Contact-partners_Box:hover a,
+.Contact-press_Box:hover a {
+color: #00f2fe; 
+    text-shadow: 0 0 8px rgba(0, 242, 254, 0.8);
 }
 
 @keyframes softBounce {
@@ -102,3 +190,28 @@
     animation: softBounce 0.4s ease infinite;
 }
 
+.Contact-support_Box:hover img,
+.Contact-partners_Box:hover img,
+.Contact-press_Box:hover img {
+  filter: drop-shadow(0 0 10px rgba(0, 242, 254, 0.6));
+}
+
+/*======This part speacil fopr the heading*/
+.contact-heading h2 {
+    font-size: 4rem;             
+    letter-spacing: 5px;          
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    color: #ffffff;              
+    text-shadow: 0 0 10px rgba(224, 51, 51, 0.236),
+                 0 0 20px rgba(29, 213, 241, 0.6),
+                 0 0 40px rgba(29, 213, 241, 0.4);
+    
+    transition: all 0.4s ease;
+}
+.contact-heading:hover h2 {
+    text-shadow: 0 0 15px rgba(226, 169, 169, 0.653),
+                 0 0 30px rgba(29, 213, 241, 0.8),
+                 0 0 60px rgba(29, 213, 241, 0.6);
+    transform: scale(1.05);       
+}

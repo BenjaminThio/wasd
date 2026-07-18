@@ -1,96 +1,165 @@
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    
+
+.headingcont h1 {
+  text-align: left;
+  font-family:var(--header-font);
+    font-style: 700;
+    font-weight: 700;
+  margin-top: 40px;
+  margin-bottom: 60px;
+  color:var(--color);
+  
 }
 
 
-.contact {
-    max-width: 1100px;
-    margin: 0 auto 50px auto;
-    text-align: center;
+.faq-page-wrapper {
+  width: 90%;
+ max-width: 1400px; 
+  margin: 0 auto; 
+  padding: 0 20px;
+  text-align: left; 
 }
 
-.contact-heading h2 {
-    font-size: 2.5rem;
-    color: #2c3e50;
-    margin-bottom: 10px;
+
+.faq-item {
+  border-bottom: 1px solid #eae9ef00; 
+  padding: 20px 0;
+  text-align: left;
 }
 
-.contact-heading p {
-    color: #7f8c8d;
-    max-width: 600px;
-    margin: 0 auto 40px auto;
+/*===========Gurlie,this is the box HIGHLIGHT======*/ 
+.accountcont, 
+.productscont, 
+.cartcont, 
+.checkoutcont, 
+.orderscont, 
+.generalcont {
+width: 100%;       
+  margin-bottom: 40px;
+  text-align: left;  
+  border: 1px solid #00ce7a;     
+  border-radius: 15px;                      
+  padding: 30px;                            
+  box-shadow: 0 0 15px 2px rgba(0, 206, 122, 0.6);
+ background: radial-gradient(circle at center, #0a162b 0%, #030813 100%);
+box-shadow: 0 0 50px 10px rgba(117, 154, 230, 0.799);
 }
 
-/* Grid Wrapper for Support, Partners, and Press Boxes */
-.cards-layout-wrapper {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 30px;
-    margin-bottom: 60px;
+/* ============== tHIS IS MY CODE TO MAKE THE BOX WHEN CURSOR POINT, ITS GLOWING LIKE ME========*/
+.accountcont:hover, 
+.cartcont:hover, 
+.checkoutcont:hover, 
+.orderscont:hover, 
+.generalcont:hover,
+.productscont:hover {
+ 
+  animation: discoGlow 5s ease-in-out infinite alternate; /*like call out function*/
+  transform: translateY(-4px); /* i want the box float, so i usse ths -4x*/
 }
 
-/* Unified class names to lowercase with hyphens */
-.support-box, .partners-box, .press-box {
-    background: #ffffff;
-    border-radius: 8px;
-    padding: 30px 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+/*=====the head header 0of eah box===*/
+.accountcont h2, 
+.productscont h2, 
+.cartcont h2, 
+.checkoutcont h2, 
+.orderscont h2, 
+.generalcont h2 {
+  font-family: var(--normal-font);
+  font-weight: 600;
+  font-size: 1.5rem;
 }
 
-.support-box:hover, .partners-box:hover, .press-box:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+.faq-question {
+  font-family: var(--normal-font);
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: var(--color);
+  cursor: pointer;
+  list-style: none; 
+  display: flex;
+  justify-content: flex-start; 
+  align-items: center;        
+  user-select: none;
+  text-align: left;      
+  transition: all 0.25s ease-out; /* call out function again*/     
 }
 
-/* Inner card elements - Names match the wrapper containers now */
-.support-box img,
-.partners-box img,
-.press-box img {
-    height: 60px;
-    width: auto;
-    margin-bottom: 20px;
+/* this i use to make the word popping*/
+.faq-question:hover {
+  transform: translateX(8px); 
+  color: #1dd5f1; 
+  text-shadow: 0 0 10px rgba(37, 232, 232, 0.4);
 }
 
-.support-box h2,
-.partners-box h2,
-.press-box h2 {
-    font-size: 1.4rem;
-    color: #2c3e50;
-    margin-bottom: 15px;
-    letter-spacing: 1px;
+.faq-question::before {
+  content: "▶";
+  font-size: 0.90rem;
+  margin-right: 15px;
+  color: #00ce7a; 
+}
+details[open] .faq-question::before {
+  content: "▼";
+  color: #4ba3ff; 
 }
 
-.support-box p,
-.partners-box p,
-.press-box p {
-    color: #7f8c8d;
-    font-size: 0.95rem; }
-
-/* Inner card elements */
-.support-box a,
-.partners-box a,
-.press-box a {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: #3498db;
-    color: #fff;
-    text-decoration: none;
-    border-radius: 4px;
-    transition: background-color 0.2s ease, transform 0.1s ease;
+/* Styling the answers */
+.faq-answer {
+  font-family: var(--normal-font);
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.8;
+  margin: 0;
 }
 
-.support-box a:hover,
-.partners-box a:hover,
-.press-box a:hover {
-    background-color: #2980b9;
+.faq-answer p {
+  color: #f1f1edbd;
+  font-size: 1.5rem;
+  line-height: 1.6; /* a room the word to breath, not tight yaa*/
+  line-height: 1.8;
+  margin: 0;
 }
 
-.support-box a:active,
-.partners-box a:active,
-.press-box a:active {
-    transform: scale(0.98);
+
+/*============this is the code TO MAKE MY BOX HAVE A LOT OF COLOUR----references, global fixed colour style=======*/
+@keyframes discoGlow {
+  0% {
+    background: radial-gradient(circle at 30% 30%, #8b5cf67d, transparent 55%), linear-gradient(150deg, #0e1b3a, #060612);
+    border-color: #8b5cf6;
+    box-shadow: 0 0 25px rgba(139, 92, 246, 0.5);
+  }
+  14.2% {
+    background: radial-gradient(circle at 70% 20%, #ff2d7859, transparent 50%), radial-gradient(circle at 20% 85%, #ff8a3d59, transparent 55%), linear-gradient(150deg, #2a0e22, #0b060e);
+    border-color: #ff2d78;
+    box-shadow: 0 0 25px rgba(255, 45, 120, 0.5);
+  }
+  28.5% {
+    background: radial-gradient(circle at 25% 75%, #22ffb859, transparent 55%), radial-gradient(circle at 85% 25%, #22e4ff47, transparent 50%), linear-gradient(150deg, #07231e, #050b10);
+    border-color: #22ffb8;
+    box-shadow: 0 0 25px rgba(34, 255, 184, 0.5);
+  }
+  42.8% {
+    background: radial-gradient(circle at 60% 30%, #8b5cf66b, transparent 55%), radial-gradient(circle at 15% 80%, #ff2d7847, transparent 55%), linear-gradient(150deg, #170b30, #090612);
+    border-color: #8b5cf6;
+    box-shadow: 0 0 25px rgba(139, 92, 246, 0.5);
+  }
+  57.1% {
+    background: radial-gradient(circle at 75% 70%, #ff5e3a55, transparent 55%), radial-gradient(circle at 20% 20%, #ffd16644, transparent 50%), linear-gradient(150deg, #2b1206, #0d0507);
+    border-color: #ff5e3a;
+    box-shadow: 0 0 25px rgba(255, 94, 58, 0.5);
+  }
+  71.4% {
+    background: radial-gradient(circle at 30% 70%, #60a5fa55, transparent 55%), radial-gradient(circle at 80% 20%, #a78bfa55, transparent 50%), linear-gradient(150deg, #0a1430, #05060f);
+    border-color: #60a5fa;
+    box-shadow: 0 0 25px rgba(96, 165, 250, 0.5);
+  }
+  85.7% {
+    background: radial-gradient(circle at 50% 20%, #34d39955, transparent 50%), radial-gradient(circle at 20% 85%, #22e4ff44, transparent 55%), linear-gradient(150deg, #08201a, #04090c);
+    border-color: #34d399;
+    box-shadow: 0 0 25px rgba(52, 211, 153, 0.5);
+  }
+  100% {
+    background: radial-gradient(circle at 70% 80%, #94a3b855, transparent 55%), radial-gradient(circle at 25% 25%, #34d39933, transparent 50%), linear-gradient(150deg, #141a14, #060809);
+    border-color: #94a3b8;
+    box-shadow: 0 0 25px rgba(148, 163, 184, 0.5);
+  }
+
 }

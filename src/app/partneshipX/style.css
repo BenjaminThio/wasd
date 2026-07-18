@@ -1,100 +1,135 @@
-.partnership-Box {
-  width: 100%;
-  max-width: 600px;
+
+/* THis is the main cont*/
+.partnershipX-Box {
+  width: 90%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 40px 20px;
   display: flex;
   flex-direction: column;
+  gap: 50px; 
 }
 
-.partnership-Box{
+.row_1, .row_2, .row_3, .row_4 {
   display: flex;
-  align-items: center;
+  align-items: stretch; 
   justify-content: space-between;
-  position: relative;
-  padding: 40px 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  overflow: hidden;
-}
-
-.bg-lines {
-  position: absolute;
-  top: 0;
-  left: 0;
   width: 100%;
-  height: 100%;
-  z-index: 1;
-  pointer-events: none;
+  gap: 40px;
 }
 
-.bg-lines::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 50%;
-  height: 100%;
-  background: linear-gradient(135deg, transparent 45%, #0055ff 50%, transparent 55%);
-  filter: drop-shadow(0 0 8px #0055ff);
-  opacity: 0.8;
+.partner.L,
+.partner.R {
+  flex: 1;
+  border: 1px solid #8b5cf6;
+  border-radius: 15px;
+  padding: 40px; 
+  background: radial-gradient(circle at center, #0a162b 0%, #030813 100%);
+  box-shadow: 0 0 50px 10px rgba(117, 154, 230, 0.4);
+  transition: background 0.4s ease, border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.bg-lines::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 50%;
-  height: 100%;
-  background: linear-gradient(225deg, transparent 45%, #00ff66 50%, transparent 55%);
-  filter: drop-shadow(0 0 8px #00ff66);
-  opacity: 0.8;
+.partner.L:hover,
+.partner.R:hover {
+transform: translateY(-4px); 
+
+  background: radial-gradient(circle at 80% 20%, rgba(34, 255, 184, 0.25) 0%, transparent 50%), 
+              radial-gradient(circle at 20% 80%, rgba(34, 228, 255, 0.3) 0%, transparent 60%), 
+              linear-gradient(135deg, #0f2347 0%, #060d1a 100%);
+  border-color: #1dd5f1; 
+  box-shadow: 0 0 40px 5px rgba(29, 213, 241, 0.6), 0 0 70px 15px rgba(139, 92, 246, 0.3);
 }
 
-.partner {
-  width: 42%;
-  z-index: 2; 
-  text-align: center;
+
+/* =============this is for the image only, dont confuse=======*/
+.partner.img {
+  width: 100%;
+  height: 320px; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: filter 0.3s ease;
 }
 
-.partner-logo {
-  font-size: 24px;
+.partner.img img {
+  max-height: 100%;
+  max-width: 300px;
+  object-fit: contain;
+  transition: all 0.25s ease-out;
+}
+
+.partner.L:hover .partner.img img,
+.partner.R:hover .partner.img img {
+  filter: drop-shadow(0 0 12px rgba(231, 11, 11, 0.682));
+}
+
+/*-=== for the cursir click it chanbge=======*/
+.partner.L:active .partner.img img,
+.partner.R:active .partner.img img {
+filter: drop-shadow(0 0 12px rgba(75, 163, 255, 0.6));
+
+}
+
+.cont1,
+.cont2,
+.cont3,
+.cont4,
+.cont5,
+.cont6,
+.cont7,
+.cont8 {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: left;
+}
+
+/* ===this the word section===*/ 
+
+.partner.logo {
+  font-family: var(--normal-font);
+  font-size: 2.0rem;
   font-weight: 700;
-  margin-bottom: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
+  color: var(--text-white);
+  text-shadow: 0 0 10px rgba(241, 10, 10, 0.841), 
+               0 0 20px rgb(162, 0, 0);
+  transition: color 0.2s ease-out;
+
 }
 
-.logo-icon {
-  font-style: italic;
-  font-weight: 900;
+.partner.describ {
+  font-family:var(--normal-font);
+  font-size: 1.3rem;
+  line-height: 1.6;
+  color: var(--color);
+  margin: 0; 
+  transition: color 0.2s ease;
 }
 
-.partner-desc {
-  font-size: 14px;
-  color: #a0aec0;
-  line-height: 1.5;
-  margin: 0;
-  word-wrap: break-word; 
+.partner.L:hover .partner.describ,
+.partner.R:hover .partner.describ {
+  color: #f1f1edbd;
+  text-shadow: 0 0 12px rgba(255, 255, 255, 0.8),
+               0 0 25px rgba(75, 163, 255, 0.8) !important;
 }
 
-
-.plus-diamond {
-  position: relative;
-  width: 40px;
-  height: 40px;
-  background-color: #ffffff;
-  transform: rotate(45deg); 
-  z-index: 3;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+.partner.L:active .partner.logo,
+.partner.R:active .partner.logo {
+  color: var(--color) !important; 
+  text-shadow: none !important;
 }
 
-.plus-diamond span {
-  color: #000000;
-  font-size: 24px;
-  font-weight: bold;
-  transform: rotate(-45deg); 
+.partner.L:active .partner.describ,
+.partner.R:active .partner.describ {
+  color: #f1f1edbd !important;
+}
+
+@media (max-width: 900px) {
+  .row_1, 
+  .row_2,
+  .row_3,
+  .row_4 {
+    flex-direction: column;
+    gap: 40px;
+  }
 }

@@ -1,6 +1,8 @@
- 
- <body>
- <!---THIS IS THE MAIN BODY OF THIS PAGE -->
+<?php
+require_once './models/Icon.php';
+?>
+
+<!---THIS IS THE MAIN BODY OF THIS PAGE -->
     <main class="contact">
         <div class="contact-heading">
         <!--This is the first heading-->
@@ -13,10 +15,15 @@
         <!--This is the first box-->
         <div class="contact-box">
         <div class="Contact-support_Box">
-            <img  src="src/app/contact/logo_img/Support_Logo.png" alt="Support Logo">
+            <div class="icon">
+             <?php
+
+                echo Icon::get('sup', 80);
+            ?>
+            </div>
             <h2>SUPPORT</h2>
             <p> Need assistance with your problem? Our support team is ready to help you. Reach us out adn let us help you!</p>
-            <a href ="src/app/support/index.php">supportXcontactus</a>
+            <a href ="/wasd/support">supportXcontactus</a>
         </div>
         </div>
 
@@ -24,21 +31,31 @@
         <!--This is the second Box-->
         <div class="support-box">
         <div class="Contact-partners_Box">
-            <img  src="src/app/contact/logo_img/Partnes_Logo.png" alt="Partners Logo">
+            
+            <!--a method to replace image-->
+            <div class="icon">
+             <?php
+                echo Icon::get('sport', 80);
+            ?>
+            </div>
             <h2>PARTNERS</h2>
             <p>Powered by great partnerships.Built for amazing players.</P>
-            <a href ="src/app/partneshipX/index.php">partnersXcontactus</a>
+            <a href ="/wasd/partneshipX">partnersXcontactus</a>
         </div>
         </div>
+
         <!--This is the third box-->
         <div class="press-Box">
         <div class="Contact-press_Box">
-            <img  src="src/app/contact/logo_img/Press_Logo.png" alt="Press Logo">
+           <div class="icon">
+            <?php 
+            echo Icon::get('press',80);
+            ?>
+           </div>
             <h2>PRESS</h2>
             <p>Discover the latest updates,game releases, and exiciting news from our team.</p>
-            <a href="src/app/press/index.php">pressXcontactus</a>
+            <a href="/wasd/press">pressXcontactus</a>
         </div>
         </div>
         </div>
         </main>
-</body>
