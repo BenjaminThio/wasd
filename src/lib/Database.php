@@ -1,5 +1,5 @@
 <?php
-    require __DIR__ . '/Env.php';
+    require_once __DIR__ . '/Env.php';
     class Database
     {
         private PDO $pdo;
@@ -37,6 +37,73 @@
             $stmt->execute($params);
 
             return $stmt;
+        }
+
+        public function insert(string $table, array $data): PDOStatement
+        {
+            $columns = implode(', ', array_keys($data));
+            $placeholders = implode(', ', array_fill(0, count($data), '?'));
+            
+            $sql = "INSERT INTO {$table} ({$columns}) VALUES ({$placeholders})";
+            
+            return $this->query($sql, array_values($data));
+        }
+
+        public function select(string $table, array $conditions = [], string $columns = '*'): array
+        {
+            $sql = "SELECT {$columns} FROM {$table}";
+            $values = [];
+
+            if (!empty($conditions)) {
+                $clause = [];
+                foreach ($conditions as $column => $value) {
+                    $clause[] = "{$column} = ?";
+                    $values[] = $value;
+                }
+                $sql .= " WHERE " . implode(' AND ', $clause);
+            }
+
+            return $this->query($sql, $values)->fetchAll();
+        }
+
+        public function update(string $table, array $data, array $conditions): PDOStatement
+        {
+            $setClauses = [];
+            $values = [];
+
+            foreach ($data as $column => $value) {
+                $setClauses[] = "{$column} = ?";
+                $values[] = $value;
+            }
+
+            $whereClauses = [];
+            foreach ($conditions as $column => $value) {
+                $whereClauses[] = "{$column} = ?";
+                $values[] = $value;
+            }
+
+            $setString = implode(', ', $setClauses);
+            $whereString = implode(' AND ', $whereClauses);
+
+            $sql = "UPDATE {$table} SET {$setString} WHERE {$whereString}";
+
+            return $this->query($sql, $values);
+        }
+
+        public function delete(string $table, array $conditions): PDOStatement
+        {
+            $whereClauses = [];
+            $values = [];
+
+            foreach ($conditions as $column => $value) {
+                $whereClauses[] = "{$column} = ?";
+                $values[] = $value;
+            }
+
+            $whereString = implode(' AND ', $whereClauses);
+            $sql = "DELETE FROM {$table} WHERE {$whereString}";
+
+            return $this->query($sql, $values);
         }
     }
 ?>

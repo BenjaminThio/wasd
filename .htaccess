@@ -1,6 +1,31 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    Options -Indexes
+
+    # 1. SECURITY: BLOCK DIRECT PHP ACCESS
+    # If someone tries to load a .php file directly
+    RewriteCond %{REQUEST_URI} \.php$ [NC]
+
+    # EXCEPT if the path contains "/api/" anywhere
+    RewriteCond %{REQUEST_URI} !/api/ [NC]
+
+    # and EXCEPT if it is your main router
+    RewriteCond %{REQUEST_URI} !/index\.php$ [NC]
+
+    # then instantly reject with 403 Forbidden!
+    RewriteRule ^(.*)$ - [F,L]
+
+    # 2. SPA FRONT CONTROLLER ROUTING
+    # Tell Apache that src/index.php is the default file for the root directory
+    DirectoryIndex src/index.php
+
+    # If the user is asking for a real physical file (like global.css or gif.mp4)
     RewriteCond %{REQUEST_FILENAME} !-f
+
+    # (The !-d rule was removed here so directories get routed to your SPA!)
+
+    # silently send the URL to your PHP router!
     RewriteRule ^(.*)$ src/index.php?page=$1 [QSA,L]
 </IfModule>
+
+# Prevent directory listing
+Options -Indexes

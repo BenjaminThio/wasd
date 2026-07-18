@@ -14,14 +14,18 @@
         <?php endif; ?>
     </head>
     <body style="margin:0;">
-        <?php require __DIR__ . '/components/navbar/navbar.php' ?>
+        <?php require __DIR__ . '/../../components/navbar/navbar.php' ?>
 
-        <!-- The Injection Zone -->
-        <main style="display:flex;flex-direction:column;align-items:center;width:100%;" id="app-root">
+        <video autoplay muted loop playsinline class="video-bg">
+            <source src="<?= BASE_URL ?>/public/assets/gif.mp4" type="video/mp4">
+        </video>
+
+        <!-- THE INJECTION ZONE -->
+        <main id="app-root" style="width: 100%;">
             <?= $page->getContent()?>
         </main>
         
-        <?php require __DIR__ . '/components/footer/footer.php' ?>
+        <?php require __DIR__ . '/../../components/footer/footer.php' ?>
 
         <script>
             window.CURRENT_LAYOUT = "<?= isset($layoutToLoad) ? addslashes($layoutToLoad) : 'unknown' ?>";
