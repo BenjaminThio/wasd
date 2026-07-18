@@ -293,11 +293,8 @@
 }
 
 .news-card:active, .com-card:active {
-  background: #232233 !important; 
-  border-color: rgba(29, 213, 241, 0) !important;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3) !important;
   transform: translateY(-1px) !important;
-  transition: none !important; 
 }
 
 .news-card:active .card-title, 
