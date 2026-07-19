@@ -1,54 +1,86 @@
-<div style="min-height:100vh;width:75%">
-    <h1 style="font-family:Unbounded;font-size:40px;">
+<?php require_once __DIR__ . '/../../models/Icon.php'; ?>
+<div class="main-container">
+    <h1 class="game-name">
         Emberfall
     </h1>
-    <div style="font-family:JetBrains Mono;display:flex;flex-direction:row;gap:1rem;margin-bottom:2rem;">
-        <div style="display:flex;flex-direction:column;gap:0.4rem;">
-            <div style="color:var(--dim);font-size:11px;letter-spacing:0.1em;">DEVELOPER</div>
-            <div style="font-family:Outfit;font-weight:500;font-size:14px;">Benjamin Thio</div>
+    <div class="basic-info-table">
+        <div class="basic-info-column">
+            <div class="basic-info-title-cell">DEVELOPER</div>
+            <div class="basic-info-cell">Benjamin Thio</div>
         </div>
-        <div style="display:flex;flex-direction:column;gap:0.4rem;">
-            <div style="color:var(--dim);font-size:11px;letter-spacing:0.1em;">RELEASED</div>
-            <div style="font-family:Outfit;font-weight:500;font-size:14px;">7/7/2026</div>
+        <div class="basic-info-column">
+            <div class="basic-info-title-cell">RELEASED</div>
+            <div class="basic-info-cell">7/7/2026</div>
         </div>
-        <div style="display:flex;flex-direction:column;gap:0.4rem;">
-            <div style="color:var(--dim);font-size:11px;letter-spacing:0.1em;">PLAYER RATING</div>
-            <div style="font-family:Outfit;font-weight:500;font-size:14px;">Overwhemingly Positive (99 reviews)</div>
+        <div class="basic-info-column">
+            <div class="basic-info-title-cell">PLAYER RATING</div>
+            <div class="basic-info-cell">Overwhemingly Positive (99 reviews)</div>
         </div>
     </div>
-    <div style="display:grid;grid-template-columns: 7fr 5fr;gap:2.5rem;">
-        <div style="display:flex;flex-direction:column;gap:1rem;">
-            <div style="border-radius:1rem;height:21rem;" class="art-1">
+    <div class="game-info-container">
+        <div class="game-info-left">
+            <div class="game-image art-1">
             </div>
-            <div style="display:flex;flex-direction:column;">
-                <h2 style="font-family:Unbounded;font-size:20px;">
+            <div class="game-about-container">
+                <h2 class="game-about-title">
                     About this game
                 </h2>
-                <div style="font-family:Outfit;color:var(--muted);font-size:15px;line-height:1.7;">
+                <div class="game-about-description">
                     Nita, a rural flower, decides to travel to Phnom Penh for a short period to help sell night-time Num Banh Chok (Khmer rice noodles) on behalf of her aunt, who is preoccupied with other matters. Her goal is simply to earn some extra income to support her livelihood for a while.  
-
                     However, from the very first day she steps foot in the capital city, a multitude of bizarre and ominous occurrences begin to plague and torment the young woman, throwing "Village One", the very place where she sells her night noodles to feed nocturnal wanderers into utter chaos.  
-
                     As the old saying goes: “They are in the dark, while we are in the light…”
                 </div>
             </div>
-            <div class="info">
+            <div class="more-info-container">
                 MORE INFORMATION
             </div>
         </div>
-        <div style="height:18rem;padding:1.5rem;display:flex;flex-direction:column;align-items:center;gap:0.7rem;background:rgba(255,255,255,0.03);border-radius:1rem;border:1px solid var(--stroke);">
-            <div style="width:100%;font-size:12px;color:cyan;letter-spacing:0.2rem;margin-top:0.7rem;">
+        <div class="get-the-game-container">
+            <div class="get-the-game-container-title">
                 GET THE GAME
             </div>
-            <h1 style="width:100%;font-family:Unbounded;font-weight:600;font-size:28px;color:cyan;margin:0.7rem;">
+            <h1 class="get-the-game-container-price">
                 RM 100
             </h1>
-            <button style="width:100%;font-family:Outfit;font-weight:600;font-size:15px;padding-top:0.7rem;padding-bottom:0.7rem;border-radius:0.5rem;">
+            <button class="get-the-game-container-button">
                 Add to cart
             </button>
-            <button style="width:100%;font-family:Outfit;font-weight:600;font-size:15px;padding-top:0.7rem;padding-bottom:0.7rem;border-radius:0.5rem;">
+            <button class="get-the-game-container-button">
                 Add to wishlist
             </button>
+        </div>
+    </div>
+    <div class="review-section-container">
+        <h2 class="review-section-header">
+            Review Section
+        </h2>
+        <div class="review-container">
+            <div class="review-title">
+                Write a review
+            </div>
+            <div class="review-rating-container">
+                <div class="review-rating-title">
+                    YOUR RATING
+                </div>
+                <div class="review-rating">
+                    <div class="thumbs-up-button">
+                        <?php
+                            echo Icon::get('thumbs-up', 21);
+                        ?>
+                    </div>
+                    <div class="thumbs-down-button">
+                        <?php
+                            echo Icon::get('thumbs-down', 21);
+                        ?>
+                    </div>
+                </div>
+            </div>
+            <div class="review-memo-field-container">
+                <div class="review-memo-field-container-title">
+                    YOUR REVIEW
+                </div>
+                <textarea placeholder="Please type something about how you feel about the game." class="review-memo-field"></textarea>
+            </div>
         </div>
     </div>
 </div>

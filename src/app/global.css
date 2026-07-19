@@ -34,6 +34,11 @@
     --muted: #8e93b4;
     --stroke: rgba(255, 255, 255, 0.15);
     --light-stroke: rgba(255, 255, 255, 0.2);
+    --cyan: #22e4ff;
+    --magenta: #ff2d78;
+    --violet: #8b5cf6;
+    --green: #34d399;
+    --amber: #ffd166;
 }
 
 body {

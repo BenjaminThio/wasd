@@ -54,6 +54,9 @@
     ob_start();
 
     if ($fileToLoad === null) {
+        // FIX: Tell the browser (and JavaScript) this is an actual 404 error!
+        http_response_code(404);
+        
         $page->setTitle('404 Not Found');
         echo "<h1 style='margin:0;min-height:100vh;display:flex;justify-content:center;align-items:center;'>404 - Page Not Found!</h1>";
     } else {

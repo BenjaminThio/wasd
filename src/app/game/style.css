@@ -1,5 +1,261 @@
-.info {
+.main-container
+{
+    min-height: 100vh;
+    width: 75%
+}
+
+.game-name
+{
+    font-family: 'Unbounded';
+    font-size: 40px;
+}
+
+.basic-info-table
+{
+    font-family: 'JetBrains Mono';
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.basic-info-column
+{
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.basic-info-title-cell
+{
+    color: var(--dim);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+}
+
+.basic-info-cell
+{
+    font-family: 'Outfit';
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.game-info-container
+{
+    display: grid;
+    grid-template-columns: 7fr 5fr;
+    gap: 2.5rem;
+}
+
+.game-info-left
+{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.game-image
+{
+    border-radius: 1rem;
+    height: 21rem;
+}
+
+.game-about-container
+{
+    display: flex;
+    flex-direction: column;
+}
+
+.game-about-title
+{
+    font-family: 'Unbounded';
+    font-size: 20px;
+}
+
+.game-about-description
+{
+    font-family: 'Outfit';
+    color: var(--muted);
+    font-size: 15px;
+    line-height: 1.7;
+    height: 10rem;
+    overflow: hidden;
+}
+
+.more-info-container
+{
     font-family: 'JetBrains Mono';
     font-size: 11px;
     letter-spacing: 0.2rem;
+}
+
+.get-the-game-container
+{
+    height: 18rem;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.7rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 1rem;
+    border: 1px solid var(--stroke);
+}
+
+.get-the-game-container-title
+{
+    width: 100%;
+    font-size: 12px;
+    color: cyan;
+    letter-spacing: 0.2rem;
+    margin-top: 0.7rem;
+}
+
+.get-the-game-container-price
+{
+    width: 100%;
+    font-family: 'Unbounded';
+    font-weight: 600;
+    font-size: 28px;
+    color: cyan;
+    margin: 0.7rem;
+}
+
+.get-the-game-container-button
+{
+    width: 100%;
+    font-family: 'Outfit';
+    font-weight: 600;
+    font-size: 15px;
+    padding-top: 0.7rem;
+    padding-bottom: 0.7rem;
+    border-radius: 0.5rem;
+}
+
+.review-section-container
+{
+    width: 100%
+}
+
+.review-section-header
+{
+    font-family: 'Unbounded';
+    font-size: 30px;
+}
+
+.review-container
+{
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    width: 50%;
+    padding: 1.5rem;
+    background: rgba(255,255,255,0.03);
+    border-radius: 1rem;
+    border: 1px solid var(--stroke);
+}
+
+.review-title
+{
+    font-family: 'Unbounded';
+    font-size: 17px;
+    font-weight:700;
+}
+
+.review-rating-container
+{
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+}
+
+.review-rating-title
+{
+    color: var(--violet);
+    font-family: 'JetBrains Mono';
+    font-size: 11px;
+    letter-spacing: 0.2rem;
+}
+
+.review-rating
+{
+    display: flex;
+    gap: 1rem;
+}
+
+.review-field::placeholder
+{
+    color: gray;
+}
+
+.thumbs-up-button
+{
+    color: var(--violet);
+    transition: 0.2s;
+    border:1px solid var(--stroke);
+    background-color: transparent;
+
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 0.5rem;
+    padding: 0.6rem;
+}
+
+.thumbs-up-button:hover
+{
+    color: var(--green);
+    border: 1px solid var(--green);
+    background-color: rgba(52, 211, 153, 0.1);
+}
+
+.thumbs-down-button
+{
+    color: var(--violet);
+    transition: 0.2s;
+    border:1px solid var(--stroke);
+    background-color: transparent;
+
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 0.5rem;
+    padding: 0.6rem;
+}
+
+.thumbs-down-button:hover
+{
+    color: var(--magenta);
+    border: 1px solid var(--magenta);
+    background-color: rgba(255, 45, 118, 0.1);
+}
+
+.review-memo-field-container
+{
+    display: flex;
+    gap: 0.7rem;
+    flex-direction: column;
+}
+
+.review-memo-field-container-title
+{
+    color: var(--violet);
+    font-family: 'JetBrains Mono';
+    font-size: 11px;
+    letter-spacing: 0.2rem;
+}
+
+.review-memo-field
+{
+    line-height: 1.6;
+    resize: vertical;
+    font-size: 15px;
+    color: white;
+    padding: 1rem 1.2rem;
+    border: 1px solid var(--stroke);
+    border-radius: 0.5rem;
+    min-height: 8rem;
+    background-color: rgba(6,6,13,.7);
 }

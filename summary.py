@@ -1,6 +1,6 @@
 import os
 
-TARGET_DIRECTORY = 'src/app/(auth)' 
+TARGET_DIRECTORY = 'src/' 
 IGNORE_FOLDERS = {}
 IGNORE_FILES = {}
 ALLOWED_EXTENSIONS = {'.php', '.js', '.css', '.sql'}

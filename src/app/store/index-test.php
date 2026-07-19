@@ -1,5 +1,5 @@
 <main style="display:flex;flex-direction:column;gap:2rem;">
-    <!-- Your Search Bar -->
+    <!-- Your Search Bar (Untouched) -->
     <div style="display:flex;gap:1rem;font-family:Outfit;background-color:rgba(255, 255, 255, 0.05);padding:1rem;border-radius:1rem;border:1px solid var(--stroke)">
         <input type="text" placeholder="test" style="flex:1;background-color:var(--bg);border:none;outline:none;padding:0.5rem;border:1px solid var(--stroke);border-radius:0.5rem;color:white;">
         <select style="font-family:monospace;min-width:9rem;padding-left:0.5rem;padding-right:0.5rem;border-radius:0.5rem;">
@@ -24,10 +24,10 @@
             require_once __DIR__ . '/../../models/Category.php';
             require_once __DIR__ . '/../../lib/utils.php';
 
-            // Fetch 12 games instead of 10 to perfectly balance the initial grid!
+            // 1. Fetch 12 games instead of 10 to perfectly balance the initial grid!
             $games = Games::getChunk(12, 0);
 
-            // Loop and render using your custom component
+            // 2. Loop and render using your custom component
             foreach ($games as $game)
             {
                 require __DIR__ . '/../../components/game-card.php';
@@ -43,9 +43,7 @@
 
 <!-- The Infinite Scroll Script -->
 <script>
-// Wrap the entire script in an IIFE to prevent global variable collision during SPA routing
-(() => {
-    // Start offset at 12 because PHP already loaded the first 12
+    // Start offset at 12 because PHP already loaded the first 12!
     let currentOffset = 12; 
     let isLoading = false;
 
@@ -72,38 +70,31 @@
         const dynamicLimit = getOptimalBatchSize();
 
         try {
-            const response = await fetch(`<?= BASE_URL ?>/src/app/api/games/index.php?limit=${dynamicLimit}&offset=${currentOffset}`, {
+            // Pass BOTH offset and dynamic limit to the API
+            //const response = await fetch(`<?= BASE_URL ?>/src/app/api/games/index.php?offset=${currentOffset}&limit=${dynamicLimit}`);
+            const response = await fetch(`<?= BASE_URL ?>/src/api/games/index.php?limit=12&offset=${currentOffset}`, {
                 method: 'GET',
-                cache: 'no-store', 
+                cache: 'no-store',
                 headers: {
-                    'Accept': 'text/html',
-                    'X-Requested-With': 'XMLHttpRequest'
+                    'Accept': 'application/json'
                 }
             });
 
-            if (!response.ok) {
-                console.error("Failed to load chunk. Status:", response.status);
-                spinner.innerText = "Error loading games.";
-                return; 
-            }
-
+            // If the server sends a 204 No Content status, we are out of games!
             if (response.status === 204) {
                 observer.disconnect();
                 spinner.innerText = "No more games!";
                 return;
             }
 
+            // Instead of JSON, we wait for raw HTML text!
             const htmlSnippet = await response.text();
-            
-            if (htmlSnippet.trim() === '') {
-                observer.disconnect();
-                spinner.innerText = "No more games!";
-                return;
-            }
 
+            // Inject the new pre-built game-card components directly into the grid
             document.getElementById('game-grid').insertAdjacentHTML('beforeend', htmlSnippet);
+
+            // Increase offset by exactly what we just fetched
             currentOffset += dynamicLimit;
-            
         } catch (error) {
             console.error("Failed to fetch games:", error);
             spinner.innerText = "Error loading games.";
@@ -122,5 +113,4 @@
     });
 
     observer.observe(document.getElementById('scroll-anchor'));
-})();
 </script>

@@ -1,4 +1,8 @@
 <?php
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+
 require_once __DIR__ . '/../../../config.php'; 
 require_once __DIR__ . '/../../../lib/Env.php'; 
 require_once __DIR__ . '/../../../models/Games.php';
@@ -23,4 +27,7 @@ if (empty($games)) {
 foreach ($games as $game) {
     require __DIR__ . '/../../../components/game-card.php';
 }
+
+// FIX: Prevent the router from injecting layout.php (navbar/footer) after the API finishes!
+exit; 
 ?>
