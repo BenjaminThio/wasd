@@ -20,16 +20,16 @@
         </div>
 
         <div>
-            <button class="login-button font">LOGIN</button>
+            <button onclick="signIn()" class="sign-in-button font">SIGN IN</button>
         </div>
 
         <div class="social-container">
             <?php
-                require './models/Icon.php';
+            require './models/Icon.php';
 
-                echo Icon::get('facebook', 32);
-                echo Icon::get('google', 32);
-                echo Icon::get('discord', 32);
+            echo Icon::get('facebook', 32);
+            echo Icon::get('google', 32);
+            echo Icon::get('discord', 32);
             ?>
         </div>
 
@@ -38,3 +38,41 @@
         </div>
     </div>
 </div>
+
+<script>
+    async function signIn() {
+
+        let emailInput = document.getElementById("email");
+        let passwordInput = document.getElementById("password");
+
+        let email = emailInput.value;
+        let password = passwordInput.value;
+        
+        const response = await fetch(`/wasd/src/app/api/sign-in/index.php?email=${email}&password=${password}`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        });
+
+        if (response.ok) {
+            let data = await response.json();
+
+            console.log(data["emailError"]);
+            if (data["emailError"]) {
+
+                emailInput.style.border = "1.5px solid red";
+                alert("Invalid email. Please re-type again.");
+            }
+
+            console.log(data["passwordError"]);
+            if (data["passwordError"]) {
+
+                passwordInput.style.border = "1.5px solid red";
+                alert("Invalid password. Please re-type again.");
+            }
+        }
+    }
+
+</script>

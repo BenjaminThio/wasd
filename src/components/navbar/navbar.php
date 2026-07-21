@@ -12,7 +12,7 @@
                 <li><a href="<?= BASE_URL ?>"><span class="navi">Home</span></a></li>
                 <li><a href="<?= BASE_URL ?>/store"><span class="navi">Store</span></a></li>
                 <li><a href="<?= BASE_URL ?>/contact"><span class="navi">Contact</span></a></li>
-                <li><a href="<?= BASE_URL ?>/sign-in"><span class="navi">Log in</span></a></li>
+                <li><a href="<?= BASE_URL ?>/sign-in"><span class="navi">Sign In</span></a></li>
                 <li><a href="<?= BASE_URL ?>/sign-up" class="sign-up-box">Sign up Free</a></li>
             </ul>
         </nav>

@@ -57,8 +57,8 @@ CREATE TABLE IF NOT EXISTS game_category (
 -- 1. Create the User table
 CREATE TABLE IF NOT EXISTS user (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(50) NOT NULL UNIQUE,
-    email VARCHAR(255) NOT NULL UNIQUE,
+    username VARCHAR(191) NOT NULL UNIQUE,
+    email VARCHAR(191) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL, -- This will store the HASHED password, never plain text!
     avatar_path VARCHAR(255) NULL
 );
