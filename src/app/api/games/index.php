@@ -23,11 +23,10 @@ if (empty($games)) {
     exit;
 }
 
-// Magically generate the HTML by reusing your exact same component
+// Generate the HTML by reusing your exact same component
 foreach ($games as $game) {
     require __DIR__ . '/../../../components/game-card.php';
 }
 
-// FIX: Prevent the router from injecting layout.php (navbar/footer) after the API finishes!
 exit; 
 ?>

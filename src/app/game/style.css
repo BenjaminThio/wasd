@@ -134,13 +134,17 @@
 
 .review-section-container
 {
-    width: 100%
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
 }
 
 .review-section-header
 {
     font-family: 'Unbounded';
     font-size: 30px;
+    margin: 0;
 }
 
 .review-container

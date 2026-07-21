@@ -50,6 +50,30 @@
             return $result;
         }
 
+        public static function getReviewChunk(int $gameId, int $limit, int $offset): array
+        {
+            $database = new Database();
+            $sql = "
+                SELECT r.enjoy, r.description, r.created_at, 
+                    u.id AS user_id, u.username, u.email, u.password, u.avatar_path 
+                FROM review r 
+                INNER JOIN user u ON r.user_id = u.id 
+                WHERE r.game_id = ?
+                ORDER BY r.created_at DESC
+                LIMIT " . (int)$limit . " OFFSET " . (int)$offset;
+
+            $reviewRows = $database->query($sql, [$gameId])->fetchAll();
+            $reviews = [];
+
+            foreach ($reviewRows as $rRow) {
+                $reviewer = new User(
+                    $rRow['user_id'], $rRow['username'], $rRow['email'], $rRow['password'], $rRow['avatar_path']
+                );
+                $reviews[] = new Review($reviewer, (bool)$rRow['enjoy'], $rRow['description'], $rRow['created_at']);
+            }
+            return $reviews;
+        }
+
         public static function getById(int $id): ?Game
         {
             $database = new Database();
