@@ -1,0 +1,137 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.page-container {
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 50px 0;
+    align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.box {
+    width: 900px;
+    min-height: 700px;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    border-radius: 20px;
+    color: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 25px rgba(34, 228, 255, 0.5);
+}
+
+.register {
+    font-size: 40px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+    width: 100%; 
+}
+
+/* Avatar Styling */
+.avatar-label {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px dashed rgba(255, 255, 255, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.avat {
+    width: 100%; 
+    display: flex;
+    justify-content: center; 
+    margin-top: 15px;
+}
+
+.avatar-plus {
+    font-size: 30px;
+}
+
+/* Input Styles */
+.input-group {
+    width: 690px; 
+    margin-top: 30px;
+    position: relative; 
+}
+
+.field-label {
+    display: block;
+    font-size: 13px;
+    margin-bottom: 5px;
+}
+
+.field-input {
+    width: 100%;
+    height: 45px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    color: white;
+    padding-left: 15px;
+    padding-right: 40px; 
+    display: block;
+}
+
+/*THIS IS FOR THE FAILED IF*/ 
+.field-input:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.field-input.error-border {
+    border-color: red !important;
+}
+
+.Save-button {
+    width: 150px;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.buttonsave {
+    width: 690px;
+    display: flex;
+    justify-content: flex-end; 
+    margin-top: 30px;
+}   
+
+.Save-button:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.02);
+}
+
+/*=====Error Icon Inside Input Box====*/
+.error-icon {
+    position: absolute;
+    right: 15px;
+    top: 32px; 
+    color: red;
+    font-weight: bold;
+    font-size: 18px;
+    display: none; 
+}
+
+/*=====Error Message Text Below Box====*/
+.error-message {
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+    display: none;
+}
