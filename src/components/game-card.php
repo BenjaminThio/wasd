@@ -1,10 +1,14 @@
 <?php
-    $randomArt = rand(1, 8);
-    $status = $game->getReviewStatus(); 
+    require_once __DIR__ . '/../lib/Media.php';
+    $coverUrl = Media::url($game->getImage());
+    $status   = $game->getReviewStatus();
 ?>
 <!-- Pass the real database ID into the URL -->
 <a class="game-card" href="<?= BASE_URL ?>/game?id=<?= $game->getId() ?>">
-    <div class="game-img art-<?= $randomArt ?>">
+    <div class="game-img<?= $coverUrl === '' ? ' ' . htmlspecialchars($game->getFallbackArt()) : '' ?>"
+         <?php if ($coverUrl !== ''): ?>
+             style="background-image:url('<?= htmlspecialchars($coverUrl, ENT_QUOTES) ?>');background-size:cover;background-position:center;"
+         <?php endif; ?>>
         <div class="traffic-light">
             <div class="<?= $status === 0 ? 'red-' : '' ?>light-bulb">
             </div>

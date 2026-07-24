@@ -1,13 +1,10 @@
-<div>
-</div>
-
 <button onclick="callApi()">
     Submit
 </button>
 
 <script>
     async function callApi() {
-        const response = await fetch('/wasd/src/app/api/sign-in/index.php?name=John&email=john@gmail.com', {
+        const response = await fetch('/wasd/src/app/api/test/index.php?name=John&email=john@gmail.com', {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -19,5 +16,4 @@
             console.log(data);
         }
     }
-
 </script>

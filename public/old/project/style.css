@@ -1,0 +1,97 @@
+:root
+{
+    --magenta: rgb(223, 0, 111);
+    --dark-magenta: rgba(209, 28, 130, 0.4);
+    --green: rgb(19, 177, 74);
+    --dark-green: rgba(15, 185, 35, 0.164);
+    --blue: rgb(100, 172, 255);
+    --dark-blue: rgba(29, 161, 255, 0.403);
+    --yellow: rgb(255, 183, 100);
+    --dark-yellow: rgba(255, 172, 29, 0.403);
+    --orange: rgb(245, 136, 27);
+    --dark-orange: rgba(254, 158, 24, 0.307);
+    --purple: rgb(146, 37, 255);
+    --dark-purple: rgba(91, 6, 134, 0.403);
+}
+
+.green {
+    background-color: var(--dark-green);
+    color: var(--green);
+    border: 1px solid var(--green);
+}
+
+.orange {
+    background-color: var(--dark-orange);
+    color: var(--orange);
+    border: 1px solid var(--orange);
+}
+
+.main-container {
+    min-height: 80vh;
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    margin: 1rem;
+    border: 1px solid var(--stroke);
+    border-radius: 1rem;
+    overflow: visible;
+    /* background-color: rgb(12, 12, 19); */
+    background-color: rgba(255, 255, 255, 0.025);
+}
+
+.header-bar {
+    height: 6rem;
+    width: 100%;
+    border-bottom: 1px solid var(--stroke);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 4rem;
+    background-color: rgba(255, 255, 255, 0.025);
+    border-radius: 1rem 1rem 0 0;
+    z-index: 1;
+
+    backdrop-filter: blur(35px);
+    -webkit-backdrop-filter: blur(35px);
+}
+
+.header-left-section {
+    margin-left: 2rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.title {
+    display: inline-flex;
+    font-family: 'Unbounded';
+    font-weight: 600;
+    font-size: 20px;
+    align-items: center;
+}
+
+.project-list {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.save-button {
+    font-family: 'Outfit';
+    color: black;
+    font-weight: 600;
+    padding: 0.7rem 1rem;
+    border-radius: 0.7rem;
+    font-size: 15.5px;
+    background: linear-gradient(135deg, var(--cyan), var(--violet));
+    transition: 0.3s;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    margin-right: 2rem;
+}
+
+.save-button:hover {
+    transform: scale(1.04);
+}

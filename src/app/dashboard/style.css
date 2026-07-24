@@ -1,0 +1,205 @@
+:root
+{
+    --magenta: rgb(223, 0, 111);
+    --dark-magenta: rgba(209, 28, 130, 0.4);
+    --green: rgb(19, 177, 74);
+    --dark-green: rgba(15, 185, 35, 0.164);
+    --blue: rgb(100, 172, 255);
+    --dark-blue: rgba(29, 161, 255, 0.403);
+    --yellow: rgb(255, 183, 100);
+    --dark-yellow: rgba(255, 172, 29, 0.403);
+    --orange: rgb(245, 136, 27);
+    --dark-orange: rgba(254, 158, 24, 0.307);
+    --purple: rgb(146, 37, 255);
+    --dark-purple: rgba(91, 6, 134, 0.403);
+}
+
+.green {
+    background-color: var(--dark-green);
+    color: var(--green);
+    border: 1px solid var(--green);
+}
+
+.orange {
+    background-color: var(--dark-orange);
+    color: var(--orange);
+    border: 1px solid var(--orange);
+}
+
+.main-container {
+    min-height: 80vh;
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    margin: 1rem;
+    border: 1px solid var(--stroke);
+    border-radius: 1rem;
+    overflow: hidden;
+}
+
+.header-bar {
+    height: 6rem;
+    width: 100%;
+    border-bottom: 1px solid var(--stroke);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.header-left-section {
+    margin-left: 2rem;
+    margin-right: 2rem;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.title {
+    display: inline-flex;
+    font-family: 'Unbounded';
+    font-weight: 600;
+    font-size: 20px;
+    align-items: center;
+}
+
+.create-project-button {
+    display: inline-flex;
+    justify-content: center;
+    align-items:center;
+    background-color: transparent;
+    color: white;
+    border: 1px solid var(--stroke);
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    transition: 0.3s;
+}
+
+.create-project-button:hover {
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    transform: scale(1.015);
+}
+
+.create-project-button-text {
+    margin-left: 0.5rem;
+    font-family: 'JetBrains Mono';
+    font-size: 12px;
+    letter-spacing: 0.1rem;
+}
+
+.info-bar {
+    display: flex;
+    height: 100%;
+}
+
+.info {
+    border-left: 1px solid var(--stroke);
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    background-color: rgba(255, 255, 255, 0.025);
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    justify-content: center;
+    align-items: center;
+    min-width: 10rem;
+}
+
+.info-header {
+    font-family: 'Unbounded';
+    font-size: 20px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.info-body {
+    text-align: center;
+    font-family: 'JetBrains Mono';
+    font-size: 12px;
+    color: var(--dim);
+    letter-spacing: 0.15rem;
+}
+
+.project-list {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.project-container {
+    background-color: rgba(255, 255, 255, 0.025);
+    min-height: 6rem;
+    display: flex;
+}
+
+.project-image-container {
+    padding:1rem;
+}
+
+.project-image {
+    height: 4rem;
+    width: 7rem;
+    border-radius: 0.5rem;
+}
+
+.project-info-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.project-title {
+    flex: 1;
+    display: flex;
+    align-items: end;
+    font-family: 'Outfit';
+    font-weight: 700;
+    font-size: 15px;
+}
+
+.project-status-list {
+    flex: 1;
+    display: flex;
+    align-items: start;
+}
+
+.project-status-tag {
+    font-family: 'JetBrains Mono';
+    display: inline-block;
+    border-radius: 0.4rem;
+    font-size: 12px;
+    padding-top: 0.1rem;
+    padding-bottom: 0.1rem;
+    padding-left: 0.4rem;
+    padding-right: 0.4rem;
+}
+
+.project-action-list {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem;
+}
+
+.project-action-button {
+    color: white;
+    background-color: transparent;
+    padding: 0.5rem;
+    border: 1px solid var(--stroke);
+    border-radius: 0.5rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.3s;
+}
+
+.project-action-button:hover {
+    transform: scale(1.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.delete-button:hover {
+    background-color: red;
+}

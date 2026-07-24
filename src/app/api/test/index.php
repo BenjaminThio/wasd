@@ -12,5 +12,5 @@ $user = [
 
 echo json_encode($user);
 
-exit; 
+exit;
 ?>

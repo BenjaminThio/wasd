@@ -110,5 +110,18 @@
             // Assemble and return the fully-loaded User
             return User::fromDatabaseRow($row, $cart, $wishlist);
         }
+
+        public static function getDevUser(): User
+        {
+            return new User(
+                id: 1,
+                username: 'GamerGuy99',
+                email: 'gamerguy@example.com',
+                password: '$2y$10$dummyhash12345678901234567890',
+                avatarPath: null,
+                cart: [],
+                wishlist: []
+            );
+        }
     }
 ?>

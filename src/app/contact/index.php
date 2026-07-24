@@ -52,7 +52,7 @@
                 </div>
                 <h2>PRESS</h2>
                 <p>Discover the latest updates,game releases, and exiciting news from our team.</p>
-                <a href="/wasd//contact/press">pressXcontactus</a>
+                <a href="/wasd/contact/press">pressXcontactus</a>
             </div>
         </div>
     </div>

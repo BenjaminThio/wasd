@@ -5,9 +5,9 @@
     <div class="partner L">
       <div class="partner img"> 
       <?php
-      $image = __DIR__ . "/partnerr_img/nvdia.png";
+      $image = __DIR__ . "/../../../../public/assets/partnership/nvdia.png";
       if (file_exists($image)) {
-          echo '<img src="/wasd/src/app/partneshipX/partnerr_img/nvdia.png" alt="NVIDIA">';
+          echo '<img src="/wasd/public/assets/partnership/nvdia.png" alt="NVIDIA">';
       } else {
           echo "Image not found";
       } ?>
@@ -23,9 +23,9 @@
     <div class="partner R">
       <div class="partner img">
         <?php
-        $image = __DIR__ . "/partnerr_img/mic.png";
+        $image = __DIR__ . "/../../../../public/assets/partnership/mic.png";
         if (file_exists($image)) {
-            echo '<img src="/wasd/src/app/partneshipX/partnerr_img/mic.png" alt="INTELLIMIZE">';
+            echo '<img src="/wasd/public/assets/partnership/mic.png" alt="INTELLIMIZE">';
         } else {
             echo "Image not found";
         } ?>
@@ -44,9 +44,9 @@
     <div class="partner L">
       <div class="partner img">
          <?php
-      $image = __DIR__ . "/partnerr_img/sony.png";
+      $image = __DIR__ . "/../../../../public/assets/partnership/sony.png";
       if (file_exists($image)) {
-          echo '<img src="/wasd/src/app/partneshipX/partnerr_img/sony.png" alt="SONY INTERACTIVE">';
+          echo '<img src="/wasd/public/assets/partnership/sony.png" alt="SONY INTERACTIVE">';
       } else {
           echo "Image not found";
       } ?>
@@ -62,9 +62,9 @@
     <div class="partner R">
       <div class="partner img">
         <?php
-      $image = __DIR__ . "/partnerr_img/epic.png";
+      $image = __DIR__ . "/../../../../public/assets/partnership/epic.png";
       if (file_exists($image)) {
-          echo '<img src="/wasd/src/app/partneshipX/partnerr_img/epic.png" alt="EPIC GAMES">';
+          echo '<img src="/wasd/public/assets/partnership/epic.png" alt="EPIC GAMES">';
       } else {
           echo "Image not found";
       } ?>
@@ -83,9 +83,9 @@
     <div class="partner L">
       <div class="partner img">
          <?php
-      $image = __DIR__ . "/partnerr_img/razerr.png";
+      $image = __DIR__ . "/../../../../public/assets/partnership/razerr.png";
       if (file_exists($image)) {
-          echo '<img src="/wasd/src/app/partneshipX/partnerr_img/razerr.png" alt="RAZER">';
+          echo '<img src="/wasd/public/assets/partnership/razerr.png" alt="RAZER">';
       } else {
           echo "Image not found";
       } ?>
@@ -101,9 +101,9 @@
     <div class="partner R">
       <div class="partner img">
          <?php
-      $image = __DIR__ . "/partnerr_img/dis.png";
+      $image = __DIR__ . "/../../../../public/assets/partnership/dis.png";
       if (file_exists($image)) {
-          echo '<img src="/wasd/src/app/partneshipX/partnerr_img/dis.png" alt="DISCORD">';
+          echo '<img src="/wasd/public/assets/partnership/dis.png" alt="DISCORD">';
       } else {
           echo "Image not found";
       } ?>
@@ -122,9 +122,9 @@
     <div class="partner L">
       <div class="partner img">
          <?php
-      $image = __DIR__ . "/partnerr_img/and.png";
+      $image = __DIR__ . "/../../../../public/assets/partnership/and.png";
       if (file_exists($image)) {
-          echo '<img src="/wasd/src/app/partneshipX/partnerr_img/and.png" alt="ANDROID">';
+          echo '<img src="/wasd/public/assets/partnership/and.png" alt="ANDROID">';
       } else {
           echo "Image not found";
       } ?>
@@ -140,9 +140,9 @@
     <div class="partner R">
       <div class="partner img">
          <?php
-      $image = __DIR__ . "/partnerr_img/aws.jpg";
+      $image = __DIR__ . "/../../../../public/assets/partnership/aws.jpg";
       if (file_exists($image)) {
-          echo '<img src="/wasd/src/app/partneshipX/partnerr_img/aws.jpg" alt="AWS">';
+          echo '<img src="/wasd/public/assets/partnership/aws.jpg" alt="AWS">';
       } else {
           echo "Image not found";
       } ?>

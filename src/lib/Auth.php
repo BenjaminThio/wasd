@@ -32,6 +32,13 @@
             $_SESSION['user_id'] = $user->getId();
         }
 
+        public static function loginDevUser(): User
+        {
+            $devUser = Users::getDevUser();
+            self::login($devUser);
+            return $devUser;
+        }
+
         // Delete the Session (Call this when the user clicks "Log Out")
         public static function logout(): void
         {

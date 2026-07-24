@@ -10,9 +10,9 @@
       <article class="news-card">
         <div class="card-img">
           <?php
-            $image = __DIR__ . "/press_img/game1.png";
+            $image = __DIR__ . "/../../../../public/assets/press/game1.png";
             if (file_exists($image)) {
-                echo '<img src="/wasd/src/app/press/press_img/game1.png" alt="beast">';
+                echo '<img src="/wasd/public/assets/press/game1.png" alt="beast">';
             } else {
                 echo "Image not found";
             } ?>
@@ -35,9 +35,9 @@
       <article class="news-card">
         <div class="card-img"> 
           <?php
-            $image = __DIR__ . "/press_img/game2.png";
+            $image = __DIR__ . "/../../../../public/assets/press/game2.png";
             if (file_exists($image)) {
-                echo '<img src="/wasd/src/app/press/press_img/game2.png" alt="beast">';
+                echo '<img src="/wasd/public/assets/press/game2.png" alt="beast">';
             } else {
                 echo "Image not found";
             } ?>
@@ -60,9 +60,9 @@
       <article class="news-card">
         <div class="card-img">
            <?php
-            $image = __DIR__ . "/press_img/game3.png";
+            $image = __DIR__ . "/../../../../public/assets/press/game3.png";
             if (file_exists($image)) {
-                echo '<img src="/wasd/src/app/press/press_img/game3.png" alt="beast">';
+                echo '<img src="/wasd/public/assets/press/game3.png" alt="beast">';
             } else {
                 echo "Image not found";
             } ?>
@@ -85,9 +85,9 @@
       <article class="news-card">
         <div class="card-img">
            <?php
-            $image = __DIR__ . "/press_img/game4.png";
+            $image = __DIR__ . "/../../../../public/assets/press/game4.png";
             if (file_exists($image)) {
-                echo '<img src="/wasd/src/app/press/press_img/game4.png" alt="beast">';
+                echo '<img src="/wasd/public/assets/press/game4.png" alt="beast">';
             } else {
                 echo "Image not found";
             } ?>
@@ -124,9 +124,9 @@
       <div class="com-card">
         <div class="human-container">
           <?php
-              $image = __DIR__ . "/press_img/beast.png";
+              $image = __DIR__ . "/../../../../public/assets/press/beast.png";
               if (file_exists($image)) {
-                  echo '<img src="/wasd/src/app/press/press_img/beast.png" alt="beast">';
+                  echo '<img src="/wasd/public/assets/press/beast.png" alt="beast">';
               } else {
                   echo "Image not found";
               } ?>
@@ -140,9 +140,9 @@
       <div class="com-card">
         <div class="human-container">
              <?php
-              $image = __DIR__ . "/press_img/pew.png";
+              $image = __DIR__ . "/../../../../public/assets/press/pew.png";
               if (file_exists($image)) {
-                  echo '<img src="/wasd/src/app/press/press_img/pew.png" alt="pew">';
+                  echo '<img src="/wasd/public/assets/press/pew.png" alt="pew">';
               } else {
                   echo "Image not found";
               } ?>
@@ -156,9 +156,9 @@
       <div class="com-card">
         <div class="human-container">
              <?php
-              $image = __DIR__ . "/press_img/jack.png";
+              $image = __DIR__ . "/../../../../public/assets/press/jack.png";
               if (file_exists($image)) {
-                  echo '<img src="/wasd/src/app/press/press_img/jack.png" alt="jack">';
+                  echo '<img src="/wasd/public/assets/press/jack.png" alt="jack">';
               } else {
                   echo "Image not found";
               } ?>

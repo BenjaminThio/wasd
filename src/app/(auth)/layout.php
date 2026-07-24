@@ -17,7 +17,7 @@
         <?php require __DIR__ . '/../../components/navbar/navbar.php' ?>
 
         <video autoplay muted loop playsinline class="video-bg">
-            <source src="<?= BASE_URL ?>/public/assets/gif.mp4" type="video/mp4">
+            <source src="<?= BASE_URL ?>/public/assets/auth/bg.mp4" type="video/mp4">
         </video>
 
         <!-- THE INJECTION ZONE -->

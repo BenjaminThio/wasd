@@ -43,16 +43,86 @@
 
 body {
     background-color: var(--bg);
+    
+    background-image: 
+        /* Cyan glow in the top-left corner */
+        radial-gradient(circle at 10% 10%, rgba(34, 229, 255, 0.06) 0%, transparent 25%),
+        
+        /* Pinkish-red glow in the top-right corner */
+        radial-gradient(circle at 90% 20%, rgba(255, 45, 120, 0.04) 0%, transparent 50%),
+        
+        /* Deep purple ambient glow near the bottom center */
+        radial-gradient(circle at 50% 90%, rgba(139, 92, 246, 0.05) 0%, transparent 55%);
+        
+    background-attachment: fixed; /* Keeps gradients anchored relative to the screen */
+    background-repeat: no-repeat;
+    
     color: var(--color);
     margin: 0;
+    min-height: 100vh;
     font-family: 'JetBrains Mono';
 }
 
-.art-1{background:radial-gradient(circle at 30% 25%,#22e4ff59,transparent 55%),radial-gradient(circle at 80% 80%,#8b5cf67d,transparent 55%),linear-gradient(150deg,#0e1b3a,#060612)}
-.art-2{background:radial-gradient(circle at 70% 20%,#ff2d7859,transparent 50%),radial-gradient(circle at 20% 85%,#ff8a3d59,transparent 55%),linear-gradient(150deg,#2a0e22,#0b060e)}
-.art-3{background:radial-gradient(circle at 25% 75%,#22ffb859,transparent 55%),radial-gradient(circle at 85% 25%,#22e4ff47,transparent 50%),linear-gradient(150deg,#07231e,#050b10)}
-.art-4{background:radial-gradient(circle at 60% 30%,#8b5cf66b,transparent 55%),radial-gradient(circle at 15% 80%,#ff2d7847,transparent 55%),linear-gradient(150deg,#170b30,#090612)}
-.art-5{background:radial-gradient(circle at 75% 70%,#ff5e3a55,transparent 55%),radial-gradient(circle at 20% 20%,#ffd16644,transparent 50%),linear-gradient(150deg,#2b1206,#0d0507)}
-.art-6{background:radial-gradient(circle at 30% 70%,#60a5fa55,transparent 55%),radial-gradient(circle at 80% 20%,#a78bfa55,transparent 50%),linear-gradient(150deg,#0a1430,#05060f)}
-.art-7{background:radial-gradient(circle at 50% 20%,#34d39955,transparent 50%),radial-gradient(circle at 20% 85%,#22e4ff44,transparent 55%),linear-gradient(150deg,#08201a,#04090c)}
-.art-8{background:radial-gradient(circle at 70% 80%,#94a3b855,transparent 55%),radial-gradient(circle at 25% 25%,#34d39933,transparent 50%),linear-gradient(150deg,#141a14,#060809)}
+::selection {
+    background-color: var(--magenta);
+    color: white;
+}
+
+::-webkit-scrollbar {
+    width: 11px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #1d1d34;
+    border-radius: 99px;
+    border: 3px solid var(--bg);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--violet);
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg);
+}
+
+.art-1 {
+    background: radial-gradient(circle at 30% 25%,#22e4ff59,transparent 55%),
+                radial-gradient(circle at 80% 80%,#8b5cf67d,transparent 55%),
+                linear-gradient(150deg,#0e1b3a,#060612)
+}
+.art-2 {
+    background: radial-gradient(circle at 70% 20%,#ff2d7859,transparent 50%),
+                radial-gradient(circle at 20% 85%,#ff8a3d59,transparent 55%),
+                linear-gradient(150deg,#2a0e22,#0b060e)
+}
+.art-3 {
+    background: radial-gradient(circle at 25% 75%,#22ffb859,transparent 55%),
+                radial-gradient(circle at 85% 25%,#22e4ff47,transparent 50%),
+                linear-gradient(150deg,#07231e,#050b10)
+}
+.art-4 {
+    background: radial-gradient(circle at 60% 30%,#8b5cf66b,transparent 55%),
+                radial-gradient(circle at 15% 80%,#ff2d7847,transparent 55%),
+                linear-gradient(150deg,#170b30,#090612)
+}
+.art-5 {
+    background: radial-gradient(circle at 75% 70%,#ff5e3a55,transparent 55%),
+                radial-gradient(circle at 20% 20%,#ffd16644,transparent 50%),
+                linear-gradient(150deg,#2b1206,#0d0507)
+}
+.art-6 {
+    background: radial-gradient(circle at 30% 70%,#60a5fa55,transparent 55%),
+                radial-gradient(circle at 80% 20%,#a78bfa55,transparent 50%),
+                linear-gradient(150deg,#0a1430,#05060f)
+}
+.art-7 {
+    background: radial-gradient(circle at 50% 20%,#34d39955,transparent 50%),
+                radial-gradient(circle at 20% 85%,#22e4ff44,transparent 55%),
+                linear-gradient(150deg,#08201a,#04090c)
+}
+.art-8 {
+    background: radial-gradient(circle at 70% 80%,#94a3b855,transparent 55%),
+                radial-gradient(circle at 25% 25%,#34d39933,transparent 50%),
+                linear-gradient(150deg,#141a14,#060809)
+}
