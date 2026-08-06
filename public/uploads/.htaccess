@@ -4,3 +4,9 @@ AddType text/plain .php .php3 .php4 .php5 .phtml .pl .py .cgi .asp .sh
 <IfModule mod_headers.c>
     Header set X-Content-Type-Options "nosniff"
 </IfModule>
+
+# Builds are downloaded through src/app/api/download, which verifies
+# that the player owns the game. Direct hits are refused.
+<FilesMatch "\.(zip|rar|7z|tar|gz|tgz|exe|msi|apk|aab|dmg|pkg|jar|love|pck|appimage|bin|x86_64)$">
+    Require all denied
+</FilesMatch>

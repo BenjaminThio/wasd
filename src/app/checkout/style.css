@@ -1,282 +1,92 @@
-:root {
-    --magenta: rgb(223, 0, 111);
-    --dark-magenta: rgba(209, 28, 130, 0.4);
-    --green: rgb(21, 193, 81);
-    --dark-green: rgba(15, 185, 34, 0.355);
-    --blue: rgb(100, 172, 255);
-    --dark-blue: rgba(29, 161, 255, 0.403);
-    --yellow: rgb(255, 183, 100);
-    --dark-yellow: rgba(255, 172, 29, 0.403);
-    --purple: rgb(146, 37, 255);
-    --dark-purple: rgba(91, 6, 134, 0.403);
+/* ==========================================================================
+   CHECKOUT PAGE
+   Reuses the cart layout (.cart-layout / .order / .list-card) from ui.css and
+   the cart stylesheet's grid, so only the payment form and receipt live here.
+   ========================================================================== */
+
+.cart-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 22rem;
+    gap: var(--space-5);
+    align-items: start;
 }
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+.cart-layout[hidden] {
+    display: none;
 }
 
-.page {
-    width: 80%;
-}
-
-.page-header {
-    font-family: var(--header-font);
-}
-
-.main {
-    margin: 24px auto;
-    display: flex;
-    gap: 24px;
-}
-
-.cart {
-    flex: 1;
+.cart-list {
     display: flex;
     flex-direction: column;
-    gap: 12px;
-}
-
-.game-card {
-    background: var(--card-bg);
-    border: 1px solid var(--stroke);
-    border-radius: 10px;
-    display: flex;
-    gap: 15px;
-    padding: 12px;
-    align-items: center;
-    transition: 0.2s;
-}
-
-.game-card:hover {
-    border-color: var(--magenta);
-}
-
-.game-pic img {
-    width: 245px;
-    height: 140px;
-    object-fit: cover;
-    border-radius: 6px;
-    background: #333;
-    display: block;
-}
-
-.game-pic .fallback-art {
-    width: 245px;
-    height: 140px;
-    border-radius: 6px;
-    display: block;
-}
-
-.game-info {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    gap: 10px;
-    padding: 10px 0;
-    align-self: stretch;
-}
-
-.game-info h3 {
-    font-family: var(--header-font);
-    font-size: 20px;
-    color: #fff;
-}
-
-.game-genre {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-}
-
-.game-tag, .game-price .discount {
-    display: inline-block;
-    border-radius: 0.4rem;
-    font-size: 11px;
-    font-weight: bold;
-    padding: 2px 7px;
-    border: 1px solid;
-}
-
-.magenta, .game-price .discount {
-    background-color: var(--dark-magenta);
-    color: var(--magenta);
-    border-color: var(--magenta);
-}
-
-.game-platform {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-top: auto;
-}
-
-.game-price {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    min-width: 110px;
-    text-align: right;
-    padding: 0 16px;
-}
-
-.game-price .original {
-    font-size: 11px;
-    color: #777;
-    text-decoration: line-through;
-    margin-top: 4px;
-}
-
-.game-price .current {
-    font-size: 16px;
-    font-weight: bold;
-    color: #fff;
+    gap: var(--space-3);
+    min-width: 0;
 }
 
 .order {
-    width: 300px;
-    background: var(--card-bg);
-    border: 1px solid var(--stroke);
-    border-radius: 10px;
-    padding: 20px;
     position: sticky;
-    top: 24px;
-}
-
-.order h2 {
-    font-family: var(--header-font);
-    font-size: 18px;
-    margin-bottom: 16px;
-    color: #fff;
+    top: calc(var(--header-height) + var(--space-4));
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    background: var(--card-bg);
 }
 
 .order-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 13px;
-    color: #ccc;
-    margin-bottom: 10px;
+    gap: var(--space-3);
+    font-family: var(--normal-font);
+    font-size: var(--text-base);
+    color: var(--muted);
 }
 
 .order-discount {
     color: var(--magenta);
 }
 
-.order-line {
-    height: 1px;
-    background: var(--stroke);
-    margin: 12px 0;
-}
-
 .order-total {
-    font-size: 16px;
-    font-weight: bold;
-    color: #fff;
-    margin-bottom: 16px;
+    font-size: var(--text-md);
+    font-weight: 700;
+    color: var(--color);
 }
 
-.checkout-btn {
-    width: 100%;
-    padding: 12px;
-    border: none;
-    border-radius: 8px;
-    background: var(--magenta);
-    color: #fff;
-    font-size: 14px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.2s;
+.checkout-pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-3);
 }
 
-.checkout-btn:hover {
-    background: rgb(183, 0, 91);
+.receipt {
+    max-width: 30rem;
+    margin-inline: auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    text-align: left;
 }
 
-.checkout-btn:disabled {
-    background: #3a2131;
-    color: #8b8b8b;
-    cursor: not-allowed;
+.receipt[hidden] {
+    display: none;
 }
 
-.cart-status {
-    font-size: 12px;
-    color: var(--dim);
-    text-align: center;
-    padding: 4px 0;
+.receipt-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-2);
 }
 
-.cart-empty {
-    background: var(--card-bg);
-    border: 1px dashed var(--stroke);
-    border-radius: 10px;
-    padding: 40px 20px;
-    text-align: center;
-    font-size: 13px;
-    line-height: 1.8;
-    color: #888;
+.receipt-actions .btn {
+    flex: 1;
 }
 
-.cart-empty a {
-    color: var(--magenta);
-    font-weight: bold;
-    text-decoration: none;
-}
+@media (max-width: 900px) {
+    .cart-layout {
+        grid-template-columns: 1fr;
+    }
 
-.cart-empty a:hover {
-    text-decoration: underline;
-}
-
-.field-input {
-    width: 100%;
-    padding: 9px 12px;
-    background-color: var(--card-bg);
-    border: 1px solid var(--stroke);
-    color: #fff;
-    border-radius: 6px;
-    outline: none;
-    font-size: 13px;
-}
-
-.field-input:focus {
-    border-color: var(--magenta);
-}
-
-.order-row .field-input {
-    width: 120px;
-}
-
-#receipt-main {
-    justify-content: center;
-}
-
-#receipt-main .order {
-    position: static;
-}
-
-a.checkout-btn {
-    display: block;
-    text-align: center;
-    text-decoration: none;
-}
-
-.back-btn {
-    width: 100%;
-    margin-top: 10px;
-    padding: 10px;
-    border-radius: 6px;
-    background: transparent;
-    color: #888;
-    border: 1px solid var(--stroke);
-    font-size: 13px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-.back-btn:hover {
-    color: var(--magenta);
-    border-color: var(--magenta);
+    .order {
+        position: static;
+    }
 }

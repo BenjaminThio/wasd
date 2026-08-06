@@ -1,0 +1,220 @@
+/* ==========================================================================
+   AUTHENTICATION SHELL - SHARED PRESENTATION
+
+   Sign in and sign up drew the same panel with two near-identical stylesheets.
+   Everything they share lives here once; each page keeps only what is unique
+   to it.
+
+   The look is deliberately unchanged: the gradient, the blur, the border, the
+   glow, the radius and every colour are the same values as before. What
+   changed is that the panel is fluid instead of pinned to 430px / 350px, so it
+   works on a phone now that the pages carry a viewport meta tag.
+   ========================================================================== */
+
+/* ------------------------------------------------------------------ shell */
+
+.video-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+    filter: blur(8px) brightness(0.5);
+}
+
+.page-container {
+    width: 100%;
+    min-height: 70vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 50px var(--page-pad);
+    font-family: var(--mono-font);
+}
+
+/* ------------------------------------------------------------------ panel */
+
+.box {
+    /* Was a fixed 430px: below that it overflowed the screen. */
+    width: min(430px, 100%);
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 20px;
+    color: rgba(255, 255, 255, 0.9);
+
+    /* Unchanged - background, blur, border and glow are exactly as they were. */
+    background: linear-gradient(135deg, rgba(34, 228, 255, 0.2), rgba(139, 92, 246, 0.2), rgba(255, 45, 120, 0.2));
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 25px rgba(34, 228, 255, 0.5);
+}
+
+/* Every row spans the panel. The fields used to be a hard-coded 350px, which
+   only lined up because the panel was 430px wide with 40px of padding.
+   The avatar circle is the one row that keeps its own size. */
+.box > *:not(.avatar-label) {
+    width: 100%;
+}
+
+.welcome {
+    font-size: clamp(30px, 7vw, 40px);
+    font-weight: bold;
+    line-height: 1.2;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* ----------------------------------------------------------------- fields */
+
+.input-group {
+    width: 100%;
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+.field-label {
+    display: block;
+    font-size: 13px;
+    margin-bottom: 5px;
+}
+
+.field-input {
+    width: 100%;
+    height: 45px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    color: white;
+    padding: 0 15px;
+    display: block;
+    font-family: var(--mono-font);
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.field-input::placeholder {
+    color: rgba(255, 255, 255, 0.45);
+}
+
+/* The panel had no focus styling at all - typing gave no feedback. */
+.field-input:focus {
+    border-color: rgba(34, 228, 255, 0.8);
+    box-shadow: 0 0 0 3px rgba(34, 228, 255, 0.18);
+}
+
+/* ---------------------------------------------------------------- buttons */
+
+.sign-in-button,
+.signup-button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: var(--mono-font);
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    transition: 0.3s;
+}
+
+.sign-in-button:hover,
+.signup-button:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.02);
+}
+
+.sign-in-button:active,
+.signup-button:active {
+    transform: scale(0.99);
+}
+
+/* ----------------------------------------------------------------- social */
+
+.social-container {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+}
+
+.social-container svg {
+    color: white;
+    opacity: 0.7;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.social-container svg:hover {
+    opacity: 1;
+    transform: scale(1.2);
+}
+
+/* Kept for the icon-font markup the pages used before. */
+.social-container i {
+    color: white;
+    opacity: 0.7;
+    font-size: 24px;
+    transition: 0.2s;
+    cursor: pointer;
+}
+
+.social-container i:hover {
+    opacity: 1;
+    transform: scale(1.2);
+}
+
+/* ------------------------------------------------------------ footer link */
+
+.signup-link {
+    margin-top: 25px;
+    font-size: 13px;
+    text-align: center;
+    opacity: 0.8;
+}
+
+.signup-link a {
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.signup-link a:hover {
+    text-decoration: underline;
+    color: #ffffff;
+    cursor: pointer;
+}
+
+/* ------------------------------------------------------------- responsive */
+
+@media (max-width: 520px) {
+    .page-container {
+        align-items: flex-start;
+        padding: 30px var(--page-pad);
+    }
+
+    .box {
+        padding: 30px 20px;
+        min-height: 0;
+    }
+
+    .social-container {
+        gap: 20px;
+    }
+}
+
+@media (max-height: 700px) {
+    .page-container {
+        align-items: flex-start;
+    }
+}

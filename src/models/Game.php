@@ -1,4 +1,7 @@
 <?php
+    // Game asks Review for the verdict thresholds, so it must be loadable alone.
+    require_once __DIR__ . '/Review.php';
+
     enum Platform { case Windows; case Linux; case Apple; case Browser; case Android; }
 
     class Game
@@ -21,16 +24,22 @@
             private array $categories = [],
             private array $reviews = [],
             private array $screenshots = [],
-            private array $builds = []
+            private array $builds = [],
+            private ?string $createdAt = null,
+            // Aggregates, so a list of cards never has to load every review body.
+            private ?int $reviewTotal = null,
+            private ?int $reviewPositive = null
         ) {}
 
         public static function fromDatabaseRow(
-            array $row, 
-            array $platforms = [], 
-            array $categories = [], 
+            array $row,
+            array $platforms = [],
+            array $categories = [],
             array $reviews = [],
             array $screenshots = [],
-            array $builds = []
+            array $builds = [],
+            ?int $reviewTotal = null,
+            ?int $reviewPositive = null
         ): self {
             return new self(
                 id: isset($row['id']) ? (int)$row['id'] : null,
@@ -47,10 +56,13 @@
                 views: (int)($row['views'] ?? 0),
                 downloads: (int)($row['downloads'] ?? 0),
                 platforms: $platforms,
-                categories: $categories, 
+                categories: $categories,
                 reviews: $reviews,
                 screenshots: $screenshots,
-                builds: $builds
+                builds: $builds,
+                createdAt: $row['created_at'] ?? null,
+                reviewTotal: $reviewTotal,
+                reviewPositive: $reviewPositive
             );
         }
 
@@ -72,23 +84,48 @@
         public function getReviews(): array { return $this->reviews; }
         public function getScreenshots(): array { return $this->screenshots; }
         public function getBuilds(): array { return $this->builds; }
+        public function getCreatedAt(): ?string { return $this->createdAt; }
 
-        public function getFormattedReleaseDate(): string {
+        public function isFree(): bool { return $this->getDiscountedPrice() <= 0; }
+        public function isPublic(): bool { return $this->visibility === 'Public'; }
+
+        /** Builds the player is allowed to see (hidden ones stay with the developer). */
+        public function getVisibleBuilds(): array
+        {
+            return array_values(array_filter($this->builds, fn($build) => empty($build['is_hidden'])));
+        }
+
+        public function getFormattedReleaseDate(): string
+        {
             if (!$this->releaseDate) return 'TBA';
             return (new DateTime($this->releaseDate))->format('d M Y');
         }
 
-        public function getReviewStatus(): int {
-            if (empty($this->reviews)) return 1; 
-            $total = count($this->reviews);
+        public function getReviewCount(): int
+        {
+            return $this->reviewTotal ?? count($this->reviews);
+        }
+
+        public function getPositiveReviewCount(): int
+        {
+            if ($this->reviewPositive !== null) return $this->reviewPositive;
+
             $positive = 0;
             foreach ($this->reviews as $review) {
                 if ($review->isEnjoy()) $positive++;
             }
-            $pct = $positive / $total;
-            if ($pct >= 0.70) return 2;
-            if ($pct < 0.40) return 0;
-            return 1;
+            return $positive;
+        }
+
+        /** 2 = mostly positive, 1 = mixed / no data, 0 = mostly negative. */
+        public function getReviewStatus(): int
+        {
+            return Review::statusFor($this->getReviewCount(), $this->getPositiveReviewCount());
+        }
+
+        public function getReviewLabel(): string
+        {
+            return Review::labelFor($this->getReviewCount(), $this->getPositiveReviewCount());
         }
     }
 ?>

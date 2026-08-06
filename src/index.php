@@ -47,7 +47,13 @@
         // Calculate relative path for the CSS file link
         $relPath = str_replace(realpath(__DIR__), '', realpath($targetFolder));
         $relPath = str_replace('\\', '/', $relPath);
-        $page->setCssUrl(BASE_URL . "/src" . $relPath . "/style.css");
+
+        // The modification time doubles as a cache key: browsers keep serving
+        // the old stylesheet after an edit otherwise, which is exactly the kind
+        // of "my CSS did not update" confusion that costs an afternoon.
+        $stamp = @filemtime("$targetFolder/style.css") ?: 0;
+
+        $page->setCssUrl(BASE_URL . "/src" . $relPath . "/style.css?v=$stamp");
     }
 
     // Buffer the inner page content
@@ -61,12 +67,26 @@
         echo "<h1 style='margin:0;min-height:100vh;display:flex;justify-content:center;align-items:center;'>404 - Page Not Found!</h1>";
     } else {
         if (!empty($route)) {
-            $page->setTitle($route);
+            // "contact/support" -> "Support", "sign-in" -> "Sign In".
+            $segment = basename($route);
+            $page->setTitle(ucwords(str_replace('-', ' ', strtolower($segment))));
         }
+
+        // A page may replace that with something more specific while it renders.
         require $fileToLoad;
     }
 
     $page->setContent(ob_get_clean());
+
+    // The shell that follows must define its own icons rather than lean on any
+    // the page body happened to define - a soft navigation replaces the body.
+    //
+    // Guarded rather than required: the auth pages include Icon.php with a
+    // plain require, so pulling it in here would redeclare the class. If the
+    // body never loaded it there is nothing to reset either way.
+    if (class_exists('Icon', false)) {
+        Icon::resetDefinitions();
+    }
 
     // Nested Layout Finder
     $layoutToLoad = __DIR__ . '/layout.php'; // Default fallback layout
@@ -91,7 +111,8 @@
             'title' => $page->getTitle(),
             'css' => $page->getCssUrl(),
             'html' => $page->getContent(),
-            'layout' => $layoutToLoad // JS needs this to know if it should soft-swap or hard-reload
+            'layout' => $layoutToLoad, // JS needs this to know if it should soft-swap or hard-reload
+            'reload' => $page->requiresFullLoad() // pages whose headers matter
         ]);
         exit;
     }

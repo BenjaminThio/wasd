@@ -1,0 +1,3 @@
+/* Intentionally empty.
+   Used as the href of #dynamic-page-style when a page has no stylesheet of its
+   own, so the browser never re-downloads the current HTML document as CSS. */

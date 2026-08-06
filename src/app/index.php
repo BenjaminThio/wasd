@@ -1,174 +1,192 @@
-<?php require './models/Icon.php'; ?>
-<div class="main-div">
-    <div class="intro">
-        <div class="neon-text">PLAYER ONE, READY</div>
+<?php
+    require_once __DIR__ . '/../lib/Auth.php';
+    require_once __DIR__ . '/../lib/View.php';
+    require_once __DIR__ . '/../models/Icon.php';
+    require_once __DIR__ . '/../models/Games.php';
+
+    $visitor = Auth::getCurrentUser();
+
+    // The counters used to be hard-coded. They now describe the real catalog.
+    $database = new Database();
+    $catalog = $database->query(
+        "SELECT COUNT(*) AS games,
+                COALESCE(SUM(downloads), 0) AS downloads,
+                COALESCE(SUM(views), 0) AS views,
+                SUM(CASE WHEN discount > 0 THEN 1 ELSE 0 END) AS on_sale
+         FROM game WHERE visibility = 'Public'"
+    )->fetch();
+
+    $trending = Games::search(['sort' => 'popular', 'limit' => 4])['games'];
+
+    $promises = [
+        ['shield-halved', 'Secure & verified', 'Every build is scanned and served through an ownership check, so downloads are always the real thing.', 'rgb(170, 240, 255)'],
+        ['tag', 'Transparent pricing', 'The price you see is the price you pay. No hidden service fees, ever.', 'rgb(255, 251, 190)'],
+        ['bolt', 'Always available', 'Your library follows you: buy once and download on every platform the developer ships.', 'rgb(230, 173, 255)'],
+    ];
+?>
+
+<div class="landing">
+
+    <!-- ------------------------------------------------------------- hero -->
+    <section class="hero">
+        <span class="neon-text">PLAYER ONE, READY</span>
 
         <div class="landing-keys-container">
             <div class="landing-glass-key floating" data-key="w">W</div>
-            <div class="landing-glass-key floating" data-key="a" style="animation-delay:0.5s;">A</div>
-            <div class="landing-glass-key floating" data-key="s" style="animation-delay:1s;">S</div>
-            <div class="landing-glass-key floating" data-key="d" style="animation-delay:1.5s;">D</div>
+            <div class="landing-glass-key floating" data-key="a" style="animation-delay:.5s">A</div>
+            <div class="landing-glass-key floating" data-key="s" style="animation-delay:1s">S</div>
+            <div class="landing-glass-key floating" data-key="d" style="animation-delay:1.5s">D</div>
         </div>
 
-        <div class="neon-text">
-            "BEYOND THE KEYS: YOUR JOURNEY STARTS HERE"
-        </div>
+        <span class="neon-text">"BEYOND THE KEYS: YOUR JOURNEY STARTS HERE"</span>
 
-        <div class="caption">
-            Your next obsession <span class="start-here">starts here.</span>
-        </div>
+        <h1 class="hero-title">
+            Your next obsession <span class="gradient-text">starts here.</span>
+        </h1>
 
-        <div class="caption2">
-            WASD is the game store built for players. Browse the catalog, wishlist what you're watching
-            and check out in seconds - all in one dark, neon-soaked storefront.
-        </div>
+        <p class="hero-copy">
+            WASD is the game store built for players. Browse the catalog, wishlist what you are
+            watching and check out in seconds - all in one dark, neon-soaked storefront.
+        </p>
 
-        <div class="button-container">
-            <button class="button" onclick="window.location.href='<?= BASE_URL ?>/store';">Browse the store</button>
-            <button class="no-highlight-button" onclick="window.location.href='<?= BASE_URL ?>/sign-up';">Create free account</button>
+        <div class="hero-actions">
+            <a class="btn btn-primary" href="<?= BASE_URL ?>/store">Browse the store</a>
+            <?php if ($visitor): ?>
+                <a class="btn btn-ghost" href="<?= BASE_URL ?>/library">Open my library</a>
+            <?php else: ?>
+                <a class="btn btn-ghost" href="<?= BASE_URL ?>/sign-up">Create free account</a>
+            <?php endif; ?>
         </div>
 
         <div class="stats-minimal">
             <div>
-                <strong style="font-family:Unbounded;font-weight:600;font-size:22px;">1.2M+</strong>
-                <div style="font-size:12px;letter-spacing:0.15rem;">DOWNLOADS</div>
+                <strong><?= View::compactNumber((int)$catalog['downloads']) ?></strong>
+                <span>Downloads</span>
             </div>
             <div>
-                <strong style="font-family:Unbounded;font-weight:600;font-size:22px;">25K</strong>
-                <div style="font-size:12px;letter-spacing:0.15rem;">Community</div>
+                <strong><?= View::compactNumber((int)$catalog['views']) ?></strong>
+                <span>Page views</span>
             </div>
             <div>
-                <strong style="font-family:Unbounded;font-weight:600;font-size:22px;">450+</strong>
-                <div style="font-size:12px;letter-spacing:0.15rem;">Active Discussions</div>
+                <strong><?= number_format((int)$catalog['games']) ?></strong>
+                <span>Games listed</span>
             </div>
-            <div class="discount">
-                <strong style="font-family:Unbounded;font-weight:600;font-size:22px;">New</strong>
-                <div style="font-size:12px;letter-spacing:0.15rem;">FLASH SALE</div>
-            </div>
-        </div>
-
-        <div class="trending"></div>
-    </div>
-
-    <div style="width:130%;">
-        <div class="promises">Store Promises</div>
-         <div class="cards">
-            <div class="card-box">
-                <div class="big-icon">
-                    <?=
-                        Icon::get('shield-halved', 24, [
-                            "style" => "color: rgb(170, 240, 255);"
-                        ]);
-                    ?>
-                </div>
-                <span class="card-title">Secure & Verified</span>
-                <p>Your payments are encrypted and every game is officially licensed.</p>
-            </div>
-
-            <div class="card-box">
-                <div class="big-icon">
-                    <?=
-                        Icon::get('tag', 24, [
-                            "style" => "color: rgb(255, 251, 190);"
-                        ]);
-                    ?>
-                </div>
-                <div class="card-title">Transparent Pricing</div>
-                <p>The price you see is the price you pay. No hidden service fees.</p>
-            </div>
-
-            <div class="card-box">
-                <div class="big-icon">
-                    <?=
-                        Icon::get('bolt', 24, [
-                            "style" => "color: rgb(230, 173, 255);"
-                        ]);
-                    ?>
-                </div>
-                <div class="card-title">Always Available</div>
-                <p>24/7 support and servers optimized for fast, reliable downloads.</p>
+            <div class="stat-highlight">
+                <strong><?= (int)$catalog['on_sale'] ?></strong>
+                <span>On sale now</span>
             </div>
         </div>
-    </div>
+    </section>
 
-    <div style="width:122%;" class="start-library">
-        <div class="free">FREE FOREVER</div>
-        <div style="margin-bottom:2rem;">
-            <div class="press" style="margin-bottom:1rem;text-align:center;">
-                Press start on your library
+    <!-- --------------------------------------------------------- trending -->
+    <?php if (!empty($trending)): ?>
+        <section class="landing-section">
+            <header class="landing-section-head">
+                <h2 class="landing-heading">Trending right now</h2>
+                <a class="btn btn-ghost btn-sm" href="<?= BASE_URL ?>/store">
+                    See the whole store <?= Icon::get('chevron-right', 14) ?>
+                </a>
+            </header>
+
+            <div class="game-grid stagger">
+                <?php foreach ($trending as $game): ?>
+                    <?php require __DIR__ . '/../components/game-card.php'; ?>
+                <?php endforeach; ?>
             </div>
-            <div style="font-family:Outfit;font-size:17px;color:var(--muted);text-align:center;">
-                Join WASD to unlock your wishlist, cart and reviews.
-            </div>
+        </section>
+    <?php endif; ?>
+
+    <!-- --------------------------------------------------------- promises -->
+    <section class="landing-section">
+        <h2 class="landing-heading">Store promises</h2>
+
+        <div class="promise-grid stagger">
+            <?php foreach ($promises as [$icon, $title, $copy, $color]): ?>
+                <article class="card card--interactive promise-card">
+                    <span class="big-icon"><?= Icon::get($icon, 24, ['style' => "color: $color;"]) ?></span>
+                    <h3 class="promise-title"><?= $title ?></h3>
+                    <p class="promise-copy"><?= $copy ?></p>
+                </article>
+            <?php endforeach; ?>
         </div>
-        <div style="display:flex;gap:1rem;justify-content:center;">
-            <button onclick="window.location.href='<?= BASE_URL ?>/sign-up';">Sign Up Free</button>
-            <button onclick="window.location.href='<?= BASE_URL ?>/sign-in';">I already have account</button>
+    </section>
+
+    <!-- -------------------------------------------------------------- cta -->
+    <section class="start-library">
+        <span class="free">FREE FOREVER</span>
+
+        <h2 class="press-heading">
+            <?= $visitor ? 'Ready for your next game?' : 'Press start on your library' ?>
+        </h2>
+
+        <p class="hero-copy">
+            <?= $visitor
+                ? 'Your wishlist, cart and library are one click away.'
+                : 'Join WASD to unlock your wishlist, cart and reviews.' ?>
+        </p>
+
+        <div class="hero-actions">
+            <?php if ($visitor): ?>
+                <a class="btn btn-primary" href="<?= BASE_URL ?>/store">Browse the store</a>
+                <a class="btn btn-ghost" href="<?= BASE_URL ?>/dashboard">Publish your own game</a>
+            <?php else: ?>
+                <a class="btn btn-primary" href="<?= BASE_URL ?>/sign-up">Sign up free</a>
+                <a class="btn btn-ghost" href="<?= BASE_URL ?>/sign-in">I already have an account</a>
+            <?php endif; ?>
         </div>
-    </div>
+    </section>
 </div>
+
 <script>
 (() => {
-    // Clean up old global listeners if they exist from a previous SPA visit
-    if (window.__wasdCleanup) {
-        window.__wasdCleanup();
-    }
+    // Remove listeners left behind by a previous visit to this page.
+    if (window.__wasdCleanup) window.__wasdCleanup();
 
-    const keyMap = {};
     const keyElements = document.querySelectorAll('.landing-glass-key');
-
     if (!keyElements.length) return;
 
-    // Attach element-level press events
-    keyElements.forEach(keyEl => {
-        const keyVal = keyEl.getAttribute('data-key')?.toLowerCase();
-        if (!keyVal) return;
+    const keyMap = {};
 
-        keyMap[keyVal] = keyEl;
-
-        const pressKey = () => activateKey(keyEl);
-        const releaseKey = () => deactivateKey(keyEl);
-
-        keyEl.addEventListener('mousedown', pressKey);
-        keyEl.addEventListener('mouseup', releaseKey);
-        keyEl.addEventListener('mouseleave', releaseKey);
-
-        keyEl.addEventListener('touchstart', (e) => { e.preventDefault(); pressKey(); });
-        keyEl.addEventListener('touchend', releaseKey);
-    });
-
-    function activateKey(element) {
-        if (!element) return;
+    const press = element => {
         element.classList.remove('floating');
         element.classList.add('pressed');
-    }
+    };
 
-    function deactivateKey(element) {
-        if (!element) return;
+    const release = element => {
         element.classList.remove('pressed');
         element.classList.add('floating');
-    }
-
-    // Define physical keyboard event handlers
-    const handleKeyDown = (e) => {
-        if (e.repeat) return;
-        const pressedKey = e.key.toLowerCase();
-        if (keyMap[pressedKey]) activateKey(keyMap[pressedKey]);
     };
 
-    const handleKeyUp = (e) => {
-        const releasedKey = e.key.toLowerCase();
-        if (keyMap[releasedKey]) deactivateKey(keyMap[releasedKey]);
+    keyElements.forEach(element => {
+        const key = element.dataset.key?.toLowerCase();
+        if (!key) return;
+
+        keyMap[key] = element;
+
+        element.addEventListener('mousedown', () => press(element));
+        element.addEventListener('mouseup', () => release(element));
+        element.addEventListener('mouseleave', () => release(element));
+        element.addEventListener('touchstart', event => { event.preventDefault(); press(element); }, { passive: false });
+        element.addEventListener('touchend', () => release(element));
+    });
+
+    const onKeyDown = event => {
+        if (event.repeat) return;
+        const element = keyMap[event.key.toLowerCase()];
+        if (element) press(element);
     };
 
-    // Attach window event listeners
-    window.addEventListener('keydown', handleKeyDown);
-    window.addEventListener('keyup', handleKeyUp);
+    const onKeyUp = event => {
+        const element = keyMap[event.key.toLowerCase()];
+        if (element) release(element);
+    };
 
-    // Save cleanup function on window to prevent duplicate listeners on future SPA visits
+    window.addEventListener('keydown', onKeyDown);
+    window.addEventListener('keyup', onKeyUp);
+
     window.__wasdCleanup = () => {
-        window.removeEventListener('keydown', handleKeyDown);
-        window.removeEventListener('keyup', handleKeyUp);
+        window.removeEventListener('keydown', onKeyDown);
+        window.removeEventListener('keyup', onKeyUp);
         delete window.__wasdCleanup;
     };
 })();

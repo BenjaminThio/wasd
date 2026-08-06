@@ -2,7 +2,7 @@
     <div class="box font">
         <div class="welcome">WELCOME</div>
 
-        <div class="input-group">Your wishlist, cart and reviews are waiting where you left them.</div>
+        <div class="input-group form-intro">Your wishlist, cart and reviews are waiting where you left them.</div>
 
         <div class="input-group">
             <label class="field-label" for="email">EMAIL ADDRESS:</label>

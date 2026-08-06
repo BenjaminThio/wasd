@@ -1,28 +1,30 @@
 <?php
-header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
-require_once __DIR__ . '/../../../config.php';
-require_once __DIR__ . '/../../../lib/Auth.php';
-require_once __DIR__ . '/../../../models/Games.php';
-require_once __DIR__ . '/../../../models/Icon.php';
+    /**
+     * Developer project chunks for the dashboard, rendered as HTML rows.
+     */
+    require_once __DIR__ . '/../../../lib/Api.php';
+    require_once __DIR__ . '/../../../lib/View.php';
+    require_once __DIR__ . '/../../../models/Games.php';
+    require_once __DIR__ . '/../../../models/Icon.php';
 
-$user = Auth::getCurrentUser();
-if (!$user) {
-    http_response_code(401);
+    Api::begin(false);
+
+    $user = Api::requireUser();
+
+    $limit  = Api::int('limit', 6, 1, 50);
+    $offset = Api::int('offset', 0, 0);
+
+    $userGames = Games::getByUserIdChunk($user->getId(), $limit, $offset);
+
+    if (empty($userGames)) {
+        Api::noContent();
+    }
+
+    header('Content-Type: text/html; charset=utf-8');
+
+    foreach ($userGames as $game) {
+        require __DIR__ . '/../../../components/dashboard-project-card.php';
+    }
+
     exit;
-}
-
-$limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 10;
-$offset = isset($_GET['offset']) ? (int)$_GET['offset'] : 0;
-
-$userGames = Games::getByUserIdChunk($user->getId(), $limit, $offset);
-
-if (empty($userGames)) {
-    http_response_code(204);
-    exit;
-}
-
-foreach ($userGames as $game) {
-    require __DIR__ . '/../../../components/dashboard-project-card.php';
-}
-exit;
 ?>

@@ -12,6 +12,8 @@
      * Use Media::absolute() when you need to touch the real file on disk.
      * Use Media::store()    when you have a value coming back from a form / old row.
      */
+    require_once __DIR__ . '/Env.php';
+
     class Media
     {
         /** Filesystem path of the project root (the folder that holds /src and /public). */
@@ -67,6 +69,49 @@
         public static function absolute(string $stored): string
         {
             return self::root() . '/' . ltrim(self::store($stored), '/');
+        }
+
+        /**
+         * URL for a playable web build.
+         *
+         * A build is somebody else's code. Run it on our own origin and it can
+         * call our API with the visitor's cookies and read our pages - which is
+         * account takeover by an uploaded game.
+         *
+         * Sandboxing the iframe without allow-same-origin does block that, but
+         * it gives the build an opaque origin, and an opaque origin cannot
+         * construct a Web Worker at all. Engines that use threads - Godot's web
+         * export, Unity with threading - therefore cannot run that way. No
+         * header fixes it; the two requirements genuinely conflict.
+         *
+         * The way out is a second hostname pointing at this same folder, which
+         * is what itch.io does. Set PLAY_ORIGIN in .env to enable it:
+         *
+         *     PLAY_ORIGIN=http://games.wasd.local
+         *
+         * A different origin is isolated from ours by the browser itself: the
+         * build cannot read our DOM or send our cookies, and because it is a
+         * normal (non-opaque) origin, workers and fetch behave normally.
+         *
+         * Left empty, builds are served from our own origin - see the note on
+         * the sandbox in the game page.
+         */
+        public static function playUrl(?string $stored): string
+        {
+            $path = self::url($stored);
+            $origin = rtrim(Env::get('PLAY_ORIGIN', ''), '/');
+
+            if ($origin === '' || preg_match('#^https?://#i', $path)) {
+                return $path;
+            }
+
+            return $origin . $path;
+        }
+
+        /** True when builds are served from a hostname of their own. */
+        public static function playOriginConfigured(): bool
+        {
+            return trim(Env::get('PLAY_ORIGIN', '')) !== '';
         }
 
         /** Relative folder that holds every asset for one game. */

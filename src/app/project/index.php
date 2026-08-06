@@ -310,7 +310,13 @@
         button.textContent = 'Saving…';
 
         try {
-            const response = await fetch(API, { method: 'POST', body: data });
+            // Multipart, so it bypasses WASD.api's JSON path - the CSRF token
+            // still has to travel with it.
+            const response = await fetch(API, {
+                method: 'POST',
+                headers: { 'X-CSRF-Token': WASD.csrfToken() },
+                body: data
+            });
             const raw = await response.text();
 
             let result;

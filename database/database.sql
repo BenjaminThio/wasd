@@ -4,6 +4,7 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- 2. Drop all existing tables (Clean Slate Execution)
 DROP TABLE IF EXISTS cart;
 DROP TABLE IF EXISTS wishlist;
+DROP TABLE IF EXISTS library;
 DROP TABLE IF EXISTS game_build;
 DROP TABLE IF EXISTS game_screenshot;
 DROP TABLE IF EXISTS game_category;
@@ -47,7 +48,10 @@ CREATE TABLE IF NOT EXISTS game (
     views INT DEFAULT 0,
     downloads INT DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
+    FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE,
+    INDEX idx_game_visibility (visibility),
+    INDEX idx_game_title (title),
+    INDEX idx_game_developer (developer)
 );
 
 -- Game Builds Table (Supports multiple build uploads per project)
@@ -62,6 +66,11 @@ CREATE TABLE IF NOT EXISTS game_build (
     is_hidden BOOLEAN NOT NULL DEFAULT 0,
     sort_order INT NOT NULL DEFAULT 0,
     uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    -- A .zip the developer marked "playable in the browser". It is unpacked
+    -- once at save time; play_path records the entry document that was found,
+    -- e.g. public/uploads/games/18/play_12/index.html
+    is_playable BOOLEAN NOT NULL DEFAULT 0,
+    play_path VARCHAR(255) NULL,
     FOREIGN KEY (game_id) REFERENCES game(id) ON DELETE CASCADE
 );
 
@@ -130,6 +139,19 @@ CREATE TABLE IF NOT EXISTS wishlist (
     user_id INT NOT NULL,
     game_id INT NOT NULL,
     added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (user_id, game_id),
+    FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE,
+    FOREIGN KEY (game_id) REFERENCES game(id) ON DELETE CASCADE
+);
+
+-- Library Table (a completed purchase - "this player owns this game")
+-- Free games are not stored here: everybody owns those, so ownership for them
+-- is answered from the price instead of from a row.
+CREATE TABLE IF NOT EXISTS library (
+    user_id INT NOT NULL,
+    game_id INT NOT NULL,
+    price_paid DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+    acquired_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (user_id, game_id),
     FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE,
     FOREIGN KEY (game_id) REFERENCES game(id) ON DELETE CASCADE
@@ -235,5 +257,10 @@ INSERT INTO cart (user_id, game_id) VALUES
     (1, 3);
 
 -- Wishlist
-INSERT INTO wishlist (user_id, game_id) VALUES 
+INSERT INTO wishlist (user_id, game_id) VALUES
     (1, 2);
+
+-- Library (one already-purchased paid game, so the "you own this" state is
+-- visible straight after seeding)
+INSERT INTO library (user_id, game_id, price_paid) VALUES
+    (1, 2, 2.00);

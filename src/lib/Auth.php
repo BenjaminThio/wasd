@@ -30,6 +30,8 @@
             
             // Store ONLY the user ID in the session, not the whole object or password
             $_SESSION['user_id'] = $user->getId();
+
+            self::forgetCurrentUser();
         }
 
         public static function loginDevUser(): User
@@ -58,18 +60,42 @@
             
             // Completely destroy the session file on the server
             session_destroy();
+
+            self::forgetCurrentUser();
         }
 
-        // Global helper to grab the logged-in User object anytime you need it
+        /**
+         * The signed-in user, looked up once per request.
+         *
+         * The header, the footer and the page body all ask for it, and each
+         * call used to be a fresh round trip to the database. Nothing can
+         * change the answer mid-request except login() and logout(), which
+         * both clear the cache below.
+         */
+        private static ?User $currentUser = null;
+        private static bool $currentUserLoaded = false;
+
         public static function getCurrentUser(): ?User
         {
-            self::startSession();
-            
-            if (isset($_SESSION['user_id'])) {
-                return Users::getById($_SESSION['user_id']);
+            if (self::$currentUserLoaded) {
+                return self::$currentUser;
             }
-            
-            return null; // No one is logged in
+
+            self::startSession();
+            self::$currentUserLoaded = true;
+
+            self::$currentUser = isset($_SESSION['user_id'])
+                ? Users::getById($_SESSION['user_id'])
+                : null;
+
+            return self::$currentUser;
+        }
+
+        /** Drops the memoised user, so the next read reflects a new session. */
+        private static function forgetCurrentUser(): void
+        {
+            self::$currentUser = null;
+            self::$currentUserLoaded = false;
         }
     }
 ?>

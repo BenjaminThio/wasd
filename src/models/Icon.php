@@ -32,16 +32,107 @@
             'plus' => 'M352 128C352 110.3 337.7 96 320 96C302.3 96 288 110.3 288 128L288 288L128 288C110.3 288 96 302.3 96 320C96 337.7 110.3 352 128 352L288 352L288 512C288 529.7 302.3 544 320 544C337.7 544 352 529.7 352 512L352 352L512 352C529.7 352 544 337.7 544 320C544 302.3 529.7 288 512 288L352 288L352 128z',
             'triangle' => 'M13.73 4a2 2 0 0 0-3.46 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z',
             'camera' => 'M257.1 96C238.4 96 220.9 105.4 210.5 120.9L184.5 160L128 160C92.7 160 64 188.7 64 224L64 480C64 515.3 92.7 544 128 544L512 544C547.3 544 576 515.3 576 480L576 224C576 188.7 547.3 160 512 160L455.5 160L429.5 120.9C419.1 105.4 401.6 96 382.9 96L257.1 96zM250.4 147.6C251.9 145.4 254.4 144 257.1 144L382.8 144C385.5 144 388 145.3 389.5 147.6L422.7 197.4C427.2 204.1 434.6 208.1 442.7 208.1L512 208.1C520.8 208.1 528 215.3 528 224.1L528 480.1C528 488.9 520.8 496.1 512 496.1L128 496C119.2 496 112 488.8 112 480L112 224C112 215.2 119.2 208 128 208L197.3 208C205.3 208 212.8 204 217.3 197.3L250.5 147.5zM320 448C381.9 448 432 397.9 432 336C432 274.1 381.9 224 320 224C258.1 224 208 274.1 208 336C208 397.9 258.1 448 320 448zM256 336C256 300.7 284.7 272 320 272C355.3 272 384 300.7 384 336C384 371.3 355.3 400 320 400C284.7 400 256 371.3 256 336z',
+
+            /* ------------------------------------------------------------------
+               Interface icons, drawn on a 24x24 grid (see VIEWBOXES below).
+               Added for the account navigation, store filters and the download
+               / gallery controls on the game page.
+               ------------------------------------------------------------------ */
+            'cart' => 'M6 4H3a1 1 0 0 0 0 2h2.2l2.6 9.1A2 2 0 0 0 9.7 17H18a1 1 0 0 0 0-2H9.7l-.3-1H18a2 2 0 0 0 1.9-1.4l1.6-5A1 1 0 0 0 20.6 6H7.4L7 4.8A1 1 0 0 0 6 4Zm3 15a1.75 1.75 0 1 0 0 3.5A1.75 1.75 0 0 0 9 19Zm8 0a1.75 1.75 0 1 0 0 3.5A1.75 1.75 0 0 0 17 19Z',
+            'heart' => 'M12 21s-7.5-4.7-9.3-9A5.6 5.6 0 0 1 12 6.1 5.6 5.6 0 0 1 21.3 12c-1.8 4.3-9.3 9-9.3 9Z',
+            'download' => 'M12 3a1 1 0 0 1 1 1v8.6l2.3-2.3a1 1 0 1 1 1.4 1.4l-4 4a1 1 0 0 1-1.4 0l-4-4a1 1 0 1 1 1.4-1.4l2.3 2.3V4a1 1 0 0 1 1-1Zm-7 15a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H6a1 1 0 0 1-1-1Z',
+            'search' => 'M10.5 3a7.5 7.5 0 1 0 4.6 13.4l4.2 4.3a1 1 0 0 0 1.4-1.4l-4.3-4.2A7.5 7.5 0 0 0 10.5 3Zm0 2a5.5 5.5 0 1 1 0 11 5.5 5.5 0 0 1 0-11Z',
+            'menu' => 'M4 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2Zm0 5h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2Zm0 5h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2Z',
+            'close' => 'M6.2 4.8 12 10.6l5.8-5.8a1 1 0 1 1 1.4 1.4L13.4 12l5.8 5.8a1 1 0 0 1-1.4 1.4L12 13.4l-5.8 5.8a1 1 0 0 1-1.4-1.4L10.6 12 4.8 6.2a1 1 0 0 1 1.4-1.4Z',
+            'logout' => 'M10 4a1 1 0 0 1 0 2H7a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3a1 1 0 1 1 0 2H7a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h3Zm5.3 3.3 4 4a1 1 0 0 1 0 1.4l-4 4a1 1 0 0 1-1.4-1.4l2.3-2.3H10a1 1 0 1 1 0-2h6.2l-2.3-2.3a1 1 0 0 1 1.4-1.4Z',
+            'grid' => 'M4 4h6v6H4V4Zm10 0h6v6h-6V4ZM4 14h6v6H4v-6Zm10 0h6v6h-6v-6Z',
+            'folder' => 'M3 6a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6Z',
+            'chevron-down' => 'M6.7 9.3a1 1 0 0 1 1.4 0L12 13.2l3.9-3.9a1 1 0 1 1 1.4 1.4l-4.6 4.6a1 1 0 0 1-1.4 0L6.7 10.7a1 1 0 0 1 0-1.4Z',
+            'chevron-right' => 'M9.3 6.7a1 1 0 0 1 1.4 0l4.6 4.6a1 1 0 0 1 0 1.4l-4.6 4.6a1 1 0 0 1-1.4-1.4l3.9-3.9-3.9-3.9a1 1 0 0 1 0-1.4Z',
+            'clock' => 'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Zm1 4a1 1 0 1 0-2 0v5a1 1 0 0 0 .55.9l3 1.5a1 1 0 1 0 .9-1.8L13 11.4V7Z',
+            'calendar' => 'M8 2a1 1 0 0 1 1 1v1h6V3a1 1 0 1 1 2 0v1h1a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1V3a1 1 0 0 1 1-1ZM6 9v10h12V9H6Z',
+            'image' => 'M4 5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5Zm3 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm11 9-4.5-6-3.5 4.5-2-2.5L6 17h12Z',
+            'info' => 'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Zm0 4a1.25 1.25 0 1 1 0 2.5A1.25 1.25 0 0 1 12 7Zm1 4a1 1 0 1 0-2 0v5a1 1 0 1 0 2 0v-5Z',
+            'check' => 'M20.3 6.3a1 1 0 0 1 0 1.4l-9.6 9.6a1 1 0 0 1-1.4 0L4.7 12.7a1 1 0 1 1 1.4-1.4l3.9 3.9 8.9-8.9a1 1 0 0 1 1.4 0Z',
+            'star' => 'M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8L3.5 9.7l5.9-.9L12 3.5Z',
+            'chart' => 'M4 20a1 1 0 0 1-1-1V5a1 1 0 1 1 2 0v13h14a1 1 0 1 1 0 2H4Zm4-3a1 1 0 0 1-1-1v-4a1 1 0 1 1 2 0v4a1 1 0 0 1-1 1Zm4 0a1 1 0 0 1-1-1V8a1 1 0 1 1 2 0v8a1 1 0 0 1-1 1Zm4 0a1 1 0 0 1-1-1v-6a1 1 0 1 1 2 0v6a1 1 0 0 1-1 1Z',
+            'filter' => 'M3 5a1 1 0 0 1 1-1h16a1 1 0 0 1 .8 1.6l-6.3 8.1V19a1 1 0 0 1-1.4.9l-3-1.4a1 1 0 0 1-.6-.9v-3.9L3.2 5.6A1 1 0 0 1 3 5Z',
+            'gamepad' => 'M7 7h10a5 5 0 0 1 5 5v1a4 4 0 0 1-7.2 2.4L14 14h-4l-.8 1.4A4 4 0 0 1 2 13v-1a5 5 0 0 1 5-5Zm0 3a1 1 0 0 0-1 1H5a1 1 0 1 0 0 2h1a1 1 0 0 0 1 1 1 1 0 0 0 1-1h1a1 1 0 1 0 0-2H8a1 1 0 0 0-1-1Zm9 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2Zm2 2a1 1 0 1 0 0 2 1 1 0 0 0 0-2Z',
         ];
 
-        public static function get(string $iconName, int $size = 20, array $attributes = [], string $viewBox = "0 0 640 640")
+        /**
+         * Icons authored on a 24x24 grid rather than Font Awesome's 640x640 one.
+         * Looked up automatically so callers never have to remember which is which.
+         */
+        private const array VIEWBOXES = [
+            'triangle' => '0 0 24 24',
+            'cart' => '0 0 24 24',
+            'heart' => '0 0 24 24',
+            'download' => '0 0 24 24',
+            'search' => '0 0 24 24',
+            'menu' => '0 0 24 24',
+            'close' => '0 0 24 24',
+            'logout' => '0 0 24 24',
+            'grid' => '0 0 24 24',
+            'folder' => '0 0 24 24',
+            'chevron-down' => '0 0 24 24',
+            'chevron-right' => '0 0 24 24',
+            'clock' => '0 0 24 24',
+            'calendar' => '0 0 24 24',
+            'image' => '0 0 24 24',
+            'info' => '0 0 24 24',
+            'check' => '0 0 24 24',
+            'star' => '0 0 24 24',
+            'chart' => '0 0 24 24',
+            'filter' => '0 0 24 24',
+            'gamepad' => '0 0 24 24',
+        ];
+
+        /**
+         * Icons already written out during this request.
+         *
+         * The path data is the expensive part - the Linux glyph alone is about
+         * 4 KB - and a store page repeats the same handful of platform icons on
+         * every card. Half of that page used to be duplicated path data.
+         *
+         * So the first time an icon appears it is emitted as a <symbol> and
+         * used; every later appearance is just a <use> reference, which costs
+         * about eighty bytes. The registry is per-request, so HTML rendered by
+         * an API endpoint defines its own symbols and stays self-contained when
+         * it is injected into a page.
+         */
+        private static array $defined = [];
+
+        /**
+         * Forget what has been defined so far.
+         *
+         * The router buffers the page body first and renders the shell (header
+         * and footer) afterwards. Without this, an icon the body happened to
+         * use first was defined inside <main>, and the header merely referenced
+         * it - so the moment a soft navigation replaced <main>, those header
+         * icons lost their definition and vanished. The account dropdown's
+         * caret and library icons were the visible casualties.
+         *
+         * Resetting between the two makes the shell self-contained: it always
+         * carries its own symbols and never depends on markup that the SPA can
+         * swap out from under it.
+         */
+        public static function resetDefinitions(): void
         {
-            $path = self::PATHS[strtolower($iconName)] ?? null;
+            self::$defined = [];
+        }
+
+        public static function get(string $iconName, int $size = 20, array $attributes = [], ?string $viewBox = null)
+        {
+            $key = strtolower($iconName);
+            $path = self::PATHS[$key] ?? null;
 
             if ($path === null)
             {
                 return '';
             }
+
+            $viewBox ??= self::VIEWBOXES[$key] ?? '0 0 640 640';
 
             // Define the mandatory SVG properties
             $coreAttributes = [
@@ -61,12 +152,24 @@
 
             // Transform the array into a valid HTML string (e.g., class="wasd-icon my-class" style="color: red;")
             $attrString = '';
-            foreach ($finalAttributes as $key => $value) {
-                $attrString .= htmlspecialchars($key) . '="' . htmlspecialchars((string)$value) . '" ';
+            foreach ($finalAttributes as $attribute => $value) {
+                $attrString .= htmlspecialchars($attribute) . '="' . htmlspecialchars((string)$value) . '" ';
             }
 
-            // Inject the compiled string directly into the SVG tag
-            return "<svg " . trim($attrString) . "><path d=\"{$path}\"/></svg>";
+            // A symbol is keyed by name AND viewBox: 'triangle' is drawn on two
+            // different grids depending on the caller.
+            $symbolId = 'wi-' . $key . '-' . substr(md5($viewBox), 0, 4);
+
+            if (!isset(self::$defined[$symbolId])) {
+                self::$defined[$symbolId] = true;
+
+                return '<svg ' . trim($attrString) . '>'
+                     . '<symbol id="' . $symbolId . '" viewBox="' . htmlspecialchars($viewBox) . '">'
+                     . '<path d="' . $path . '"/></symbol>'
+                     . '<use href="#' . $symbolId . '"/></svg>';
+            }
+
+            return '<svg ' . trim($attrString) . '><use href="#' . $symbolId . '"/></svg>';
         }
     }
 ?>

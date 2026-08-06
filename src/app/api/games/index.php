@@ -1,32 +1,59 @@
 <?php
-header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
-header("Cache-Control: post-check=0, pre-check=0", false);
-header("Pragma: no-cache");
+    /**
+     * Store listing / search endpoint.
+     *
+     * GET ?q&category&platform&price&sort&limit&offset
+     *
+     * Returns the rendered cards plus the totals the toolbar needs:
+     *   { html, count, total, has_more }
+     *
+     * The cards are produced by the same component the page uses for its first
+     * paint, so search results and server-rendered results can never drift.
+     */
+    require_once __DIR__ . '/../../../lib/Api.php';
+    require_once __DIR__ . '/../../../lib/View.php';
+    require_once __DIR__ . '/../../../models/Games.php';
+    require_once __DIR__ . '/../../../models/Icon.php';
+    require_once __DIR__ . '/../../../models/Library.php';
 
-require_once __DIR__ . '/../../../config.php'; 
-require_once __DIR__ . '/../../../lib/Env.php'; 
-require_once __DIR__ . '/../../../models/Games.php';
-require_once __DIR__ . '/../../../models/Icon.php';
-require_once __DIR__ . '/../../../models/Category.php';
-require_once __DIR__ . '/../../../lib/utils.php';
+    Api::begin();
 
-$offset = isset($_GET['offset']) ? (int)$_GET['offset'] : 0;
-// Read the limit from the URL, default to 12 if missing, cap at 50 for security
-$limit = isset($_GET['limit']) ? min((int)$_GET['limit'], 50) : 12;
+    $limit  = Api::int('limit', 12, 1, 50);
+    $offset = Api::int('offset', 0, 0);
 
-// Get the next chunk from the database
-$games = Games::getChunk($limit, $offset);
+    $result = Games::search([
+        'q'        => Api::text('q'),
+        'category' => Api::int('category', 0, 0),
+        'platform' => Api::text('platform'),
+        'price'    => Api::text('price', 'all'),
+        'sort'     => Api::text('sort', 'newest'),
+        'limit'    => $limit,
+        'offset'   => $offset,
+    ]);
 
-// If the array is empty, tell JS to stop asking (HTTP 204)
-if (empty($games)) {
-    http_response_code(204);
-    exit;
-}
+    $games = $result['games'];
 
-// Generate the HTML by reusing your exact same component
-foreach ($games as $game) {
-    require __DIR__ . '/../../../components/game-card.php';
-}
+    if (empty($games)) {
+        Api::json(['html' => '', 'count' => 0, 'total' => $result['total'], 'has_more' => false]);
+    }
 
-exit; 
+    $viewer = Api::optionalUser();
+    $ownedIds = Library::ownedIdsIn(
+        $viewer?->getId(),
+        array_map(fn(Game $game) => (int)$game->getId(), $games),
+        Api::database()
+    );
+
+    ob_start();
+    foreach ($games as $game) {
+        require __DIR__ . '/../../../components/game-card.php';
+    }
+    $html = ob_get_clean();
+
+    Api::json([
+        'html'     => $html,
+        'count'    => count($games),
+        'total'    => $result['total'],
+        'has_more' => ($offset + count($games)) < $result['total'],
+    ]);
 ?>

@@ -1,27 +1,56 @@
-<div style="background-color:rgba(255,255,255,0.03);border:1px solid var(--stroke);border-radius:1rem;padding:1.5rem;display:flex;flex-direction:column;gap:1rem;">
-    <div style="display:flex;justify-content:space-between;">
-        <div style="display:flex;align-items:center;gap:0.8rem;">
-            <div style="color:var(--violet);background-color:rgba(138, 92, 246, 0.2);display:inline-flex;justify-content:center;align-items:center;padding:0.35rem;border:1px solid rgba(138, 92, 246, 0.5);border-radius:0.5rem;">
-                <?= Icon::get('user', 16) ?>
-            </div>
-            <strong style="font-family:Outfit;font-size:14.5px;">
-                <?= htmlspecialchars($review->getUser()->getUsername()) ?>
-            </strong>
+<?php
+    /**
+     * One player review. Expects $review (Review).
+     *
+     * Optionally $reviewViewerId (?int): when it matches the author, the card
+     * carries edit and delete controls. The check is repeated on the server for
+     * every write, so hiding the buttons is presentation, not security.
+     *
+     * Rendered both inside the page and by src/app/api/reviews.
+     */
+    $reviewIsMine = $review->isBy($reviewViewerId ?? null);
+?>
+<article class="review-card<?= $reviewIsMine ? ' is-mine' : '' ?>"
+         data-review-id="<?= (int)$review->getId() ?>">
+    <header class="review-card-head">
+        <div class="review-card-user">
+            <span class="review-avatar">
+                <?= strtoupper(htmlspecialchars(substr($review->getUser()->getUsername(), 0, 1))) ?>
+            </span>
+            <strong><?= htmlspecialchars($review->getUser()->getUsername()) ?></strong>
+
             <?php if ($review->isEnjoy()): ?>
-                <div style="color:var(--green);border:1px solid rgba(52, 211, 153, 0.5);background-color:rgba(52, 211, 153, 0.2);display:inline-flex;justify-content:center;align-items:center;padding:0.35rem;border-radius:0.5rem;">
-                    <?= Icon::get('thumbs-up', 16) ?>
-                </div>
+                <span class="review-verdict is-positive" title="Recommended">
+                    <?= Icon::get('thumbs-up', 14) ?>
+                </span>
             <?php else: ?>
-                <div style="color:var(--magenta);border:1px solid rgba(255, 45, 118, 0.5);background-color:rgba(255, 45, 118, 0.2);display:inline-flex;justify-content:center;align-items:center;padding:0.35rem;border-radius:0.5rem;">
-                    <?= Icon::get('thumbs-down', 16) ?>
+                <span class="review-verdict is-negative" title="Not recommended">
+                    <?= Icon::get('thumbs-down', 14) ?>
+                </span>
+            <?php endif; ?>
+
+            <?php if ($reviewIsMine): ?>
+                <span class="review-mine-flag">Your review</span>
+            <?php endif; ?>
+        </div>
+
+        <div class="review-card-side">
+            <time class="review-card-date"><?= htmlspecialchars($review->getFormattedDate()) ?></time>
+
+            <?php if ($reviewIsMine): ?>
+                <div class="review-card-actions">
+                    <button type="button" class="review-action" title="Edit your review"
+                            onclick="editMyReview(this)">
+                        <?= Icon::get('pencil', 14) ?> Edit
+                    </button>
+                    <button type="button" class="review-action is-danger" title="Delete your review"
+                            onclick="deleteMyReview(this)">
+                        <?= Icon::get('trash', 14) ?> Delete
+                    </button>
                 </div>
             <?php endif; ?>
         </div>
-        <div style="display:flex;align-items:center;font-size:12px;color:var(--dim);font-family:JetBrains Mono;">
-            <?= htmlspecialchars($review->getFormattedDate()) ?>
-        </div>
-    </div>
-    <div style="font-family:'Outfit';color:var(--muted);font-size:15px;line-height:1.7;">
-        <?= nl2br(htmlspecialchars($review->getDescription())) ?>
-    </div>
-</div>
+    </header>
+
+    <p class="review-card-body"><?= nl2br(htmlspecialchars($review->getDescription())) ?></p>
+</article>

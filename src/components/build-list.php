@@ -166,6 +166,48 @@
     }
 
     .build-hide-checkbox { accent-color: var(--magenta); }
+
+    /* Playable-in-browser toggle */
+    .build-play-row {
+        padding: 1rem;
+        display: flex;
+        gap: 0.6rem;
+        align-items: flex-start;
+        cursor: pointer;
+        border-bottom: 1px solid var(--stroke);
+        background: rgba(34, 228, 255, 0.04);
+        font-family: 'Outfit', sans-serif;
+        font-size: 13px;
+        line-height: 1.5;
+    }
+
+    .build-play-row[hidden] { display: none; }
+
+    .build-play-checkbox {
+        margin-top: 0.15rem;
+        accent-color: var(--cyan);
+        flex: none;
+    }
+
+    .build-play-row strong {
+        display: block;
+        font-weight: 600;
+    }
+
+    .build-play-hint {
+        display: block;
+        color: var(--muted);
+        font-size: 12px;
+    }
+
+    .build-play-ok {
+        display: block;
+        margin-top: 0.2rem;
+        color: var(--green);
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 11px;
+    }
+
 </style>
 
 <div>
@@ -228,11 +270,36 @@
             card.querySelector('.build-display-name').textContent = file.name;
             card.querySelector('.build-size-badge').textContent = humanSize(file.size);
 
+            // Only a .zip can be unpacked into a playable web build.
+            const isZip = /\.zip$/i.test(file.name);
+            card.dataset.zip = isZip ? '1' : '0';
+            card.querySelector('.build-play-row').hidden = !isZip;
+
             wrapper().appendChild(fragment);
         });
 
         input.value = '';
         refreshEmptyState();
+    };
+
+    /**
+     * One playable build per project: embedding two pages at once has no
+     * meaning, so ticking a new one unticks the previous.
+     */
+    window.togglePlayable = function (checkbox) {
+        if (!checkbox.checked) return;
+
+        wrapper().querySelectorAll('.build-play-checkbox').forEach(other => {
+            if (other !== checkbox) other.checked = false;
+        });
+
+        // Browser is implied by a build that runs in one.
+        const card = checkbox.closest('.build-card-item');
+        const browserButton = card.querySelector('.platform-btn[data-platform="Browser"]');
+
+        if (browserButton && !browserButton.classList.contains('is-active')) {
+            browserButton.click();
+        }
     };
 
     window.removeBuildCard = function (btn) {
@@ -287,7 +354,8 @@
                 kind: card.dataset.kind,
                 name: card.querySelector('.build-display-name').textContent.trim(),
                 platforms: card.dataset.platforms || 'Windows',
-                hidden: card.querySelector('.build-hide-checkbox').checked
+                hidden: card.querySelector('.build-hide-checkbox').checked,
+                playable: card.querySelector('.build-play-checkbox')?.checked === true
             };
 
             if (entry.kind === 'existing') {

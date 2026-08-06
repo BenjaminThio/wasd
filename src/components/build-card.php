@@ -14,6 +14,11 @@
             $fileSize    = (string)($build['file_size'] ?? '');
             $downloads   = (int)($build['downloads'] ?? 0);
             $isHidden    = !empty($build['is_hidden']);
+            $isPlayable  = !empty($build['is_playable']);
+            $playPath    = (string)($build['play_path'] ?? '');
+
+            // Only a .zip can be unpacked and served as a web page.
+            $isZip = strtolower(pathinfo($storedPath, PATHINFO_EXTENSION)) === 'zip';
 
             $uploadedAt = !empty($build['uploaded_at'])
                 ? date('F jS Y', strtotime((string)$build['uploaded_at']))
@@ -34,6 +39,7 @@
                  data-kind="<?= $isTemplate ? 'new' : 'existing' ?>"
                  data-path="<?= htmlspecialchars($storedPath) ?>"
                  data-file-key=""
+                 data-zip="<?= $isTemplate || $isZip ? '1' : '0' ?>"
                  data-platforms="<?= htmlspecialchars(implode(',', $active)) ?>">
 
                 <div class="build-card-body">
@@ -72,6 +78,25 @@
 
                     <button type="button" class="build-delete" onclick="removeBuildCard(this)">Delete</button>
                 </div>
+
+                <!--
+                    A .zip holding an index.html can be unpacked and embedded on
+                    the game page, the way itch.io does it. The row is only
+                    offered for zips; anything else has nothing to unpack.
+                -->
+                <label class="build-play-row" <?= $isTemplate || $isZip ? '' : 'hidden' ?>>
+                    <input type="checkbox" class="build-play-checkbox"
+                           onchange="togglePlayable(this)" <?= $isPlayable ? 'checked' : '' ?>>
+                    <span>
+                        <strong>Playable in the browser</strong>
+                        <span class="build-play-hint">
+                            Unpack this .zip and embed it on the game page. It needs an index.html.
+                            <?php if ($isPlayable && $playPath !== ''): ?>
+                                <span class="build-play-ok">Currently serving <?= htmlspecialchars(basename($playPath)) ?></span>
+                            <?php endif; ?>
+                        </span>
+                    </span>
+                </label>
 
                 <label class="build-hide-row">
                     <input type="checkbox" class="build-hide-checkbox" <?= $isHidden ? 'checked' : '' ?>>

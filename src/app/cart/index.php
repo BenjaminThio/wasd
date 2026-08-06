@@ -1,27 +1,35 @@
 <?php
-require_once './models/Icon.php';
-$platformIcons = [
-    'windows' => Icon::get('windows', 20),
-    'linux' => Icon::get('linux', 20),
-    'apple' => Icon::get('apple', 20),
-    'browser' => Icon::get('browser', 20),
-    'android' => Icon::get('android', 20)
-];
+    require_once __DIR__ . '/../../lib/Auth.php';
+    require_once __DIR__ . '/../../lib/View.php';
+    require_once __DIR__ . '/../../models/Icon.php';
+
+    if (!Auth::getCurrentUser()) {
+        echo '<div class="page"><div class="empty-state">'
+           . 'Sign in to see your cart.<br>'
+           . '<a href="' . BASE_URL . '/sign-in">Sign in</a></div></div>';
+        return;
+    }
 ?>
-<div class="page">
-    <div class="page-header">
-        <div>
-            <h1>My Cart</h1>
+<div class="page cart-page">
+    <header class="page-head reveal">
+        <div class="flex-col gap-2">
+            <span class="eyebrow">Ready when you are</span>
+            <h1 class="page-title">My Cart</h1>
         </div>
-    </div>
+        <a class="btn btn-ghost btn-sm" href="<?= BASE_URL ?>/store">
+            <?= Icon::get('search', 15) ?> Keep browsing
+        </a>
+    </header>
 
-    <div class="main">
-        <div class="cart" id="cart-list">
-            <div class="cart-status" id="cart-status"></div>
+    <div class="cart-layout">
+        <div class="cart-column">
+            <div class="cart-list" id="cart-list"></div>
+            <div id="cart-anchor" class="scroll-anchor"></div>
         </div>
 
-        <div class="order">
-            <h2>Order Summary</h2>
+        <aside class="order card reveal">
+            <h2 class="section-title">Order summary</h2>
+
             <div class="order-row">
                 <span>Items</span>
                 <span id="order-count">0 items</span>
@@ -31,112 +39,156 @@ $platformIcons = [
                 <span id="order-price">RM0.00</span>
             </div>
             <div class="order-row">
-                <span>Sale Discount</span>
+                <span>Sale discount</span>
                 <span class="order-discount" id="order-discount">-RM0.00</span>
             </div>
-            <div class="order-line"></div>
+
+            <div class="divider"></div>
+
             <div class="order-row order-total">
                 <span>Subtotal</span>
                 <span id="order-subtotal">RM0.00</span>
             </div>
-            <button class="checkout-btn" id="checkout-btn" onclick="checkOut()" disabled>Check Out</button>
-        </div>
+
+            <button type="button" class="btn btn-primary btn-block" id="checkout-btn"
+                    onclick="checkOut()" disabled>
+                Check out
+            </button>
+
+            <p class="order-note text-body text-sm text-muted">
+                Games are added to your library the moment the order goes through.
+            </p>
+        </aside>
     </div>
 </div>
 
 <script>
 (() => {
-    const API = '<?= BASE_URL ?>/src/app/api/cart/index.php';
-    const STORE = '<?= BASE_URL ?>/store';
-    const CHECKOUT = '<?= BASE_URL ?>/checkout';
-    const ICONS = <?= json_encode($platformIcons) ?>;
+    const API = '/src/app/api/cart/index.php';
+    const ICONS = <?= json_encode(View::platformIcons()) ?>;
     const LIMIT = 12;
 
-    const list = document.getElementById("cart-list");
-    const statusBox = document.getElementById("cart-status");
-    let offset = 0, loading = false, done = false;
+    const list = document.getElementById('cart-list');
+    let offset = 0;
+    let scroller;
 
-    function money(value) { return "RM" + Number(value).toFixed(2); }
+    function cardMarkup(item) {
+        // WASD.cover() is the shared renderer, so a game with no uploaded image
+        // gets its fallback artwork here exactly as it does on a store card.
+        const cover = WASD.cover(item, 'list-card-media');
 
-    function showItem(item) {
-        let cover = `<div class="fallback-art ${item.fallback_art}"></div>`;
-        if (item.cover) cover = `<img src="${item.cover}" alt="${item.title} Cover">`;
+        const price = (item.discount > 0
+            ? `<span class="magenta game-tag">-${item.discount}%</span>
+               <span class="original">${WASD.money(item.price)}</span>`
+            : '') + `<span class="current">${WASD.money(item.final_price)}</span>`;
 
-        let price = `<span class="current">${money(item.final_price)}</span>`;
-        if (item.discount > 0) {
-            price = `<span class="discount">-${item.discount}%</span><span class="original">${money(item.price)}</span>` + price;
-        }
+        const tags = item.categories
+            .map(name => `<span class="magenta game-tag">${WASD.escapeHtml(name)}</span>`).join('');
 
-        let tags = "";
-        for (let i = 0; i < item.categories.length; i++) tags += `<span class="magenta game-tag">${item.categories[i]}</span>`;
+        const icons = item.platforms.map(name => ICONS[name] || '').join('');
 
-        let icons = "";
-        for (let i = 0; i < item.platforms.length; i++) icons += ICONS[item.platforms[i]] || "";
-
-        const card = `<div class="game-card">
-            <div class="game-pic">${cover}</div>
-            <div class="game-info">
-                <h3>${item.title}</h3>
-                <div class="game-genre">${tags}</div>
-                <div class="game-platform">${icons}</div>
+        return `<div class="list-card" data-id="${item.id}">
+            ${cover}
+            <div class="list-card-body">
+                <a class="list-card-title" href="${WASD.url('/game?id=' + item.id)}">${WASD.escapeHtml(item.title)}</a>
+                <div class="chip-list">${tags}</div>
+                <div class="list-card-platforms">${icons}</div>
             </div>
-            <div class="game-price">${price}</div>
-            <div class="actions">
-                <button class="remove-btn" onclick="removeItem(${item.id})">Remove</button>
-                <button class="wishlist-btn" onclick="moveToWishlist(${item.id})">Move to wishlist</button>
+            <div class="list-card-price">${price}</div>
+            <div class="list-card-actions">
+                <button type="button" class="btn btn-ghost btn-sm" onclick="moveToWishlist(${item.id})">
+                    Move to wishlist
+                </button>
+                <button type="button" class="btn btn-danger btn-sm" onclick="removeItem(${item.id})">
+                    Remove
+                </button>
             </div>
         </div>`;
-        list.insertAdjacentHTML("beforeend", card);
     }
 
     function showTotals(totals) {
-        document.getElementById("order-count").textContent = totals.items + " items";
-        document.getElementById("order-price").textContent = money(totals.price);
-        document.getElementById("order-discount").textContent = "-" + money(totals.discount);
-        document.getElementById("order-subtotal").textContent = money(totals.subtotal);
-        document.getElementById("checkout-btn").disabled = (totals.items === 0);
+        document.getElementById('order-count').textContent =
+            totals.items + ' item' + (totals.items === 1 ? '' : 's');
+        document.getElementById('order-price').textContent = WASD.money(totals.price);
+        document.getElementById('order-discount').textContent = '-' + WASD.money(totals.discount);
+        document.getElementById('order-subtotal').textContent = WASD.money(totals.subtotal);
+        document.getElementById('checkout-btn').disabled = totals.items === 0;
+        window.wasdSetBadge?.('cart', totals.items);
     }
 
-    async function loadMore() {
-        if (loading || done) return;
-        loading = true;
-        const response = await fetch(`${API}?offset=${offset}&limit=${LIMIT}`, { cache: 'no-store' });
-        if (response.status === 204) {
-            done = true;
-            if (offset === 0) {
-                statusBox.innerHTML = `<div class="cart-empty">Your cart is empty.<br><a href="#" onclick="goToStore(); return false;">Browse the store</a> to find your next game.</div>`;
-                showTotals({ items: 0, price: 0, discount: 0, subtotal: 0 });
-            }
-            loading = false;
+    function showEmpty() {
+        list.innerHTML = `<div class="empty-state">
+            Your cart is empty.<br>
+            <a href="${WASD.url('/store')}">Browse the store</a> to find your next game.
+        </div>`;
+        showTotals({ items: 0, price: 0, discount: 0, subtotal: 0 });
+    }
+
+    async function loadPage() {
+        const result = await WASD.api(`${API}?offset=${offset}&limit=${LIMIT}`);
+
+        if (result.status === 401) {
+            list.innerHTML = `<div class="empty-state">
+                Your session expired. <a href="${WASD.url('/sign-in')}">Sign in again</a>.
+            </div>`;
+            return false;
+        }
+
+        if (result.status === 204 || !result.data || !result.data.items.length) {
+            if (offset === 0) showEmpty();
+            else if (result.data && result.data.totals) showTotals(result.data.totals);
+            return false;
+        }
+
+        const html = result.data.items.map(cardMarkup).join('');
+        list.insertAdjacentHTML('beforeend', html);
+        WASD.lazyImages(list);
+
+        offset += result.data.items.length;
+        showTotals(result.data.totals);
+
+        return result.data.items.length === LIMIT;
+    }
+
+    async function reload() {
+        scroller?.stop();
+        offset = 0;
+        list.innerHTML = WASD.skeletonRows(2);
+
+        const more = await loadPage();
+        // The skeletons sit in front of the first real page - drop them.
+        list.querySelectorAll('.skeleton-row').forEach(node => node.remove());
+
+        if (more) scroller = WASD.infiniteScroll(document.getElementById('cart-anchor'), loadPage);
+    }
+
+    async function sendAction(action, gameId, card) {
+        card?.classList.add('is-busy');
+        const result = await WASD.api(API, { json: { action, game_id: gameId } });
+
+        if (!result.ok) {
+            card?.classList.remove('is-busy');
+            WASD.toast('That did not work. Try again.', 'error');
             return;
         }
-        const data = await response.json();
-        data.items.forEach(showItem);
-        offset += data.items.length;
-        showTotals(data.totals);
-        statusBox.textContent = "";
-        loading = false;
-        if (data.items.length < LIMIT) done = true;
-        else if (document.documentElement.scrollHeight <= window.innerHeight) loadMore();
+
+        card?.remove();
+        if (result.data && result.data.totals) showTotals(result.data.totals);
+        if (!list.querySelector('.list-card')) showEmpty();
     }
 
-    async function sendAction(action, gameId) {
-        await fetch(API, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: action, game_id: gameId }) });
-        reload();
-    }
+    const cardOf = id => list.querySelector(`.list-card[data-id="${id}"]`);
 
-    window.removeItem = (gameId) => sendAction("remove", gameId);
-    window.moveToWishlist = (gameId) => sendAction("move-to-wishlist", gameId);
-    window.reload = function () {
-        list.querySelectorAll(".game-card").forEach(card => card.remove());
-        offset = 0; done = false; loadMore();
+    window.removeItem = id => sendAction('remove', id, cardOf(id));
+
+    window.moveToWishlist = async id => {
+        await sendAction('move-to-wishlist', id, cardOf(id));
+        window.wasdBumpBadge?.('wishlist', 1);
+        WASD.toast('Moved to your wishlist.', 'success');
     };
-    window.checkOut = function () { window.location.href = CHECKOUT; };
-    window.goToStore = function () { window.location.href = STORE; };
 
-    window.addEventListener('scroll', () => {
-        if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 300) loadMore();
-    });
-    loadMore();
+    window.checkOut = () => window.wasdNavigate(WASD.url('/checkout'));
+
+    reload();
 })();
 </script>

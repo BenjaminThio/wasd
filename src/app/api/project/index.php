@@ -18,7 +18,23 @@
     }
 
     set_exception_handler(function (Throwable $e) {
-        respond(['status' => 'error', 'error' => 'Server error: ' . $e->getMessage()], 500);
+        /*
+         * Never hand the exception text to the browser. A PDOException carries
+         * the failing SQL, table and column names, and sometimes the DSN - a
+         * free map of the database for anyone who can make a request fail.
+         *
+         * The full detail goes to the error log. The developer running the site
+         * can opt back in with APP_DEBUG=true in .env.
+         */
+        error_log('WASD project API: ' . $e::class . ': ' . $e->getMessage()
+                  . ' in ' . $e->getFile() . ':' . $e->getLine());
+
+        respond([
+            'status' => 'error',
+            'error'  => defined('APP_DEBUG') && APP_DEBUG
+                ? 'Server error: ' . $e->getMessage()
+                : 'Something went wrong saving the project. Please try again.'
+        ], 500);
     });
 
     $user = Auth::getCurrentUser();
@@ -48,12 +64,18 @@
     }
 
     if (Uploads::postSizeExceeded()) {
+        // The limit itself is useful to whoever is uploading; how the server is
+        // configured to enforce it is not their business, and naming php.ini
+        // directives to every account holder only helps someone mapping the
+        // stack. That half goes to the log.
+        error_log('WASD: upload rejected, request exceeded post_max_size ('
+                  . ini_get('post_max_size') . ') / upload_max_filesize ('
+                  . ini_get('upload_max_filesize') . ')');
+
         respond([
             'status' => 'error',
-            'error'  => 'The upload was larger than the server accepts, so nothing was saved. '
-                      . 'Raise post_max_size (currently ' . ini_get('post_max_size') . ') and '
-                      . 'upload_max_filesize (currently ' . ini_get('upload_max_filesize') . ') in php.ini, '
-                      . 'then restart Apache.'
+            'error'  => 'That upload was too large, so nothing was saved. The maximum is '
+                      . ini_get('upload_max_filesize') . ' per file.'
         ], 413);
     }
 
@@ -152,10 +174,14 @@
     $buildManifest = json_decode((string)($_POST['builds_manifest'] ?? '[]'), true) ?: [];
     $buildRows = [];
 
+    // Only one build can be the browser-playable one.
+    $playableClaimed = false;
+
     foreach ($buildManifest as $index => $entry) {
         $displayName = trim((string)($entry['name'] ?? ''));
         $platforms   = trim((string)($entry['platforms'] ?? 'Windows'));
         $isHidden    = !empty($entry['hidden']);
+        $wantsPlay   = !empty($entry['playable']) && !$playableClaimed;
 
         if ($platforms === '') $platforms = 'Windows';
 
@@ -193,6 +219,14 @@
             if ($displayName === '') $displayName = (string)$_FILES[$field]['name'];
         }
 
+        // A web build must be a zip - there is nothing to unpack otherwise.
+        if ($wantsPlay && strtolower(pathinfo($stored, PATHINFO_EXTENSION)) !== 'zip') {
+            $warnings[] = ($displayName ?: 'A build') . ' - only a .zip can be played in the browser.';
+            $wantsPlay = false;
+        }
+
+        if ($wantsPlay) $playableClaimed = true;
+
         $buildRows[] = [
             'game_id' => $gameId,
             'display_name' => $displayName !== '' ? $displayName : basename($stored),
@@ -200,21 +234,102 @@
             'file_size' => $size,
             'platforms' => $platforms,
             'is_hidden' => $isHidden ? 1 : 0,
-            'sort_order' => $index
+            'sort_order' => $index,
+            'is_playable' => $wantsPlay ? 1 : 0,
         ];
 
         $keptFiles[] = $stored;
     }
 
-    $previousDownloads = [];
-    foreach ($database->query('SELECT file_path, downloads FROM game_build WHERE game_id = ?', [$gameId])->fetchAll() as $row) {
-        $previousDownloads[Media::store($row['file_path'])] = (int)$row['downloads'];
+    // Carry over the counters and the already-unpacked web build, both of which
+    // are keyed by the stored file path rather than the row id.
+    $previous = [];
+    foreach ($database->query(
+        'SELECT id, file_path, downloads, is_playable, play_path FROM game_build WHERE game_id = ?',
+        [$gameId]
+    )->fetchAll() as $row) {
+        $previous[Media::store($row['file_path'])] = $row;
     }
 
     $database->query('DELETE FROM game_build WHERE game_id = ?', [$gameId]);
+
+    $playFoldersInUse = [];
+
     foreach ($buildRows as $row) {
-        $row['downloads'] = $previousDownloads[$row['file_path']] ?? 0;
+        $before = $previous[$row['file_path']] ?? null;
+
+        $row['downloads'] = (int)($before['downloads'] ?? 0);
+        $row['play_path'] = null;
+
         $database->insert('game_build', $row);
+        $buildId = $database->lastInsertId();
+
+        if (!$row['is_playable']) continue;
+
+        // Re-use the existing unpack when the same archive is still ticked,
+        // so saving a project does not re-extract a 300 MB build every time.
+        $alreadyPlayable = $before
+            && (int)$before['is_playable'] === 1
+            && !empty($before['play_path'])
+            && is_file(Media::absolute($before['play_path']));
+
+        if ($alreadyPlayable) {
+            // The folder is named after the old row id; keep pointing at it.
+            $database->update('game_build', ['play_path' => $before['play_path']], ['id' => $buildId]);
+
+            // playRoot, not dirname: an engine that zips its export inside a
+            // folder puts the entry several levels below the play folder.
+            $existingFolder = Uploads::playRoot($before['play_path']);
+
+            if ($existingFolder !== null) {
+                $playFoldersInUse[] = $existingFolder;
+
+                // Refresh its .htaccess even though the files are reused, so a
+                // folder unpacked by an older version picks up current headers.
+                Uploads::protectPlayDirectory(Media::root() . '/' . $existingFolder);
+            }
+            continue;
+        }
+
+        $result = Uploads::extractWebBuild(
+            Media::absolute($row['file_path']),
+            Uploads::playDir($gameId, $buildId)
+        );
+
+        if (!$result['ok']) {
+            $warnings[] = $row['display_name'] . ' - ' . $result['error'];
+            $database->update('game_build', ['is_playable' => 0], ['id' => $buildId]);
+            continue;
+        }
+
+        if ($result['error'] !== '') $warnings[] = $row['display_name'] . ' - ' . $result['error'];
+
+        $database->update('game_build', ['play_path' => $result['entry']], ['id' => $buildId]);
+        $playFoldersInUse[] = Uploads::playDir($gameId, $buildId);
+
+        // Operator-facing, deliberately not shown in the UI: a note about the
+        // site's own configuration is useless to the developer uploading a
+        // game - they cannot act on it - and telling every account holder that
+        // builds share our origin only helps anyone looking for a way in.
+        if (!Media::playOriginConfigured()) {
+            error_log(
+                'WASD: game ' . $gameId . ' has a browser-playable build while PLAY_ORIGIN is unset, '
+                . 'so it runs on this site\'s own origin. Set PLAY_ORIGIN in .env to serve builds '
+                . 'from a separate hostname.'
+            );
+        }
+    }
+
+    // Sweep play folders that no longer belong to a build.
+    $gameDirectory = Media::gameDirAbsolute($gameId);
+    if (is_dir($gameDirectory)) {
+        foreach (array_diff(scandir($gameDirectory) ?: [], ['.', '..']) as $name) {
+            if (!str_starts_with($name, 'play_') || !is_dir($gameDirectory . '/' . $name)) continue;
+
+            if (!in_array(Media::gameDir($gameId) . '/' . $name, $playFoldersInUse, true)) {
+                Uploads::deleteDirectory($gameDirectory . '/' . $name);
+            }
+        }
     }
 
     $platformNames = [];

@@ -1,135 +1,99 @@
+/* ==========================================================================
+   PARTNERS
+   ========================================================================== */
 
-/* THis is the main cont*/
-.partnershipX-Box {
-  width: 90%;
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 40px 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 50px; 
-}
-
-.row_1, .row_2, .row_3, .row_4 {
-  display: flex;
-  align-items: stretch; 
-  justify-content: space-between;
-  width: 100%;
-  gap: 40px;
-}
-
-.partner.L,
-.partner.R {
-  flex: 1;
-  border: 1px solid #8b5cf6;
-  border-radius: 15px;
-  padding: 40px; 
-  background: radial-gradient(circle at center, #0a162b 0%, #030813 100%);
-  box-shadow: 0 0 50px 10px rgba(117, 154, 230, 0.4);
-  transition: background 0.4s ease, border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.partner.L:hover,
-.partner.R:hover {
-transform: translateY(-4px); 
-
-  background: radial-gradient(circle at 80% 20%, rgba(34, 255, 184, 0.25) 0%, transparent 50%), 
-              radial-gradient(circle at 20% 80%, rgba(34, 228, 255, 0.3) 0%, transparent 60%), 
-              linear-gradient(135deg, #0f2347 0%, #060d1a 100%);
-  border-color: #1dd5f1; 
-  box-shadow: 0 0 40px 5px rgba(29, 213, 241, 0.6), 0 0 70px 15px rgba(139, 92, 246, 0.3);
-}
-
-
-/* =============this is for the image only, dont confuse=======*/
-.partner.img {
-  width: 100%;
-  height: 320px; 
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: filter 0.3s ease;
-}
-
-.partner.img img {
-  max-height: 100%;
-  max-width: 300px;
-  object-fit: contain;
-  transition: all 0.25s ease-out;
-}
-
-.partner.L:hover .partner.img img,
-.partner.R:hover .partner.img img {
-  filter: drop-shadow(0 0 12px rgba(231, 11, 11, 0.682));
-}
-
-/*-=== for the cursir click it chanbge=======*/
-.partner.L:active .partner.img img,
-.partner.R:active .partner.img img {
-filter: drop-shadow(0 0 12px rgba(75, 163, 255, 0.6));
-
-}
-
-.cont1,
-.cont2,
-.cont3,
-.cont4,
-.cont5,
-.cont6,
-.cont7,
-.cont8 {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  text-align: left;
-}
-
-/* ===this the word section===*/ 
-
-.partner.logo {
-  font-family: var(--normal-font);
-  font-size: 2.0rem;
-  font-weight: 700;
-  color: var(--text-white);
-  text-shadow: 0 0 10px rgba(241, 10, 10, 0.841), 
-               0 0 20px rgb(162, 0, 0);
-  transition: color 0.2s ease-out;
-
-}
-
-.partner.describ {
-  font-family:var(--normal-font);
-  font-size: 1.3rem;
-  line-height: 1.6;
-  color: var(--color);
-  margin: 0; 
-  transition: color 0.2s ease;
-}
-
-.partner.L:hover .partner.describ,
-.partner.R:hover .partner.describ {
-  color: #f1f1edbd;
-  text-shadow: 0 0 12px rgba(255, 255, 255, 0.8),
-               0 0 25px rgba(75, 163, 255, 0.8) !important;
-}
-
-.partner.L:active .partner.logo,
-.partner.R:active .partner.logo {
-  color: var(--color) !important; 
-  text-shadow: none !important;
-}
-
-.partner.L:active .partner.describ,
-.partner.R:active .partner.describ {
-  color: #f1f1edbd !important;
-}
-
-@media (max-width: 900px) {
-  .row_1, 
-  .row_2,
-  .row_3,
-  .row_4 {
+.partners-hero {
+    display: flex;
     flex-direction: column;
-    gap: 40px;
-  }
+    align-items: center;
+    gap: var(--space-3);
+    text-align: center;
+    padding-top: var(--space-5);
+}
+
+.contact-title {
+    font-family: var(--header-font);
+    font-size: var(--text-3xl);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+.partners-hero .page-subtitle {
+    text-align: center;
+}
+
+.partners-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(21rem, 1fr));
+    gap: var(--space-4);
+}
+
+.partner-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+}
+
+.partner-logo {
+    display: grid;
+    place-items: center;
+    height: 8rem;
+    padding: var(--space-4);
+    border-radius: var(--radius-md);
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.partner-logo img {
+    max-height: 100%;
+    max-width: 12rem;
+    width: auto;
+    object-fit: contain;
+    transition: transform var(--normal);
+}
+
+.partner-card:hover .partner-logo img {
+    transform: scale(1.05);
+}
+
+.partner-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.partner-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+}
+
+.partner-name {
+    font-family: var(--header-font);
+    font-size: var(--text-lg);
+    font-weight: 600;
+}
+
+.partner-copy {
+    font-family: var(--normal-font);
+    font-size: var(--text-base);
+    color: var(--muted);
+    line-height: 1.7;
+}
+
+.partners-cta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    background: radial-gradient(circle at 90% 0%, rgba(139, 92, 246, 0.12), transparent 60%),
+                var(--surface);
+}
+
+@media (max-width: 640px) {
+    .partners-cta .btn {
+        width: 100%;
+    }
 }

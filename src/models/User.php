@@ -32,7 +32,14 @@
         public function getPassword(): string { return $this->password; }
         public function getAvatarPath(): ?string { return $this->avatarPath; }
         
-        // High-level Getters for E-commerce logic
+        /**
+         * Only populated when a caller passes them in explicitly. Users::getById()
+         * deliberately leaves them empty - loading every game in a cart on every
+         * request cost more than the rest of the page put together.
+         *
+         * Read the cart and wishlist through src/app/api/cart and
+         * src/app/api/wishlist, which page and filter them.
+         */
         public function getCart(): array { return $this->cart; }
         public function getWishlist(): array { return $this->wishlist; }
     }

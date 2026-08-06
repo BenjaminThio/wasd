@@ -77,38 +77,22 @@
             $database->query($sql, [$userId, $gameId]);
         }
 
-        // The hydrator
+        /**
+         * Turn a user row into a User.
+         *
+         * This used to eagerly load the whole cart and wishlist as fully
+         * hydrated Game objects - every review, screenshot, build and platform
+         * of every item - on every single request, because the header calls
+         * Auth::getCurrentUser(). Nothing in the application ever read those
+         * two arrays, and they cost around sixty queries a page. A static
+         * contact page was issuing sixty-four.
+         *
+         * The cart and wishlist are served by their own endpoints, which page
+         * them properly; they are not part of identity.
+         */
         private static function hydrateUser(array $row, Database $database): User
         {
-            $userId = $row['id'];
-
-            // Fetch cart items
-            $cartSql = "SELECT game_id FROM cart WHERE user_id = ? ORDER BY added_at DESC";
-            $cartRows = $database->query($cartSql, [$userId])->fetchAll();
-
-            $cart = [];
-            foreach ($cartRows as $cRow) {
-                // Get the FULL game object
-                $game = Games::getById($cRow['game_id']);
-                if ($game) {
-                    $cart[] = $game;
-                }
-            }
-
-            // Fetch wishlist items
-            $wishlistSql = "SELECT game_id FROM wishlist WHERE user_id = ? ORDER BY added_at DESC";
-            $wishlistRows = $database->query($wishlistSql, [$userId])->fetchAll();
-            
-            $wishlist = [];
-            foreach ($wishlistRows as $wRow) {
-                $game = Games::getById($wRow['game_id']);
-                if ($game) {
-                    $wishlist[] = $game;
-                }
-            }
-
-            // Assemble and return the fully-loaded User
-            return User::fromDatabaseRow($row, $cart, $wishlist);
+            return User::fromDatabaseRow($row);
         }
 
         public static function getDevUser(): User

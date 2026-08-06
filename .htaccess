@@ -1,3 +1,35 @@
+# ==========================================================================
+# 0. SECURITY: FILES THAT MUST NEVER BE SERVED
+#
+# The rewrite below only redirects requests that do NOT match a real file, so
+# every real file in the project was being handed straight to the browser.
+# That included .env - the database user and password in plain text - plus
+# .git (the entire repository history), the SQL schema and the helper scripts.
+#
+# These rules come first and are absolute.
+# ==========================================================================
+
+# Dot-files: .env, .gitignore, .htpasswd, editor and CI configs.
+<FilesMatch "^\.">
+    Require all denied
+</FilesMatch>
+
+# Anything whose extension has no business being downloaded.
+<FilesMatch "\.(env|sql|py|sh|bak|old|log|ini|conf|lock|json|md|yml|yaml|dist|swp|tpl)$">
+    Require all denied
+</FilesMatch>
+
+# Directories that hold no public assets at all.
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    RewriteRule ^\.git(/|$)        - [F,L]
+    RewriteRule ^database(/|$)     - [F,L]
+    RewriteRule ^\.vscode(/|$)     - [F,L]
+    RewriteRule ^node_modules(/|$) - [F,L]
+    RewriteRule ^vendor(/|$)       - [F,L]
+</IfModule>
+
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
@@ -29,3 +61,115 @@
 
 # Prevent directory listing
 Options -Indexes
+
+# ==========================================================================
+# TRANSFER: compression and caching
+# Both blocks are guarded, so the site still works if the module is off.
+# ==========================================================================
+
+<IfModule mod_deflate.c>
+    # Text compresses to roughly a fifth of its size. Images, fonts and video
+    # are already compressed and are deliberately left alone.
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css
+    AddOutputFilterByType DEFLATE text/javascript application/javascript
+    AddOutputFilterByType DEFLATE application/json application/xml
+    AddOutputFilterByType DEFLATE image/svg+xml application/wasm
+</IfModule>
+
+<IfModule mod_expires.c>
+    ExpiresActive On
+
+    # Stylesheets and scripts carry ?v=<file modification time>, so an edit
+    # produces a new URL and the old one can be cached indefinitely.
+    ExpiresByType text/css                  "access plus 1 year"
+    ExpiresByType text/javascript           "access plus 1 year"
+    ExpiresByType application/javascript    "access plus 1 year"
+
+    # Fonts never change under the same name.
+    ExpiresByType font/woff2                "access plus 1 year"
+    ExpiresByType application/font-woff2    "access plus 1 year"
+
+    # Uploads get random file names, so a replacement is a different URL.
+    ExpiresByType image/jpeg                "access plus 30 days"
+    ExpiresByType image/png                 "access plus 30 days"
+    ExpiresByType image/webp                "access plus 30 days"
+    ExpiresByType image/avif                "access plus 30 days"
+    ExpiresByType image/gif                 "access plus 30 days"
+    ExpiresByType image/svg+xml             "access plus 30 days"
+    ExpiresByType video/mp4                 "access plus 30 days"
+
+    # Pages are per-visitor (cart counts, ownership, review controls) and must
+    # never be reused from cache.
+    ExpiresByType text/html                 "access plus 0 seconds"
+</IfModule>
+
+# ==========================================================================
+# SECURITY HEADERS
+# ==========================================================================
+
+<IfModule mod_headers.c>
+    # Unpacked browser builds are exempt from the framing and CSP rules below.
+    # They run in a sandboxed iframe with no allow-same-origin, which gives
+    # them an OPAQUE origin - and against an opaque origin both
+    # "X-Frame-Options: SAMEORIGIN" and "frame-ancestors 'self'" can never
+    # match, so the browser refuses to render the player at all. A same-origin
+    # script-src would block the build's own .js for the same reason.
+    #
+    # Those documents ship their own headers from their play folder.
+    <IfModule mod_setenvif.c>
+        SetEnvIf Request_URI "/play_[0-9]+/" WASD_PLAY_BUILD
+    </IfModule>
+
+    # Never let a browser guess a type: an uploaded file that sniffs as HTML
+    # would otherwise run as HTML.
+    Header always set X-Content-Type-Options "nosniff"
+
+    # Clickjacking: nobody frames our pages but us.
+    Header always set X-Frame-Options "SAMEORIGIN" env=!WASD_PLAY_BUILD
+
+    # Do not hand our URLs - which contain game ids - to other sites.
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+
+    # Hardware the site never uses is switched off for the whole page.
+    Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()"
+
+    # Content Security Policy.
+    #
+    # 'unsafe-inline' for scripts is an honest compromise, not an oversight:
+    # the pages carry inline <script> blocks, and the SPA re-injects markup
+    # from separate responses, so a per-response nonce would be stale by the
+    # time injected script ran. The directives that do not depend on that are
+    # still worth having, and they are the ones that stop an injected payload
+    # loading a remote script, exfiltrating to another host, rewriting <base>,
+    # or framing the site.
+    #
+    # blob: is for the local avatar preview, data: for the select arrow.
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self'; font-src 'self'; connect-src 'self'; frame-src 'self'; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'" env=!WASD_PLAY_BUILD
+
+    # Long-lived assets are immutable: the browser can skip revalidating them.
+    <FilesMatch "\.(css|js|woff2)$">
+        Header set Cache-Control "public, max-age=31536000, immutable"
+    </FilesMatch>
+
+    # Belt and braces for the document itself.
+    <FilesMatch "index\.php$">
+        Header set Cache-Control "no-cache, must-revalidate"
+    </FilesMatch>
+
+    # Our assets are ours: no other site may embed them, and the game page
+    # cannot be cross-origin isolated (which HTML5 builds need for
+    # SharedArrayBuffer) unless every subresource states this.
+    #
+    # Unpacked browser builds are the exception - they run on an opaque origin
+    # inside a sandboxed iframe, so a same-origin policy would block a build
+    # from loading its own files. Those folders set their own value, and this
+    # flag keeps the rule below from overwriting it: header merging across
+    # .htaccess levels is not reliably child-wins.
+    <IfModule mod_setenvif.c>
+        SetEnvIf Request_URI "/play_[0-9]+/" WASD_PLAY_BUILD
+    </IfModule>
+
+    <FilesMatch "\.(css|js|woff2|jpe?g|png|gif|webp|avif|svg|mp4)$">
+        Header set Cross-Origin-Resource-Policy "same-origin" env=!WASD_PLAY_BUILD
+    </FilesMatch>
+</IfModule>

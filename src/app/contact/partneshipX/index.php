@@ -1,159 +1,84 @@
-<div class="partnershipX-Box">
- 
-  <!-- ROW 1 -->
-  <div class="row_1">
-    <div class="partner L">
-      <div class="partner img"> 
-      <?php
-      $image = __DIR__ . "/../../../../public/assets/partnership/nvdia.png";
-      if (file_exists($image)) {
-          echo '<img src="/wasd/public/assets/partnership/nvdia.png" alt="NVIDIA">';
-      } else {
-          echo "Image not found";
-      } ?>
-      </div>
-      <div class="cont1">
-        <div class="partner logo">NVIDIA</div>
-        <p class="partner describ">
-          NVIDIA provides WSD Co. with cutting-edge GPU technologies and AI-powered rendering solutions that significantly enhance the visual quality and performance of our games.
+<?php
+    require_once __DIR__ . '/../../../models/Icon.php';
+
+    $page->setTitle('Partners');
+
+    /**
+     * Partners.
+     *
+     * The same eight partners as before. They were eight near-identical blocks
+     * of markup with hand-numbered wrapper classes (cont1 … cont8); they are a
+     * list and one loop now, which also makes the grid responsive for free.
+     */
+    $assets = BASE_URL . '/public/assets/partnership/';
+    $assetRoot = __DIR__ . '/../../../../public/assets/partnership/';
+
+    $partners = [
+        ['nvdia.png', 'NVIDIA', 'Hardware',
+         'NVIDIA provides WASD with cutting-edge GPU technologies and AI-powered rendering '
+         . 'solutions that significantly enhance the visual quality and performance of our games.'],
+        ['mic.png', 'Intellimize', 'Cloud',
+         'Microsoft provides WASD with cloud computing infrastructure and gaming ecosystem '
+         . 'support, enabling secure online multiplayer services.'],
+        ['sony.png', 'Sony Interactive', 'Platform',
+         'Sony Interactive Entertainment supports WASD by providing PlayStation platform '
+         . 'integration, technical development resources, and performance optimization.'],
+        ['epic.png', 'Epic Games', 'Engine',
+         'Epic Games empowers WASD through Unreal Engine, providing industry-leading game '
+         . 'development technology that enables realistic environments.'],
+        ['razerr.png', 'Razer', 'Peripherals',
+         'Razer enhances the WASD gaming ecosystem through hardware compatibility, peripheral '
+         . 'optimization, and esports collaboration.'],
+        ['dis.png', 'Discord', 'Community',
+         "Discord strengthens WASD's player community by providing integrated communication "
+         . 'platforms that support real-time interaction.'],
+        ['and.png', 'Android', 'Mobile',
+         'Android supports WASD by providing platform integration, mobile development tools and '
+         . 'performance optimization, so games run smoothly across Android devices.'],
+        ['aws.jpg', 'AWS', 'Infrastructure',
+         'Amazon supports WASD with cloud infrastructure, scalable hosting and content delivery, '
+         . 'keeping servers reliable and player data secure worldwide.'],
+    ];
+?>
+
+<div class="page partners-page">
+    <header class="partners-hero reveal">
+        <span class="eyebrow">Better together</span>
+        <h1 class="contact-title">Our <span class="gradient-text">partners</span></h1>
+        <p class="page-subtitle">
+            Powered by great partnerships, built for amazing players. These are the companies
+            behind the hardware, engines, platforms and infrastructure that WASD runs on.
         </p>
-      </div>
+    </header>
+
+    <div class="partners-grid stagger">
+        <?php foreach ($partners as [$image, $name, $kind, $copy]): ?>
+            <article class="partner-card card card--interactive">
+                <div class="partner-logo media">
+                    <?php if (is_file($assetRoot . $image)): ?>
+                        <img class="img-lazy" loading="lazy" decoding="async"
+                             src="<?= $assets . $image ?>" alt="<?= htmlspecialchars($name) ?> logo">
+                    <?php endif; ?>
+                </div>
+
+                <div class="partner-body">
+                    <div class="partner-head">
+                        <h2 class="partner-name"><?= htmlspecialchars($name) ?></h2>
+                        <span class="badge"><?= htmlspecialchars($kind) ?></span>
+                    </div>
+                    <p class="partner-copy"><?= htmlspecialchars($copy) ?></p>
+                </div>
+            </article>
+        <?php endforeach; ?>
     </div>
 
-    <div class="partner R">
-      <div class="partner img">
-        <?php
-        $image = __DIR__ . "/../../../../public/assets/partnership/mic.png";
-        if (file_exists($image)) {
-            echo '<img src="/wasd/public/assets/partnership/mic.png" alt="INTELLIMIZE">';
-        } else {
-            echo "Image not found";
-        } ?>
-      </div>
-      <div class="cont2">
-        <div class="partner logo">INTELLIMIZE</div>
-        <p class="partner describ">
-          Microsoft provides WSD Co. with cloud computing infrastructure and gaming ecosystem support, enabling secure online multiplayer services.
-        </p>
-      </div>
-    </div>
-  </div>
-
-  <!---THIS IS THE SECOND ROWW GURL---> 
-  <div class="row_2">
-    <div class="partner L">
-      <div class="partner img">
-         <?php
-      $image = __DIR__ . "/../../../../public/assets/partnership/sony.png";
-      if (file_exists($image)) {
-          echo '<img src="/wasd/public/assets/partnership/sony.png" alt="SONY INTERACTIVE">';
-      } else {
-          echo "Image not found";
-      } ?>
-      </div>
-      <div class="cont3">
-        <div class="partner logo">SONY INTERACTIVE</div>
-        <p class="partner describ">
-          Sony Interactive Entertainment supports WSD Co. by providing PlayStation platform integration, technical development resources, and performance optimization.
-        </p>
-      </div>
-    </div>
-
-    <div class="partner R">
-      <div class="partner img">
-        <?php
-      $image = __DIR__ . "/../../../../public/assets/partnership/epic.png";
-      if (file_exists($image)) {
-          echo '<img src="/wasd/public/assets/partnership/epic.png" alt="EPIC GAMES">';
-      } else {
-          echo "Image not found";
-      } ?>
-      </div>
-      <div class="cont4">
-        <div class="partner logo">EPIC GAMES</div>
-        <p class="partner describ">
-          Epic Games empowers WSD Co. through Unreal Engine, providing industry-leading game development technology that enables realistic environments.
-        </p>
-      </div>
-    </div>
-  </div>
-
-  <!-- ROW 3 -->
-  <div class="row_3">
-    <div class="partner L">
-      <div class="partner img">
-         <?php
-      $image = __DIR__ . "/../../../../public/assets/partnership/razerr.png";
-      if (file_exists($image)) {
-          echo '<img src="/wasd/public/assets/partnership/razerr.png" alt="RAZER">';
-      } else {
-          echo "Image not found";
-      } ?>
-      </div>
-      <div class="cont5">
-        <div class="partner logo">RAZER</div>
-        <p class="partner describ">
-          Razer enhances the WSD Co. gaming ecosystem through hardware compatibility, peripheral optimization, and esports collaboration.
-        </p>
-      </div>
-    </div>
-
-    <div class="partner R">
-      <div class="partner img">
-         <?php
-      $image = __DIR__ . "/../../../../public/assets/partnership/dis.png";
-      if (file_exists($image)) {
-          echo '<img src="/wasd/public/assets/partnership/dis.png" alt="DISCORD">';
-      } else {
-          echo "Image not found";
-      } ?>
-      </div>
-      <div class="cont6">
-        <div class="partner logo">DISCORD</div>
-        <p class="partner describ">
-          Discord strengthens WSD Co.'s player community by providing integrated communication platforms that support real-time interaction.
-        </p>
-      </div>
-    </div>
-  </div>
-
-  <!-- ROW 4 -->
-  <div class="row_4">
-    <div class="partner L">
-      <div class="partner img">
-         <?php
-      $image = __DIR__ . "/../../../../public/assets/partnership/and.png";
-      if (file_exists($image)) {
-          echo '<img src="/wasd/public/assets/partnership/and.png" alt="ANDROID">';
-      } else {
-          echo "Image not found";
-      } ?>
-      </div>
-      <div class="cont7">
-        <div class="partner logo">ANDROID</div>
-        <p class="partner describ">
-          Android supports WSD Co. by providing Android platform integration, mobile development tools, and performance optimization. This partnership enables seamless compatibility across Android devices, enhances application performance, and delivers a smooth and reliable gaming experience for users.
-        </p>
-      </div>
-    </div>
-
-    <div class="partner R">
-      <div class="partner img">
-         <?php
-      $image = __DIR__ . "/../../../../public/assets/partnership/aws.jpg";
-      if (file_exists($image)) {
-          echo '<img src="/wasd/public/assets/partnership/aws.jpg" alt="AWS">';
-      } else {
-          echo "Image not found";
-      } ?>
-      </div> <!-- Fixed: Added missing closing tag here for the image box -->
-      <div class="cont8">
-        <div class="partner logo">AWS</div>
-        <p class="partner describ">
-          Amazon supports WSD Co. by providing cloud infrastructure, scalable hosting services, and content delivery solutions. This partnership helps ensure reliable server performance, secure data management, and a smooth gaming experience for users worldwide.
-        </p>
-      </div>
-    </div>
-  </div>
-
+    <section class="partners-cta card reveal">
+        <div class="flex-col gap-2">
+            <h2 class="section-title">Want to work with WASD?</h2>
+            <p class="text-muted text-body">
+                Tell us what you are building and how you would like to collaborate.
+            </p>
+        </div>
+        <a class="btn btn-primary" href="<?= BASE_URL ?>/contact">Talk to the team</a>
+    </section>
 </div>

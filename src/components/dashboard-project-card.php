@@ -1,39 +1,39 @@
 <?php
+    /**
+     * One row in the developer dashboard. Expects $game (Game).
+     */
     require_once __DIR__ . '/../lib/Media.php';
-    $coverUrl = Media::url($game->getImage());
-?>
-<div class="project-container" id="project-card-<?= (int)$game->getId() ?>">
-    <div class="project-image-container">
-        <?php if ($coverUrl !== ''): ?>
-            <div class="project-image" style="background-image:url('<?= htmlspecialchars($coverUrl, ENT_QUOTES) ?>');background-size:cover;background-position:center;"></div>
-        <?php else: ?>
-            <div class="project-image <?= htmlspecialchars($game->getFallbackArt()) ?>"></div>
-        <?php endif; ?>
-    </div>
+    require_once __DIR__ . '/../lib/View.php';
 
-    <div class="project-info-container">
-        <div class="project-title"><?= htmlspecialchars($game->getTitle()) ?></div>
-        <div class="project-status-list">
-            <div class="project-status-tag <?= $game->getVisibility() === 'Public' ? 'green' : 'orange' ?>">
+?>
+<div class="project-row" id="project-card-<?= (int)$game->getId() ?>">
+    <?= View::cover($game->getImage(), $game->getFallbackArt(), $game->getTitle(), 'project-media') ?>
+
+    <div class="project-info">
+        <a class="project-title" href="<?= BASE_URL ?>/game?id=<?= (int)$game->getId() ?>">
+            <?= htmlspecialchars($game->getTitle()) ?>
+        </a>
+
+        <div class="project-meta">
+            <span class="game-tag <?= $game->isPublic() ? 'green' : 'orange' ?>">
                 <?= strtoupper(htmlspecialchars($game->getVisibility())) ?>
-            </div>
+            </span>
+            <span><?= Icon::get('chart', 13) ?> <?= View::compactNumber($game->getViews()) ?> views</span>
+            <span><?= Icon::get('download', 13) ?> <?= View::compactNumber($game->getDownloads()) ?> downloads</span>
+            <span><?= Icon::get('folder', 13) ?> <?= count($game->getBuilds()) ?> builds</span>
         </div>
     </div>
 
-    <div class="project-action-list">
-        <button onclick="window.location.href='<?= BASE_URL ?>/game?id=<?= (int)$game->getId() ?>'"
-                class="project-action-button" title="View game page">
-            <?= Icon::get('eyes') ?>
-        </button>
-
-        <button onclick="window.location.href='<?= BASE_URL ?>/project?id=<?= (int)$game->getId() ?>'"
-                class="project-action-button" title="Edit project">
-            <?= Icon::get('pencil') ?>
-        </button>
-
-        <button onclick="deleteProject(<?= (int)$game->getId() ?>)"
-                class="project-action-button delete-button" title="Delete project">
-            <?= Icon::get('trash') ?>
+    <div class="project-actions">
+        <a class="btn-icon" href="<?= BASE_URL ?>/game?id=<?= (int)$game->getId() ?>" title="View game page">
+            <?= Icon::get('eyes', 17) ?>
+        </a>
+        <a class="btn-icon" href="<?= BASE_URL ?>/project?id=<?= (int)$game->getId() ?>" title="Edit project">
+            <?= Icon::get('pencil', 17) ?>
+        </a>
+        <button type="button" class="btn-icon is-danger" title="Delete project"
+                onclick="deleteProject(<?= (int)$game->getId() ?>)">
+            <?= Icon::get('trash', 17) ?>
         </button>
     </div>
 </div>

@@ -1,0 +1,1330 @@
+/* ==========================================================================
+   WASD - SHARED UI LAYER
+   Reusable components, utilities, skeletons and animations.
+   Anything that appears on more than one page belongs in this file.
+   Page stylesheets only hold rules unique to that single page.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. PAGE SHELL
+   Every page wraps its content in .page so widths and gutters stay identical.
+   -------------------------------------------------------------------------- */
+
+.app-root {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    min-height: calc(100vh - var(--header-height) - 8rem);
+}
+
+.page {
+    width: 100%;
+    max-width: var(--page-width);
+    margin-inline: auto;
+    padding: var(--space-6) var(--page-pad) var(--space-8);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+}
+
+.page--wide {
+    max-width: 1440px;
+}
+
+.page-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-4);
+}
+
+.page-title {
+    font-family: var(--header-font);
+    font-size: var(--text-2xl);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+}
+
+.page-subtitle {
+    font-family: var(--normal-font);
+    color: var(--muted);
+    font-size: var(--text-md);
+    max-width: 60ch;
+}
+
+.eyebrow {
+    font-family: var(--mono-font);
+    font-size: var(--text-xs);
+    letter-spacing: 0.2rem;
+    color: var(--cyan);
+    text-transform: uppercase;
+}
+
+.section-title {
+    font-family: var(--header-font);
+    font-size: var(--text-xl);
+    font-weight: 600;
+}
+
+/* --------------------------------------------------------------------------
+   2. SURFACES
+   -------------------------------------------------------------------------- */
+
+.card {
+    background: var(--surface);
+    border: 1px solid var(--stroke);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
+}
+
+.card--interactive {
+    transition: transform var(--normal), border-color var(--normal), box-shadow var(--normal);
+}
+
+.card--interactive:hover {
+    transform: translateY(-4px);
+    border-color: var(--light-stroke);
+    box-shadow: var(--shadow);
+}
+
+.panel {
+    background: var(--card-bg);
+    border: 1px solid var(--stroke);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+}
+
+.divider {
+    height: 1px;
+    background: var(--stroke);
+    border: none;
+    margin: var(--space-4) 0;
+}
+
+.empty-state {
+    border: 1px dashed var(--stroke);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+    padding: var(--space-7) var(--space-5);
+    text-align: center;
+    font-family: var(--normal-font);
+    color: var(--muted);
+    line-height: 1.8;
+}
+
+.empty-state a {
+    color: var(--cyan);
+    font-weight: 600;
+}
+
+.empty-state a:hover {
+    text-decoration: underline;
+}
+
+/* --------------------------------------------------------------------------
+   3. BUTTONS
+   -------------------------------------------------------------------------- */
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    font-family: var(--normal-font);
+    font-weight: 600;
+    font-size: var(--text-base);
+    padding: 0.75rem 1.15rem;
+    border-radius: var(--radius-md);
+    border: 1px solid transparent;
+    background: transparent;
+    color: var(--color);
+    text-align: center;
+    transition: transform var(--fast), background var(--normal),
+                border-color var(--normal), color var(--normal), opacity var(--fast);
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+.btn[disabled],
+.btn.is-disabled {
+    opacity: 0.5;
+    pointer-events: none;
+    transform: none;
+}
+
+.btn-primary {
+    background: var(--gradient);
+    color: #05050c;
+}
+
+.btn-primary:hover {
+    box-shadow: var(--glow-cyan);
+}
+
+.btn-ghost {
+    border-color: var(--stroke);
+    background: var(--surface);
+}
+
+.btn-ghost:hover {
+    border-color: var(--cyan);
+    background: var(--cyan-soft);
+}
+
+.btn-accent {
+    background: var(--violet);
+    color: #fff;
+}
+
+.btn-accent:hover {
+    box-shadow: var(--glow-violet);
+}
+
+.btn-danger {
+    border-color: var(--stroke);
+    color: var(--muted);
+}
+
+.btn-danger:hover {
+    color: var(--red);
+    border-color: var(--red);
+    background: var(--red-soft);
+}
+
+.btn-block {
+    width: 100%;
+}
+
+.btn-sm {
+    font-size: var(--text-sm);
+    padding: 0.5rem 0.8rem;
+    border-radius: var(--radius);
+}
+
+.btn-icon {
+    padding: 0.5rem;
+    border: 1px solid var(--stroke);
+    border-radius: var(--radius);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-icon:hover {
+    border-color: var(--cyan);
+    color: var(--cyan);
+}
+
+/* Legacy aliases kept so older markup keeps rendering correctly. */
+.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--normal-font);
+    font-weight: 600;
+    font-size: 15.5px;
+    padding: 0.9rem 1.2rem;
+    border: none;
+    border-radius: var(--radius-md);
+    background: var(--gradient);
+    color: #05050c;
+    transition: transform var(--fast), box-shadow var(--normal);
+}
+
+.button:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--glow-cyan);
+}
+
+.no-highlight-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--normal-font);
+    font-weight: 600;
+    font-size: 15.5px;
+    padding: 0.9rem 1.2rem;
+    border: 1px solid var(--stroke);
+    border-radius: var(--radius-md);
+    background: transparent;
+    color: var(--color);
+    transition: transform var(--fast), border-color var(--normal), background var(--normal);
+}
+
+.no-highlight-button:hover {
+    transform: translateY(-2px);
+    border-color: var(--cyan);
+    background: var(--cyan-soft);
+}
+
+/* --------------------------------------------------------------------------
+   4. FORM CONTROLS
+   -------------------------------------------------------------------------- */
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.field-label {
+    font-family: var(--mono-font);
+    font-size: var(--text-xs);
+    letter-spacing: 0.15rem;
+    color: var(--violet);
+    text-transform: uppercase;
+}
+
+.field-input,
+.field-select,
+.field-textarea {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.45);
+    border: 1px solid var(--stroke);
+    border-radius: var(--radius);
+    color: var(--color);
+    font-family: var(--normal-font);
+    font-size: var(--text-base);
+    padding: 0.7rem 0.9rem;
+    outline: none;
+    transition: border-color var(--normal), box-shadow var(--normal), background var(--normal);
+}
+
+.field-input::placeholder,
+.field-textarea::placeholder {
+    color: var(--dim);
+}
+
+.field-input:focus,
+.field-select:focus,
+.field-textarea:focus {
+    border-color: var(--cyan);
+    box-shadow: 0 0 0 3px var(--cyan-soft);
+}
+
+.field-input:disabled,
+.field-select:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.field-textarea {
+    min-height: 8rem;
+    line-height: 1.7;
+    resize: vertical;
+}
+
+/*
+   The arrow is one inline SVG chevron.
+
+   It used to be two 5x5px linear-gradient triangles butted together at
+   fractional offsets; wherever the two halves did not land on a whole device
+   pixel the seam between them rendered as a stray line next to the arrow. A
+   single vector shape cannot seam, and it scales cleanly on any DPI.
+*/
+.field-select {
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    padding-right: 2.4rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238e93b4' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.85rem center;
+    background-size: 0.85rem;
+}
+
+.field-select:hover {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2322e4ff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+}
+
+/* Edge / IE render their own arrow on top of ours. */
+.field-select::-ms-expand {
+    display: none;
+}
+
+.field-select option {
+    background: var(--card-bg);
+    color: var(--color);
+}
+
+.field-error {
+    color: var(--red);
+    font-family: var(--normal-font);
+    font-size: var(--text-sm);
+}
+
+.field-input.is-invalid {
+    border-color: var(--red);
+}
+
+/*
+   Search box with an icon slot.
+
+   No flex sizing here on purpose. The help centre drops this component into a
+   column layout, where a `flex: 1 1 15rem` basis is read as a HEIGHT: the box
+   grew to 240px around a 43px input and the absolutely-centred icon drifted
+   down into the empty space below it. Row sizing is applied by .toolbar, which
+   is the only place a row context is guaranteed.
+*/
+.search-box {
+    position: relative;
+    min-width: 0;
+}
+
+.search-box .field-input {
+    padding-left: 2.6rem;
+}
+
+.search-box .search-icon {
+    position: absolute;
+    left: 0.85rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--dim);
+    pointer-events: none;
+    display: flex;
+}
+
+/*
+   Toolbar shared by the store, wishlist and any future filtered listing.
+
+   Everything sits on one row on a desktop and only breaks apart when the row
+   genuinely runs out of space. The earlier version put every control on its
+   own line at any width because `.field-input, .field-select { width: 100% }`
+   combined with `flex: 0 0 auto` told each select to be as wide as the whole
+   toolbar - five stacked rows that ate a third of the screen before a single
+   game was visible.
+*/
+.toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2) var(--space-3);
+    padding: var(--space-3);
+    background: var(--surface);
+    border: 1px solid var(--stroke);
+    border-radius: var(--radius-lg);
+}
+
+/* The search field takes whatever room the filters leave. */
+.toolbar .search-box {
+    flex: 1 1 15rem;
+}
+
+/* Controls size themselves from their content, not from the toolbar. */
+.toolbar .field-select {
+    width: auto;
+    flex: 1 1 9rem;
+    max-width: 13rem;
+    min-width: 0;
+}
+
+.toolbar .btn {
+    flex: 0 0 auto;
+}
+
+/* Small laptops and tablets: search takes the full first row, the filters
+   share the second one instead of squeezing into unreadable widths. */
+@media (max-width: 1024px) {
+    .search-box {
+        flex-basis: 100%;
+    }
+
+    .toolbar .field-select {
+        max-width: none;
+    }
+}
+
+/* Phones: one control per row, full width, easy to tap. */
+@media (max-width: 560px) {
+    .toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .toolbar .field-select,
+    .toolbar .btn {
+        width: 100%;
+        max-width: none;
+        flex: none;
+    }
+}
+
+/* --------------------------------------------------------------------------
+   5. TAGS, BADGES AND STATUS COLOURS
+   -------------------------------------------------------------------------- */
+
+.game-tag,
+.tag {
+    display: inline-block;
+    font-family: var(--mono-font);
+    font-size: var(--text-sm);
+    line-height: 1.6;
+    border-radius: var(--radius-sm);
+    padding: 0.1rem 0.45rem;
+    border: 1px solid transparent;
+    white-space: nowrap;
+}
+
+.magenta { background: var(--magenta-soft); color: var(--magenta); border-color: var(--magenta); }
+.green   { background: var(--green-soft);   color: var(--green);   border-color: var(--green); }
+.blue    { background: var(--blue-soft);    color: var(--blue);    border-color: var(--blue); }
+.yellow  { background: var(--yellow-soft);  color: var(--yellow);  border-color: var(--yellow); }
+.purple  { background: var(--purple-soft);  color: var(--purple);  border-color: var(--purple); }
+.cyan    { background: var(--cyan-soft);    color: var(--cyan);    border-color: var(--cyan); }
+.orange  { background: var(--orange-soft);  color: var(--orange);  border-color: var(--orange); }
+.violet  { background: var(--violet-soft);  color: var(--violet);  border-color: var(--violet); }
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-family: var(--mono-font);
+    font-size: var(--text-sm);
+    letter-spacing: 0.08rem;
+    padding: 0.3rem 0.6rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--stroke);
+    background: var(--surface);
+    color: var(--muted);
+}
+
+.chip-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+}
+
+/* Review status "traffic light" used on every game cover */
+.light-bulb,
+.red-light-bulb,
+.orange-light-bulb,
+.green-light-bulb {
+    height: 0.5rem;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    box-shadow: inset 0 0 0.12rem 0.12rem #c8c8c8;
+}
+
+.red-light-bulb {
+    background: #ff0000;
+    box-shadow: inset 0 0 0.12rem 0.12rem #ffc8c8, 0 0 0.5rem 0.25rem #ff0000;
+}
+
+.orange-light-bulb {
+    background: #ffa500;
+    box-shadow: inset 0 0 0.12rem 0.12rem #ffffc8, 0 0 0.5rem 0.25rem #ffa500;
+}
+
+.green-light-bulb {
+    background: #00ff7f;
+    box-shadow: inset 0 0 0.12rem 0.12rem #c8ffff, 0 0 0.5rem 0.25rem #00ff7f;
+}
+
+.traffic-light {
+    position: absolute;
+    right: 0.7rem;
+    top: 0.7rem;
+    padding: 0.6rem;
+    display: flex;
+    gap: 0.6rem;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--stroke);
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(6px);
+}
+
+.platform-strip {
+    position: absolute;
+    bottom: 0.7rem;
+    left: 0.7rem;
+    display: flex;
+    gap: 0.4rem;
+    padding: 0.25rem 0.35rem;
+    border-radius: var(--radius);
+    border: 1px solid var(--light-stroke);
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(6px);
+}
+
+/* --------------------------------------------------------------------------
+   6. GAME CARD (grid tile used by store, search results and API chunks)
+   -------------------------------------------------------------------------- */
+
+.game-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+    gap: var(--space-4);
+}
+
+.game-card {
+    display: flex;
+    flex-direction: column;
+    height: 24rem;
+    background: var(--card-bg);
+    border: 1px solid var(--stroke);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition: transform var(--normal), border-color var(--normal), box-shadow var(--normal);
+}
+
+.game-card:hover {
+    transform: translateY(-0.3rem);
+    border-color: var(--light-stroke);
+    box-shadow: var(--shadow);
+}
+
+.game-img {
+    position: relative;
+    height: 50%;
+    flex: none;
+    background-size: cover;
+    background-position: center;
+}
+
+.game-owned-flag {
+    position: absolute;
+    top: 0.7rem;
+    left: 0.7rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.2rem 0.45rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--green);
+    background: rgba(6, 6, 13, 0.75);
+    color: var(--green);
+    font-family: var(--mono-font);
+    font-size: 10px;
+    letter-spacing: 0.08rem;
+}
+
+.game-info {
+    flex: 1;
+    min-height: 0;
+    padding: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    overflow: hidden;
+}
+
+.game-title {
+    font-family: var(--header-font);
+    font-weight: 600;
+    font-size: var(--text-base);
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+    overflow: hidden;
+}
+
+.game-desc {
+    font-family: var(--normal-font);
+    color: var(--muted);
+    font-size: var(--text-base);
+    flex: 1;
+    min-height: 0;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
+}
+
+.game-tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    max-height: 3.5rem;
+    overflow: hidden;
+}
+
+.game-price {
+    font-family: var(--mono-font);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.game-price-tag {
+    color: var(--cyan);
+    font-size: var(--text-sm);
+}
+
+.game-old-price-tag {
+    font-size: var(--text-sm);
+    text-decoration: line-through;
+    color: var(--dim);
+}
+
+/* --------------------------------------------------------------------------
+   7. LIST CARD (horizontal row used by cart, wishlist and checkout)
+   -------------------------------------------------------------------------- */
+
+.list-card {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    padding: var(--space-3);
+    background: var(--card-bg);
+    border: 1px solid var(--stroke);
+    border-radius: var(--radius-lg);
+    transition: border-color var(--normal), transform var(--normal), box-shadow var(--normal);
+}
+
+.list-card:hover {
+    border-color: var(--light-stroke);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+}
+
+.list-card.is-busy {
+    opacity: 0.45;
+    pointer-events: none;
+}
+
+.list-card-media {
+    flex: none;
+    width: 15rem;
+    aspect-ratio: 16 / 9;
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--surface);
+}
+
+.list-card-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.list-card-body {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding: var(--space-2) 0;
+}
+
+.list-card-title {
+    font-family: var(--header-font);
+    font-size: var(--text-md);
+    font-weight: 600;
+}
+
+.list-card-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    font-family: var(--normal-font);
+    font-size: var(--text-sm);
+}
+
+.list-card-meta .label {
+    color: var(--dim);
+    margin-right: var(--space-1);
+}
+
+.list-card-meta .value {
+    color: var(--muted);
+}
+
+.value.review-negative { color: var(--magenta); }
+.value.review-mixed    { color: var(--amber); }
+.value.review-positive { color: var(--green); }
+
+.list-card-platforms {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-top: auto;
+    color: var(--muted);
+}
+
+.list-card-price {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+    min-width: 7rem;
+    padding: 0 var(--space-4);
+    font-family: var(--mono-font);
+}
+
+.list-card-price .current {
+    font-size: var(--text-md);
+    font-weight: 700;
+}
+
+.list-card-price .original {
+    font-size: var(--text-sm);
+    color: var(--dim);
+    text-decoration: line-through;
+}
+
+.list-card-actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    min-width: 9.5rem;
+}
+
+@media (max-width: 900px) {
+    .list-card {
+        flex-wrap: wrap;
+    }
+
+    .list-card-media {
+        width: 11rem;
+    }
+
+    .list-card-price {
+        align-items: flex-start;
+        padding: 0;
+    }
+
+    .list-card-actions {
+        width: 100%;
+        flex-direction: row;
+    }
+
+    .list-card-actions .btn {
+        flex: 1;
+    }
+}
+
+@media (max-width: 560px) {
+    .list-card-media {
+        width: 100%;
+    }
+}
+
+/* --------------------------------------------------------------------------
+   7b. REVIEW CARD (game page + reviews API)
+   -------------------------------------------------------------------------- */
+
+.review-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: var(--space-5);
+    background: var(--surface);
+    border: 1px solid var(--stroke);
+    border-radius: var(--radius-lg);
+    animation: slide-up 0.4s var(--ease) both;
+}
+
+.review-card-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+}
+
+.review-card-user {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    font-family: var(--normal-font);
+    font-size: var(--text-base);
+}
+
+.review-avatar {
+    height: 2rem;
+    width: 2rem;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: var(--violet-soft);
+    border: 1px solid rgba(139, 92, 246, 0.5);
+    color: var(--violet);
+    font-family: var(--header-font);
+    font-size: var(--text-sm);
+    font-weight: 700;
+}
+
+.review-verdict {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.3rem;
+    border-radius: var(--radius);
+}
+
+.review-verdict.is-positive {
+    color: var(--green);
+    background: var(--green-soft);
+    border: 1px solid rgba(52, 211, 153, 0.5);
+}
+
+.review-verdict.is-negative {
+    color: var(--magenta);
+    background: var(--magenta-soft);
+    border: 1px solid rgba(255, 45, 118, 0.5);
+}
+
+/* The viewer's own review, with its edit / delete controls. */
+.review-card.is-mine {
+    border-color: rgba(139, 92, 246, 0.45);
+    background: rgba(139, 92, 246, 0.06);
+}
+
+.review-card.is-busy {
+    opacity: 0.45;
+    pointer-events: none;
+}
+
+.review-mine-flag {
+    padding: 0.15rem 0.45rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid rgba(139, 92, 246, 0.5);
+    background: var(--violet-soft);
+    color: var(--violet);
+    font-family: var(--mono-font);
+    font-size: 10px;
+    letter-spacing: 0.08rem;
+    text-transform: uppercase;
+}
+
+.review-card-side {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+.review-card-actions {
+    display: flex;
+    gap: var(--space-2);
+}
+
+.review-action {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    padding: 0.3rem 0.55rem;
+    border: 1px solid var(--stroke);
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--muted);
+    font-family: var(--normal-font);
+    font-size: var(--text-sm);
+    transition: color var(--normal), border-color var(--normal), background var(--normal);
+}
+
+.review-action:hover {
+    color: var(--cyan);
+    border-color: var(--cyan);
+    background: var(--cyan-soft);
+}
+
+.review-action.is-danger:hover {
+    color: var(--magenta);
+    border-color: var(--magenta);
+    background: var(--magenta-soft);
+}
+
+.review-card-date {
+    font-family: var(--mono-font);
+    font-size: var(--text-sm);
+    color: var(--dim);
+}
+
+@media (max-width: 560px) {
+    .review-card-head {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .review-card-side {
+        width: 100%;
+        justify-content: space-between;
+    }
+}
+
+.review-card-body {
+    font-family: var(--normal-font);
+    color: var(--muted);
+    font-size: var(--text-base);
+    line-height: 1.8;
+}
+
+/* --------------------------------------------------------------------------
+   8. PROGRESSIVE IMAGE LOADING
+   Markup: <div class="media"><img class="img-lazy" loading="lazy" ...></div>
+   The wrapper shows a soft shimmer, the image fades in once decoded.
+   -------------------------------------------------------------------------- */
+
+/*
+   Structure:
+
+     <div class="media">                     <- clips, holds the shimmer
+         <span class="media-art art-3"></span>  <- fallback artwork layer
+         <img class="img-lazy" ...>             <- fades in over the artwork
+     </div>
+
+   The artwork is a child layer rather than a class on .media itself. When it
+   lived on the wrapper, `.media.is-ready` (specificity 0,2,0) painted its flat
+   placeholder colour straight over `.art-N` (0,1,0), so every game without a
+   cover rendered as an empty dark rectangle. As a separate layer there is
+   nothing left to fight over, and a cover image that fails to load simply
+   reveals the artwork underneath instead of a broken-image icon.
+*/
+
+.media {
+    position: relative;
+    overflow: hidden;
+    background-color: var(--card-bg);
+}
+
+/* Shimmer while the image is still on its way. */
+.media::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(110deg, #10101f 8%, #1a1a30 18%, #10101f 33%);
+    background-size: 220% 100%;
+    animation: media-shimmer 1.6s linear infinite;
+    transition: opacity var(--normal);
+}
+
+.media.is-ready::before {
+    opacity: 0;
+    animation: none;
+    pointer-events: none;
+}
+
+.media-art {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    display: block;
+}
+
+/*
+   Anything inside a .media wrapper that is not picture content is an overlay
+   control - the gallery arrows and counter, the rating lights, the platform
+   strip, the owned flag - so it has to sit above the photo.
+
+   Without this the image (z-index 2) covered every one of them: the gallery
+   arrows and the counter were still rendered, but buried and unclickable.
+
+   Picture content opts out with .media-layer (the game page's slide track is
+   one), so a component can hold its images in a wrapper without that wrapper
+   being mistaken for a button.
+*/
+.media > :not(.media-art):not(.media-layer):not(img) {
+    z-index: 3;
+}
+
+.img-lazy {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transform: scale(1.03);
+    filter: blur(12px);
+    transition: opacity var(--slow), transform var(--slow), filter var(--slow);
+}
+
+.img-lazy.is-loaded {
+    opacity: 1;
+    transform: none;
+    filter: none;
+}
+
+/* A cover that 404s stays out of the way so the artwork shows. */
+.img-lazy.is-broken {
+    display: none;
+}
+
+@keyframes media-shimmer {
+    to { background-position-x: -220%; }
+}
+
+/* --------------------------------------------------------------------------
+   9. SKELETON LOADERS
+   -------------------------------------------------------------------------- */
+
+.skeleton {
+    position: relative;
+    overflow: hidden;
+    background: var(--surface-2);
+    border-radius: var(--radius);
+}
+
+.skeleton::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.07), transparent);
+    animation: skeleton-sweep 1.4s infinite;
+}
+
+@keyframes skeleton-sweep {
+    to { transform: translateX(100%); }
+}
+
+.skeleton-text {
+    height: 0.7rem;
+    border-radius: var(--radius-pill);
+}
+
+.skeleton-text.w-40 { width: 40%; }
+.skeleton-text.w-60 { width: 60%; }
+.skeleton-text.w-80 { width: 80%; }
+.skeleton-text.w-full { width: 100%; }
+
+.skeleton-card {
+    height: 24rem;
+    border: 1px solid var(--stroke);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--card-bg);
+    display: flex;
+    flex-direction: column;
+}
+
+.skeleton-card .skeleton-cover {
+    height: 50%;
+    border-radius: 0;
+}
+
+.skeleton-card .skeleton-lines {
+    flex: 1;
+    padding: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+}
+
+.skeleton-row {
+    height: 9.5rem;
+    border: 1px solid var(--stroke);
+    border-radius: var(--radius-lg);
+    background: var(--card-bg);
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    padding: var(--space-3);
+}
+
+.skeleton-row .skeleton-thumb {
+    width: 15rem;
+    height: 100%;
+    flex: none;
+}
+
+.skeleton-row .skeleton-lines {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+}
+
+@media (max-width: 560px) {
+    .skeleton-row .skeleton-thumb { width: 8rem; }
+}
+
+/* --------------------------------------------------------------------------
+   10. ENTRANCE ANIMATIONS
+   Add .reveal for a single element or .stagger on a parent for its children.
+   -------------------------------------------------------------------------- */
+
+@keyframes fade-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@keyframes slide-up {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: none; }
+}
+
+@keyframes scale-in {
+    from { opacity: 0; transform: scale(0.96); }
+    to   { opacity: 1; transform: none; }
+}
+
+.reveal      { animation: slide-up 0.45s var(--ease) both; }
+.reveal-fade { animation: fade-in 0.45s var(--ease) both; }
+.reveal-pop  { animation: scale-in 0.35s var(--ease) both; }
+
+.stagger > * {
+    animation: slide-up 0.45s var(--ease) both;
+}
+
+.stagger > *:nth-child(1)  { animation-delay: 0.02s; }
+.stagger > *:nth-child(2)  { animation-delay: 0.06s; }
+.stagger > *:nth-child(3)  { animation-delay: 0.10s; }
+.stagger > *:nth-child(4)  { animation-delay: 0.14s; }
+.stagger > *:nth-child(5)  { animation-delay: 0.18s; }
+.stagger > *:nth-child(6)  { animation-delay: 0.22s; }
+.stagger > *:nth-child(7)  { animation-delay: 0.26s; }
+.stagger > *:nth-child(8)  { animation-delay: 0.30s; }
+.stagger > *:nth-child(9)  { animation-delay: 0.34s; }
+.stagger > *:nth-child(10) { animation-delay: 0.38s; }
+.stagger > *:nth-child(n + 11) { animation-delay: 0.42s; }
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* --------------------------------------------------------------------------
+   10b. NAVIGATION PROGRESS
+   The router flags the document while a page is being fetched.
+   -------------------------------------------------------------------------- */
+
+html.is-navigating::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 2px;
+    width: 100%;
+    z-index: var(--z-modal);
+    background: var(--gradient-text);
+    transform-origin: left;
+    animation: nav-progress 1.2s var(--ease) infinite;
+}
+
+@keyframes nav-progress {
+    0%   { transform: scaleX(0); opacity: 1; }
+    70%  { transform: scaleX(0.85); opacity: 1; }
+    100% { transform: scaleX(1); opacity: 0; }
+}
+
+/* --------------------------------------------------------------------------
+   11. TOASTS
+   Replaces the blocking alert() calls the pages used to fire.
+   -------------------------------------------------------------------------- */
+
+.toast-host {
+    position: fixed;
+    right: var(--space-5);
+    bottom: var(--space-5);
+    z-index: var(--z-modal);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    pointer-events: none;
+}
+
+.toast {
+    min-width: 14rem;
+    max-width: min(24rem, calc(100vw - 2 * var(--space-5)));
+    padding: 0.8rem 1rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--stroke);
+    background: rgba(11, 11, 24, 0.95);
+    backdrop-filter: blur(12px);
+    box-shadow: var(--shadow);
+    font-family: var(--normal-font);
+    font-size: var(--text-base);
+    animation: slide-up 0.28s var(--ease) both;
+}
+
+.toast.is-leaving {
+    animation: fade-in 0.28s var(--ease) reverse both;
+}
+
+.toast-success { border-color: var(--green); color: var(--green); }
+.toast-error   { border-color: var(--magenta); color: var(--magenta); }
+.toast-info    { border-color: var(--cyan); color: var(--cyan); }
+
+@media (max-width: 640px) {
+    .toast-host {
+        left: var(--space-4);
+        right: var(--space-4);
+        bottom: var(--space-4);
+    }
+}
+
+/* --------------------------------------------------------------------------
+   12. UTILITIES
+   -------------------------------------------------------------------------- */
+
+.flex        { display: flex; }
+.flex-col    { display: flex; flex-direction: column; }
+.flex-wrap   { flex-wrap: wrap; }
+.items-center{ align-items: center; }
+.items-end   { align-items: flex-end; }
+.justify-between { justify-content: space-between; }
+.justify-center  { justify-content: center; }
+.flex-1      { flex: 1; min-width: 0; }
+
+.gap-1 { gap: var(--space-1); }
+.gap-2 { gap: var(--space-2); }
+.gap-3 { gap: var(--space-3); }
+.gap-4 { gap: var(--space-4); }
+.gap-5 { gap: var(--space-5); }
+.gap-6 { gap: var(--space-6); }
+
+.text-muted { color: var(--muted); }
+.text-dim   { color: var(--dim); }
+.text-cyan  { color: var(--cyan); }
+.text-mono  { font-family: var(--mono-font); }
+.text-body  { font-family: var(--normal-font); }
+.text-head  { font-family: var(--header-font); }
+.text-sm    { font-size: var(--text-sm); }
+.text-xs    { font-size: var(--text-xs); }
+.text-center{ text-align: center; }
+
+.gradient-text {
+    background: var(--gradient-text);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.mono-label {
+    font-family: var(--mono-font);
+    font-size: var(--text-xs);
+    letter-spacing: 0.2rem;
+    color: var(--dim);
+    text-transform: uppercase;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.hide-mobile { display: initial; }
+.only-mobile { display: none; }
+
+@media (max-width: 860px) {
+    .hide-mobile { display: none !important; }
+    .only-mobile { display: initial; }
+}
