@@ -1,27 +1,54 @@
 <?php
-    header('Content-Type: application/json');
-    header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
-    header("Cache-Control: post-check=0, pre-check=0", false);
-    header("Pragma: no-cache");
+    /**
+     * Sign-in endpoint.
+     *
+     * POST { email, password } -> starts the session for an existing account.
+     *
+     * The previous version of this file took a GET request with the password
+     * in the query string, validated only that the email ended in
+     * "@gmail.com", and never queried the `user` table or called
+     * Auth::login(). No sign-in could ever actually succeed - Auth::login()
+     * existed and worked, but nothing in this file called it.
+     */
+    require_once __DIR__ . '/../../../lib/Api.php';
+    require_once __DIR__ . '/../../../models/Users.php';
 
-    $user = [
-        "email" => $_GET["email"],
-        "password"=> $_GET["password"],
-        
-        "emailError"=> false,
-        "passwordError"=> false,
-    ];
+    Api::begin();
 
-    if (!str_ends_with($user["email"],"@gmail.com")) {
-        $user["emailError"] = true;
+    if (Api::method() !== 'POST') {
+        Api::fail('Use POST to sign in.', 405);
     }
 
-    if (strlen($user["password"]) <8 || strlen($user["password"])>32) {
-        $user['passwordError'] = true;
+    if (!Csrf::check(Csrf::fromRequest(Api::body()))) {
+        Api::fail('Your session token was missing or stale. Reload the page and try again.', 403);
     }
 
-    echo json_encode($user);
+    $body = Api::body();
 
-    exit;
+    $email    = trim((string)($body['email'] ?? ''));
+    $password = (string)($body['password'] ?? '');
+
+    if ($email === '' || $password === '') {
+        Api::fail('Enter your email and password.', 422);
+    }
+
+    $user = Users::getByEmail($email);
+
+    // One message for "no such account" and "wrong password" alike - telling
+    // them apart is exactly what lets an attacker enumerate real accounts by
+    // trying addresses and watching which error comes back.
+    if (!$user || !password_verify($password, $user->getPassword())) {
+        Api::fail('Incorrect email or password.', 401);
+    }
+
+    Auth::login($user);
+
+    Api::json([
+        'status' => 'success',
+        'user' => [
+            'id' => $user->getId(),
+            'username' => $user->getUsername(),
+            'email' => $user->getEmail(),
+        ],
+    ]);
 ?>
-

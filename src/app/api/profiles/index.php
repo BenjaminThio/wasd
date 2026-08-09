@@ -87,7 +87,7 @@
             Api::fail('The two passwords do not match.', 422);
         }
 
-        if (!isStrongPassword($password)) {
+        if (!Users::isStrongPassword($password)) {
             Api::fail('Use at least 6 characters with an uppercase letter, a lowercase '
                     . 'letter, a number and a symbol.', 422);
         }
@@ -141,15 +141,6 @@
     ]);
 
     /* ------------------------------------------------------------- helpers */
-
-    function isStrongPassword(string $password): bool
-    {
-        return strlen($password) >= 6
-            && preg_match('/[A-Z]/', $password)
-            && preg_match('/[a-z]/', $password)
-            && preg_match('/[0-9]/', $password)
-            && preg_match('/[^A-Za-z0-9]/', $password);
-    }
 
     function profileStats(Database $database, int $userId): array
     {

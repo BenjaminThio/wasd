@@ -47,6 +47,80 @@
             return self::hydrateUser($row, $database);
         }
 
+        public static function getByUsername(string $username): ?User
+        {
+            $database = new Database();
+            $row = $database->query('SELECT * FROM user WHERE username = ? LIMIT 1', [$username])->fetch();
+
+            if (!$row) return null;
+            return self::hydrateUser($row, $database);
+        }
+
+        public static function usernameTaken(string $username): bool
+        {
+            $database = new Database();
+            return (bool)$database->query(
+                'SELECT 1 FROM user WHERE username = ? LIMIT 1', [$username]
+            )->fetch();
+        }
+
+        public static function emailTaken(string $email): bool
+        {
+            $database = new Database();
+            return (bool)$database->query(
+                'SELECT 1 FROM user WHERE email = ? LIMIT 1', [$email]
+            )->fetch();
+        }
+
+        /**
+         * Create the account row and hand back the fully-hydrated User.
+         *
+         * This is the piece that was entirely missing: nothing in the codebase
+         * ever inserted a new row into `user`. save() below could technically
+         * do it (it branches on a null id), but nothing called it either - the
+         * sign-up endpoint validated a couple of fields and stopped.
+         *
+         * Auth::register() is the high-level entry point that pairs with
+         * Auth::login(); this is its one job, kept separate so the "create a
+         * row" step can be tested and reasoned about on its own.
+         */
+        public static function create(string $username, string $email, string $password): User
+        {
+            $database = new Database();
+            $database->insert('user', [
+                'username' => $username,
+                'email' => $email,
+                'password' => password_hash($password, PASSWORD_DEFAULT),
+                'avatar_path' => null,
+            ]);
+
+            $user = self::getById($database->lastInsertId());
+
+            if ($user === null) {
+                // Unreachable in practice - the insert above just committed
+                // this exact row - but create() promises a User, not a User|null.
+                throw new RuntimeException('User was created but could not be read back.');
+            }
+
+            return $user;
+        }
+
+        /**
+         * Shared password strength rule.
+         *
+         * Sign-up and the profile password change both enforce this exact
+         * policy, so it lives here once instead of as two copies that could
+         * quietly drift apart.
+         */
+        public static function isStrongPassword(string $password): bool
+        {
+            return strlen($password) >= 6
+                && preg_match('/[A-Z]/', $password)
+                && preg_match('/[a-z]/', $password)
+                && preg_match('/[0-9]/', $password)
+                && preg_match('/[^A-Za-z0-9]/', $password);
+        }
+
         // E-commerce high-level functions
         public static function addToCart(int $userId, int $gameId): void
         {

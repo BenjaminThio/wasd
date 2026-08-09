@@ -41,6 +41,20 @@
             return $devUser;
         }
 
+        /**
+         * Create an account and sign into it in one step - the sign-up
+         * counterpart to login(). Callers are expected to have already
+         * validated the fields (format, strength, "is it taken"); this just
+         * creates the row and starts the session, exactly like login() does
+         * for an account that already exists.
+         */
+        public static function register(string $username, string $email, string $password): User
+        {
+            $user = Users::create($username, $email, $password);
+            self::login($user);
+            return $user;
+        }
+
         // Delete the Session (Call this when the user clicks "Log Out")
         public static function logout(): void
         {

@@ -95,11 +95,20 @@
          *
          * Left empty, builds are served from our own origin - see the note on
          * the sandbox in the game page.
+         *
+         * PLAY_ORIGIN is normalized to scheme + host [+ port] and anything
+         * else is discarded. Without that, a value like
+         * "http://localhost/wasd" - the app's own browsable URL, and the most
+         * natural thing to paste in before setting up a real second host -
+         * would be glued straight onto a path that already starts with
+         * /wasd, doubling it into /wasd/wasd/... and 404ing the player. The
+         * path always comes from Media::url(); PLAY_ORIGIN only ever
+         * contributes the origin.
          */
         public static function playUrl(?string $stored): string
         {
             $path = self::url($stored);
-            $origin = rtrim(Env::get('PLAY_ORIGIN', ''), '/');
+            $origin = self::playOrigin();
 
             if ($origin === '' || preg_match('#^https?://#i', $path)) {
                 return $path;
@@ -111,7 +120,44 @@
         /** True when builds are served from a hostname of their own. */
         public static function playOriginConfigured(): bool
         {
-            return trim(Env::get('PLAY_ORIGIN', '')) !== '';
+            return self::playOrigin() !== '';
+        }
+
+        /**
+         * PLAY_ORIGIN reduced to "scheme://host[:port]", or '' if unset.
+         *
+         * Also the one place that notices when the configured value is not
+         * actually a separate origin (same host as the current request, or a
+         * bare "localhost") - that setup does not throw an error, because a
+         * normalized same-host value is harmless once path-doubling is fixed,
+         * but it buys none of the isolation PLAY_ORIGIN exists for either. A
+         * note goes to the log so whoever runs the server can tell the
+         * difference between "not configured" and "configured to do nothing".
+         */
+        private static function playOrigin(): string
+        {
+            static $cached = null;
+            if ($cached !== null) return $cached;
+
+            $raw = trim(Env::get('PLAY_ORIGIN', ''));
+            if ($raw === '') return $cached = '';
+
+            $parts = parse_url($raw);
+            if (empty($parts['scheme']) || empty($parts['host'])) {
+                error_log('WASD: PLAY_ORIGIN is set but not a valid "scheme://host" value (' . $raw . '); ignoring it.');
+                return $cached = '';
+            }
+
+            $origin = $parts['scheme'] . '://' . $parts['host'] . (isset($parts['port']) ? ':' . $parts['port'] : '');
+
+            $ownHost = $_SERVER['HTTP_HOST'] ?? null;
+            if ($ownHost !== null && strcasecmp($parts['host'], explode(':', $ownHost)[0]) === 0) {
+                error_log('WASD: PLAY_ORIGIN (' . $origin . ') resolves to this site\'s own host, '
+                          . 'so playable builds get no isolation from it. Point it at a separate '
+                          . 'hostname to actually isolate builds from the main site.');
+            }
+
+            return $cached = $origin;
         }
 
         /** Relative folder that holds every asset for one game. */

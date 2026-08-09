@@ -9,25 +9,27 @@
 
         <div class="input-group">
             <label class="field-label" for="username">USERNAME:</label>
-            <input type="text" id="username" class="field-input" placeholder="Type here...">
+            <input type="text" id="username" class="field-input" placeholder="Type here..." autocomplete="username">
         </div>
 
         <div class="input-group">
             <label class="field-label" for="email">EMAIL ADDRESS:</label>
-            <input type="email" id="email" class="field-input" placeholder="Type here...">
+            <input type="email" id="email" class="field-input" placeholder="Type here..." autocomplete="email">
         </div>
 
         <div class="input-group">
             <label class="field-label" for="password">PASSWORD:</label>
-            <input type="password" id="password" class="field-input" placeholder="Type here...">
+            <input type="password" id="password" class="field-input" placeholder="Type here..." autocomplete="new-password">
         </div>
 
         <div class="input-group">
             <label class="field-label" for="confirm">CONFIRM PASSWORD:</label>
-            <input type="password" id="confirm" class="field-input" placeholder="Type here...">
+            <input type="password" id="confirm" class="field-input" placeholder="Type here..." autocomplete="new-password">
         </div>
 
-        <button class="signup-button">REGISTER</button>
+        <p id="signup-status" class="auth-status" role="alert" hidden></p>
+
+        <button class="signup-button" onclick="signUp()">REGISTER</button>
 
         <div class="social-container">
             <?php
@@ -45,54 +47,110 @@
 </div>
 
 <script>
-    async function signUp() {
+/*
+ * Wrapped in an IIFE, like every other page script in this app - and unlike
+ * how this file used to be written. The sign-in and sign-up pages share one
+ * layout, so the SPA router soft-swaps between them instead of doing a full
+ * reload; a bare top-level `const` here collided with the same name declared
+ * by the other page's script the moment someone followed the "Sign in" /
+ * "Sign up" link, throwing a SyntaxError that killed the whole injected
+ * script before signUp() even got defined. Scoping everything to this
+ * closure - and only this closure - makes each script re-runnable no matter
+ * how many times the router injects it.
+ */
+(() => {
+    const authCsrfToken = () => document.querySelector('meta[name="csrf-token"]')?.content || '';
 
-        let usernameInput = document.getElementById("username");
-        let emailInput = document.getElementById("email");
-        let passwordInput = document.getElementVyId("password");
-        let confirmPassInput = document.getElementById("confirmPass");
-
-        let username = usernameInput.value;
-        let email = emailInput.value;
-        let password = passwordInput.value;
-        let confirmPass = confirmPassInput.value;
-
-
-        const response = await fetch(`/wasd/src/app/api/sign-up/index.php?username=${username}&email=${username}&password=${password}&confirmPass=${confirmPass}`, {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'X-Requested-With': 'XMLHttpRequest'
-            }
-        });
-
-        if (response.ok) {
-            let data = await response.json();
-
-            console.log(data["usernameError"]);
-            if (data["usernameError"]) {
-                usernameInput.style.border = "1.5px solid red";
-                alert("Invalid username. Please re-type again.");
-            }
-
-            console.log(data["emailError"]);
-            if (data["emailError"]) {
-                emailInput.style.border = "1.5px solid red";
-                alert("Invalid email. Please re-type again.");
-            }
-
-            console.log(data["passwordError"]);
-            if (data["passwordError"]) {
-                passwordInput.style.border = "1.5px solid red";
-                alert("Invalid password. Please re-type again.")
-            }
-
-            console.log(data["confirmPassError"]);
-            if (data["confirmPassError"]) {
-                confirmPassInput.style.border = "1.5px solid red";
-                alert("The password is not the same. Please re-type again.")
-            }
-        }
+    function showAuthStatus(el, message, ok) {
+        el.textContent = message;
+        el.hidden = !message;
+        el.classList.toggle('is-success', !!ok);
     }
 
+    function markAuthField(input, invalid) {
+        input.classList.toggle('is-invalid', invalid);
+    }
+
+    const STRONG_PASSWORD = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z0-9]).{6,}$/;
+    const VALID_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    // The button's onclick="signUp()" runs in global scope, so the function
+    // it calls has to be attached to window explicitly.
+    window.signUp = async function signUp() {
+        const usernameInput = document.getElementById('username');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const confirmInput = document.getElementById('confirm');
+        const status = document.getElementById('signup-status');
+        const button = document.querySelector('.signup-button');
+
+        [usernameInput, emailInput, passwordInput, confirmInput].forEach(field => markAuthField(field, false));
+        showAuthStatus(status, '');
+
+        const username = usernameInput.value.trim();
+        const email = emailInput.value.trim();
+        const password = passwordInput.value;
+        const confirm = confirmInput.value;
+
+        if (username.length < 3 || username.length > 50) {
+            markAuthField(usernameInput, true);
+            return showAuthStatus(status, 'Usernames are between 3 and 50 characters.');
+        }
+
+        if (!/^[A-Za-z0-9_-]+$/.test(username)) {
+            markAuthField(usernameInput, true);
+            return showAuthStatus(status, 'Usernames can only contain letters, numbers, underscores and hyphens.');
+        }
+
+        if (!VALID_EMAIL.test(email)) {
+            markAuthField(emailInput, true);
+            return showAuthStatus(status, 'Enter a valid email address.');
+        }
+
+        if (password !== confirm) {
+            markAuthField(confirmInput, true);
+            return showAuthStatus(status, 'The two passwords do not match.');
+        }
+
+        if (!STRONG_PASSWORD.test(password)) {
+            markAuthField(passwordInput, true);
+            return showAuthStatus(status,
+                'Use at least 6 characters with an uppercase letter, a lowercase letter, a number and a symbol.');
+        }
+
+        button.disabled = true;
+        button.textContent = 'CREATING…';
+
+        try {
+            const response = await fetch('<?= BASE_URL ?>/src/app/api/sign-up/index.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-Token': authCsrfToken(),
+                },
+                body: JSON.stringify({ username, email, password, confirm }),
+            });
+
+            const data = await response.json().catch(() => null);
+
+            if (!response.ok || !data || data.status !== 'success') {
+                markAuthField(usernameInput, false);
+                showAuthStatus(status, (data && data.error) || 'Could not create your account. Try again.');
+                return;
+            }
+
+            showAuthStatus(status, 'Account created! Taking you in…', true);
+
+            // A full navigation, not the SPA router: the header only decides
+            // "signed in" vs "guest" on a real page load, and that is exactly
+            // what just changed.
+            window.location.href = '<?= BASE_URL ?>/';
+        } catch (err) {
+            showAuthStatus(status, 'Could not reach the server. Check your connection and try again.');
+        } finally {
+            button.disabled = false;
+            button.textContent = 'REGISTER';
+        }
+    };
+})();
 </script>

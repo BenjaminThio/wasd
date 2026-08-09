@@ -109,6 +109,35 @@
     box-shadow: 0 0 0 3px rgba(34, 228, 255, 0.18);
 }
 
+/* A field the server or the client-side check rejected. */
+.field-input.is-invalid {
+    border-color: rgba(255, 90, 90, 0.85);
+}
+
+.field-input.is-invalid:focus {
+    box-shadow: 0 0 0 3px rgba(255, 90, 90, 0.18);
+}
+
+/* --------------------------------------------------------------- feedback */
+
+.auth-status {
+    margin-top: 15px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    background: rgba(255, 90, 90, 0.12);
+    border: 1px solid rgba(255, 90, 90, 0.35);
+    color: #ffb3b3;
+    font-size: 13px;
+    line-height: 1.5;
+    text-align: center;
+}
+
+.auth-status.is-success {
+    background: rgba(34, 228, 255, 0.12);
+    border-color: rgba(34, 228, 255, 0.4);
+    color: #bdf3ff;
+}
+
 /* ---------------------------------------------------------------- buttons */
 
 .sign-in-button,
