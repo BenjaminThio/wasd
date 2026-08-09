@@ -20,6 +20,20 @@
             }
         }
 
+        public static function login(int $id): void
+        {
+            self::startSession();
+            
+            // Regenerate the session ID to completely prevent Session Fixation attacks
+            session_regenerate_id(true);
+            
+            // Store ONLY the user ID in the session, not the whole object or password
+            $_SESSION['user_id'] = $id;
+
+            self::forgetCurrentUser();
+        }
+
+        /*
         // Create the Session (Call this upon successful Sign In / Sign Up)
         public static function login(User $user): void
         {
@@ -33,11 +47,12 @@
 
             self::forgetCurrentUser();
         }
+        */
 
         public static function loginDevUser(): User
         {
             $devUser = Users::getDevUser();
-            self::login($devUser);
+            self::login($devUser->getId());
             return $devUser;
         }
 
@@ -51,7 +66,7 @@
         public static function register(string $username, string $email, string $password): User
         {
             $user = Users::create($username, $email, $password);
-            self::login($user);
+            self::login($user->getId());
             return $user;
         }
 
