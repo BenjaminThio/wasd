@@ -28,7 +28,12 @@
 
 .contact-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+    /*
+       min() rather than a bare 17rem: on a screen narrower than the track, a
+       fixed minimum makes the column wider than the grid and the cards hang off
+       the side. Falling back to 100% lets the track shrink with the page.
+    */
+    grid-template-columns: repeat(auto-fit, minmax(min(17rem, 100%), 1fr));
     gap: var(--space-4);
 }
 
@@ -114,27 +119,91 @@
     transform: translateX(4px);
 }
 
-/* -------------------------------------------------------------- direct box */
+/* ---------------------------------------------------- form + direct details */
 
-.contact-direct {
+/*
+   The form takes the room it needs and the details column sits beside it until
+   there is no longer space for both, at which point they stack. Both tracks are
+   given a minimum in the basis rather than a breakpoint, so this behaves the
+   same whatever the surrounding page width happens to be.
+*/
+.contact-reach {
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
+    align-items: flex-start;
     gap: var(--space-5);
 }
 
-.contact-direct-text {
-    flex: 1 1 22rem;
+.contact-form {
+    flex: 2 1 26rem;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+}
+
+.contact-form-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+}
+
+/* Each half of the name/email pair keeps a floor and then wraps, rather than
+   being squeezed until the labels no longer fit. */
+.contact-form-row .input-group {
+    flex: 1 1 14rem;
+    min-width: 0;
+}
+
+.contact-form .input-group {
     display: flex;
     flex-direction: column;
     gap: var(--space-2);
 }
 
+.contact-counter {
+    align-self: flex-end;
+    font-family: var(--mono-font);
+    font-size: var(--text-xs);
+    color: var(--dim);
+    transition: color var(--fast);
+}
+
+.contact-counter.is-near-limit {
+    color: var(--accent);
+}
+
+.contact-status {
+    margin: 0;
+    padding: var(--space-3);
+    border: 1px solid var(--stroke);
+    border-left: 3px solid var(--danger, #ff5470);
+    border-radius: var(--radius);
+    background: var(--surface);
+    font-family: var(--normal-font);
+    font-size: var(--text-sm);
+    line-height: 1.6;
+    color: var(--text);
+}
+
+.contact-status.is-success {
+    border-left-color: var(--accent);
+}
+
+.contact-form .btn {
+    align-self: flex-start;
+}
+
+.contact-direct {
+    flex: 1 1 18rem;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+}
+
 .contact-details {
     display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-5);
+    flex-direction: column;
+    gap: var(--space-4);
 }
 
 .contact-detail {
@@ -145,8 +214,31 @@
     font-size: var(--text-base);
 }
 
-@media (max-width: 640px) {
-    .contact-details {
-        gap: var(--space-3);
+.contact-detail a {
+    color: var(--text);
+    text-decoration: none;
+    /* Long addresses break rather than widen the column. */
+    overflow-wrap: anywhere;
+    transition: color var(--fast);
+}
+
+.contact-detail a:hover {
+    color: var(--accent);
+}
+
+.contact-note {
+    font-size: var(--text-sm);
+    color: var(--dim);
+}
+
+.contact-address {
+    font-style: normal;
+    line-height: 1.7;
+    color: var(--muted);
+}
+
+@media (max-width: 560px) {
+    .contact-form .btn {
+        align-self: stretch;
     }
 }

@@ -75,9 +75,19 @@
             exit;
         }
 
-        public static function fail(string $message, int $status = 400): never
+        public static function fail(string $message, int $status = 400, ?string $field = null): never
         {
-            self::json(['status' => 'error', 'error' => $message], $status);
+            $payload = ['status' => 'error', 'error' => $message];
+
+            // Naming the field lets the browser put the message underneath the
+            // input that caused it instead of at the bottom of the form, which
+            // is the difference between "something is wrong" and "this is what
+            // is wrong, here".
+            if ($field !== null) {
+                $payload['field'] = $field;
+            }
+
+            self::json($payload, $status);
         }
 
         /** 204 tells the infinite scrollers "stop asking". */
@@ -108,6 +118,24 @@
                     // standard code, and clients and proxies all understand it.
                     self::fail('Your session token was missing or stale. Reload the page and try again.', 403);
                 }
+            }
+
+            return $user;
+        }
+
+        /**
+         * A signed-in user who is also staff, or a refusal.
+         *
+         * Two separate answers on purpose. A visitor who is not signed in gets
+         * a 401, because signing in would fix it. A signed-in user who is not
+         * staff gets a 403, because it would not.
+         */
+        public static function requireAdmin(): User
+        {
+            $user = self::requireUser();
+
+            if (!$user->isAdmin()) {
+                self::fail('That area is for staff accounts only.', 403);
             }
 
             return $user;

@@ -2,6 +2,7 @@
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- 2. Drop all existing tables (Clean Slate Execution)
+DROP TABLE IF EXISTS contact_message;
 DROP TABLE IF EXISTS cart;
 DROP TABLE IF EXISTS wishlist;
 DROP TABLE IF EXISTS library;
@@ -26,9 +27,14 @@ SET FOREIGN_KEY_CHECKS = 1;
 CREATE TABLE IF NOT EXISTS user (
     id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) NOT NULL UNIQUE,
-    email VARCHAR(191) NOT NULL UNIQUE, 
-    password VARCHAR(255) NOT NULL, 
-    avatar_path VARCHAR(255) NULL
+    email VARCHAR(191) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    avatar_path VARCHAR(255) NULL,
+    -- Staff flag, for the contact inbox. Deliberately a column rather than
+    -- "user id 1 is the admin": the check then reads the same way as every
+    -- other permission in the app, and granting or revoking it is one UPDATE
+    -- instead of a code change.
+    is_admin BOOLEAN NOT NULL DEFAULT 0
 );
 
 -- Game Table (Upgraded for Developer Dashboard & Project Engine)
@@ -157,23 +163,53 @@ CREATE TABLE IF NOT EXISTS library (
     FOREIGN KEY (game_id) REFERENCES game(id) ON DELETE CASCADE
 );
 
+-- Contact Message Table (enquiries sent from the Contact page form)
+-- user_id is nullable and ON DELETE SET NULL on purpose: a guest can write to
+-- us without an account, and closing an account must not silently destroy an
+-- open enquiry thread that we still owe someone a reply on.
+CREATE TABLE IF NOT EXISTS contact_message (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NULL,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(191) NOT NULL,
+    topic ENUM("General", "Support", "Partnership", "Press") NOT NULL DEFAULT "General",
+    message TEXT NOT NULL,
+    status ENUM("New", "Read") NOT NULL DEFAULT "New",
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE SET NULL,
+    INDEX idx_contact_created (created_at),
+    INDEX idx_contact_status (status)
+);
+
 -- ==========================================
 -- 2. DATA POPULATION
 -- ==========================================
 
 -- Seed Users First (Required for Foreign Keys in Game table)
-INSERT INTO user (id, username, email, password, avatar_path) VALUES
-    (1, 'GamerGuy99', 'gamerguy@example.com', '$2y$10$dummyhash12345678901234567890', NULL),
-    (2, 'NoobMaster', 'noob@example.com', '$2y$10$dummyhash12345678901234567890', NULL),
-    (3, 'ProSniper', 'sniper@example.com', '$2y$10$dummyhash12345678901234567890', NULL),
-    (4, 'CasualPlayer', 'casual@example.com', '$2y$10$dummyhash12345678901234567890', NULL);
+--
+-- The password column stores a bcrypt hash produced by PHP's password_hash(),
+-- never the password itself - see src/models/Users.php. Every account below
+-- has the demo password  Player!23  so that a fresh install can be signed into
+-- immediately; each hash is different because bcrypt salts every one of them,
+-- which is exactly why two people with the same password do not end up with
+-- the same row.
+-- GamerGuy99 is the only account with is_admin set, so it is the one that can
+-- open the contact inbox at /inbox. Everybody else gets a 403 there.
+INSERT INTO user (id, username, email, password, avatar_path, is_admin) VALUES
+    (1, 'GamerGuy99', 'gamerguy@example.com', '$2y$12$/G/nuXSai3QxutMWhUzLTepDGzy64GCjEsBORtuPI4bcaE7NKiiaW', NULL, 1),
+    (2, 'NoobMaster', 'noob@example.com', '$2y$12$odEL8URciYjaLNF9IAq46.dyE2fMiwOgiCL9NxlYfZrVlgVvng5J6', NULL, 0),
+    (3, 'ProSniper', 'sniper@example.com', '$2y$12$NuxCxnLnTefLIjFV3cOfXu9dwvukTmhVe1CiQwBknyoKRNVdXt90C', NULL, 0),
+    (4, 'CasualPlayer', 'casual@example.com', '$2y$12$/ol9gen.oaFSNg0h3WCjleagL2qFGy3PisPe7hQUzcVpVVPMFdMH6', NULL, 0);
 
 -- Seed All 15 Games with user_id, fallback_art, and visibility mapping
 INSERT INTO game (id, user_id, title, description, developer, release_date, price, discount, image_path, fallback_art, visibility, views, downloads) VALUES
     (1, 1, 'Minecraft', 'Let''s build and dream together.', 'Mojang Studios', '2011-11-18', 0.00, 0, NULL, 'art-1', 'Public', 1250, 450),
     (2, 1, 'Left 4 Dead 2', 'Escape the zombies and survive!', 'Valve', '2009-11-17', 2.00, 0, NULL, 'art-2', 'Public', 890, 310),
     (3, 2, 'Undertale', 'A sikina accidentally fell into a pit and discovered a magical place.', 'tobyfox', '2015-09-15', 520.00, 10, NULL, 'art-3', 'Public', 2100, 800),
-    (4, 2, 'R.E.P.O', 'Acts as a robot, explore and steal abandoned places :D', 'WASD Studios', '2026-05-12', 17.00, 77, '/public/repo.jpg', 'art-4', 'Public', 450, 120),
+    -- image_path is NULL here like the rest: the seed deliberately ships no
+    -- artwork files, and every card falls back to the generated art in
+    -- fallback_art instead of a broken image.
+    (4, 2, 'R.E.P.O', 'Acts as a robot, explore and steal abandoned places :D', 'WASD Studios', '2026-05-12', 17.00, 77, NULL, 'art-4', 'Public', 450, 120),
     (5, 3, 'Stardew Valley', 'Inherit your grandfather''s farm plot and build your legacy.', 'ConcernedApe', '2016-02-26', 14.99, 0, NULL, 'art-5', 'Public', 1780, 620),
     (6, 3, 'Cyberpunk 2077', 'An open-world, action-adventure RPG set in the dark future.', 'CD PROJEKT RED', '2020-12-10', 59.99, 50, NULL, 'art-6', 'Public', 3400, 1100),
     (7, 4, 'Hollow Knight', 'Forge your own path in this award-winning action adventure.', 'Team Cherry', '2017-02-24', 14.99, 20, NULL, 'art-7', 'Public', 1560, 540),

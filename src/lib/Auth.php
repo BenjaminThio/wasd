@@ -20,6 +20,7 @@
             }
         }
 
+        /*
         public static function login(int $id): void
         {
             self::startSession();
@@ -32,8 +33,8 @@
 
             self::forgetCurrentUser();
         }
+        */
 
-        /*
         // Create the Session (Call this upon successful Sign In / Sign Up)
         public static function login(User $user): void
         {
@@ -47,12 +48,11 @@
 
             self::forgetCurrentUser();
         }
-        */
 
         public static function loginDevUser(): User
         {
             $devUser = Users::getDevUser();
-            self::login($devUser->getId());
+            self::login($devUser);
             return $devUser;
         }
 
@@ -66,7 +66,7 @@
         public static function register(string $username, string $email, string $password): User
         {
             $user = Users::create($username, $email, $password);
-            self::login($user->getId());
+            self::login($user);
             return $user;
         }
 

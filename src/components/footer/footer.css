@@ -118,7 +118,15 @@
     line-height: 1.4;
     color: var(--muted);
     text-decoration: none;
-    white-space: nowrap;
+
+    /*
+       These were nowrap, which kept the two-word links on one line and then let
+       them run past their column. "Developer dashboard" is 145px of text in a
+       107px column on a 280px screen, and the 38px it stuck out was the whole
+       reason the page scrolled sideways. Wrapping is the correct answer: the
+       column is narrow, so the link should use two lines.
+    */
+    overflow-wrap: break-word;
     transition: color var(--normal), transform var(--fast);
 }
 

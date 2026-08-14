@@ -1,0 +1,199 @@
+/* ==========================================================================
+   CONTACT INBOX (staff only)
+
+   Reads whatever the contact form wrote to contact_message. Everything here is
+   unique to this page; the card, button and empty-state styles come from the
+   shared layer in ui.css.
+   ========================================================================== */
+
+.inbox-summary {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    font-family: var(--mono-font);
+    font-size: var(--text-sm);
+    color: var(--muted);
+    letter-spacing: 0.04em;
+}
+
+.inbox-count {
+    font-weight: 700;
+    color: var(--color);
+}
+
+.inbox-count.is-unread {
+    color: var(--cyan);
+}
+
+/* ------------------------------------------------------------------ list */
+
+.inbox-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+}
+
+/*
+   The accent is set per topic and read by the stripe and the topic chip
+   below, so adding a topic is one line here rather than a new rule for every
+   piece that uses the colour.
+*/
+.inbox-card.accent-cyan    { --accent: var(--cyan);    --accent-wash: rgba(34, 228, 255, 0.16); }
+.inbox-card.accent-violet  { --accent: var(--violet);  --accent-wash: rgba(139, 92, 246, 0.18); }
+.inbox-card.accent-magenta { --accent: var(--magenta); --accent-wash: rgba(255, 45, 120, 0.16); }
+.inbox-card.accent-amber   { --accent: var(--amber);   --accent-wash: rgba(255, 209, 102, 0.16); }
+
+.inbox-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: var(--space-4);
+    /* Room for the unread stripe, so the text does not shift when one is
+       marked read and the stripe disappears. */
+    border-left: 3px solid transparent;
+    transition: border-color var(--normal), background var(--normal);
+}
+
+/* Unread messages carry the stripe. Colour is not the only signal: the NEW
+   chip in the corner says the same thing in words. */
+.inbox-card.is-unread {
+    border-left-color: var(--accent);
+    background: var(--surface-2);
+}
+
+/* ------------------------------------------------------------------ head */
+
+.inbox-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-3);
+}
+
+.inbox-from {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    /* Lets a long address wrap instead of widening the row. */
+    min-width: 0;
+}
+
+.inbox-name {
+    font-family: var(--header-font);
+    font-size: var(--text-md);
+    font-weight: 700;
+}
+
+.inbox-email {
+    font-family: var(--mono-font);
+    font-size: var(--text-sm);
+    color: var(--muted);
+    text-decoration: none;
+    overflow-wrap: anywhere;
+    transition: color var(--fast);
+}
+
+.inbox-email:hover {
+    color: var(--accent);
+}
+
+.inbox-tags {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.inbox-topic,
+.inbox-account,
+.inbox-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 8px;
+    border-radius: var(--radius-sm, 6px);
+    font-family: var(--mono-font);
+    font-size: var(--text-xs);
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+}
+
+.inbox-topic {
+    background: var(--accent-wash);
+    color: var(--accent);
+}
+
+.inbox-account {
+    background: var(--surface);
+    color: var(--muted);
+}
+
+.inbox-status {
+    background: var(--surface);
+    color: var(--dim);
+}
+
+.inbox-card.is-unread .inbox-status {
+    background: var(--accent-wash);
+    color: var(--accent);
+    font-weight: 700;
+}
+
+/* --------------------------------------------------------------- message */
+
+.inbox-message {
+    font-family: var(--normal-font);
+    font-size: var(--text-base);
+    line-height: 1.7;
+    color: var(--muted);
+    /* The message is whatever somebody typed, so a long unbroken string has to
+       wrap rather than stretch the card. */
+    overflow-wrap: anywhere;
+}
+
+/* ------------------------------------------------------------------ foot */
+
+.inbox-foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--stroke);
+}
+
+.inbox-date {
+    font-family: var(--mono-font);
+    font-size: var(--text-xs);
+    color: var(--dim);
+}
+
+.inbox-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+}
+
+/* ------------------------------------------------------------- responsive */
+
+@media (max-width: 640px) {
+    .inbox-head,
+    .inbox-foot {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    /* One row of three buttons does not fit a phone; let them share the width. */
+    .inbox-actions {
+        width: 100%;
+    }
+
+    .inbox-actions .btn {
+        flex: 1 1 auto;
+        justify-content: center;
+    }
+}

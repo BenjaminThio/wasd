@@ -31,6 +31,18 @@
         }
     }
 
+    // Only queried for staff, so an ordinary visit does not pay for a count
+    // nobody will see.
+    $navUnreadMessages = 0;
+
+    if ($navUser && $navUser->isAdmin()) {
+        try {
+            require_once __DIR__ . '/../../models/ContactMessages.php';
+            $navUnreadMessages = ContactMessages::unreadCount($navDatabase ?? null);
+        } catch (Throwable) {
+        }
+    }
+
     $navPath = '/' . trim((string)($_GET['page'] ?? ''), '/');
     $isActive = fn(string $route): string => $navPath === $route ? ' is-active' : '';
 ?>
@@ -92,6 +104,24 @@
                             <a href="<?= BASE_URL ?>/project"><?= Icon::get('plus', 16) ?> New project</a>
                             <a href="<?= BASE_URL ?>/wishlist"><?= Icon::get('heart', 16) ?> Wishlist</a>
                             <a href="<?= BASE_URL ?>/cart"><?= Icon::get('cart', 16) ?> Cart</a>
+
+                            <?php if ($navUser->isAdmin()): ?>
+                                <!-- Staff only. The page and its endpoint both check
+                                     the same flag again; hiding the link is a
+                                     convenience, not the permission. -->
+                                <div class="account-dropdown-line"></div>
+                                <a href="<?= BASE_URL ?>/inbox">
+                                    <?= Icon::get('press', 16) ?> Contact inbox
+                                    <!-- Always rendered, hidden at zero, so the inbox page
+                                         can update it through wasdSetBadge('inbox', n) the
+                                         same way the cart and wishlist counters work. A
+                                         badge that only exists when the count is non-zero
+                                         has nothing to update once it reaches zero. -->
+                                    <span class="account-badge" id="nav-inbox-count"
+                                          <?= $navUnreadMessages > 0 ? '' : 'hidden' ?>><?= $navUnreadMessages ?></span>
+                                </a>
+                            <?php endif; ?>
+
                             <div class="account-dropdown-line"></div>
                             <a class="account-danger" href="<?= BASE_URL ?>/logout" data-no-spa>
                                 <?= Icon::get('logout', 16) ?> Log out

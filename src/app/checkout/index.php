@@ -33,19 +33,19 @@
             <div class="field">
                 <label class="field-label" for="card-number">Card number</label>
                 <input type="text" id="card-number" class="field-input" placeholder="4111 1111 1111 1111"
-                       inputmode="numeric" autocomplete="cc-number">
+                       inputmode="numeric" autocomplete="cc-number" maxlength="23">
             </div>
 
             <div class="checkout-pair">
                 <div class="field">
                     <label class="field-label" for="card-expiry">Expiry</label>
                     <input type="text" id="card-expiry" class="field-input" placeholder="MM/YY"
-                           inputmode="numeric" autocomplete="cc-exp">
+                           inputmode="numeric" autocomplete="cc-exp" maxlength="5">
                 </div>
                 <div class="field">
                     <label class="field-label" for="card-cvv">CVV</label>
                     <input type="password" id="card-cvv" class="field-input" placeholder="123"
-                           inputmode="numeric" autocomplete="cc-csc">
+                           inputmode="numeric" autocomplete="cc-csc" maxlength="4">
                 </div>
             </div>
 
@@ -180,19 +180,132 @@
 
     window.goToCart = () => window.wasdNavigate(WASD.url('/cart'));
 
-    window.payNow = async function () {
-        const fields = ['card-name', 'card-number', 'card-expiry', 'card-cvv'];
-        let valid = true;
+    /* ------------------------------------------------------ card validation */
 
-        fields.forEach(id => {
+    /*
+       No card details are sent anywhere and nothing is stored, but the fields
+       are still checked properly. A form that accepts "aaaa" as a card number
+       and then reports success teaches the user nothing about what went wrong,
+       and the checks below are the ones a real payment form would run before
+       spending a round trip on a number that cannot be right.
+    */
+
+    /** Groups digits in fours as the user types, so a long number stays readable. */
+    function formatCardNumber(value) {
+        return value.replace(/\D/g, '').slice(0, 19).replace(/(.{4})/g, '$1 ').trim();
+    }
+
+    /** Inserts the slash in MM/YY once two digits are in. */
+    function formatExpiry(value) {
+        const digits = value.replace(/\D/g, '').slice(0, 4);
+        return digits.length > 2 ? digits.slice(0, 2) + '/' + digits.slice(2) : digits;
+    }
+
+    /*
+       The Luhn checksum. Every real card number satisfies it, so a typo in one
+       digit is caught here rather than by the bank. Doubling every second digit
+       from the right and subtracting 9 from anything over 9 must leave a total
+       divisible by ten.
+    */
+    function passesLuhn(number) {
+        const digits = number.replace(/\D/g, '');
+        if (digits.length < 13 || digits.length > 19) return false;
+
+        let sum = 0;
+        let double = false;
+
+        for (let i = digits.length - 1; i >= 0; i--) {
+            let digit = Number(digits[i]);
+            if (double) {
+                digit *= 2;
+                if (digit > 9) digit -= 9;
+            }
+            sum += digit;
+            double = !double;
+        }
+
+        return sum % 10 === 0;
+    }
+
+    /** True when MM/YY is a real month that has not already passed. */
+    function expiryIsValid(value) {
+        const match = /^(\d{2})\/(\d{2})$/.exec(value.trim());
+        if (!match) return false;
+
+        const month = Number(match[1]);
+        const year = 2000 + Number(match[2]);
+        if (month < 1 || month > 12) return false;
+
+        const now = new Date();
+        // The card is good until the last day of its month, so compare against
+        // the first day of the month after it.
+        return new Date(year, month) > now;
+    }
+
+    const cardNumber = document.getElementById('card-number');
+    const cardExpiry = document.getElementById('card-expiry');
+    const cardCvv = document.getElementById('card-cvv');
+
+    cardNumber.addEventListener('input', () => {
+        cardNumber.value = formatCardNumber(cardNumber.value);
+    });
+
+    cardExpiry.addEventListener('input', () => {
+        cardExpiry.value = formatExpiry(cardExpiry.value);
+    });
+
+    cardCvv.addEventListener('input', () => {
+        cardCvv.value = cardCvv.value.replace(/\D/g, '').slice(0, 4);
+    });
+
+    // Each field reports its own problem the moment the user leaves it, rather
+    // than saving up four complaints until the order button is pressed.
+    const rules = {
+        'card-name': [v => v.trim().length >= 2, 'Enter the name printed on the card.'],
+        'card-number': [passesLuhn, 'That card number is not valid. Check the digits.'],
+        'card-expiry': [expiryIsValid, 'Enter a future expiry date as MM/YY.'],
+        'card-cvv': [v => /^\d{3,4}$/.test(v.trim()), 'The CVV is the 3 or 4 digits on the card.'],
+    };
+
+    function checkField(id, quiet) {
+        const field = document.getElementById(id);
+        const [test, message] = rules[id];
+        const ok = test(field.value);
+
+        // Nothing is marked wrong while the field is still empty and untouched.
+        field.classList.toggle('is-invalid', !ok && field.value.trim() !== '');
+
+        if (!ok && !quiet && field.value.trim() !== '') WASD.toast(message, 'error');
+        return ok;
+    }
+
+    Object.keys(rules).forEach(id => {
+        document.getElementById(id).addEventListener('blur', () => checkField(id, true));
+    });
+
+    window.payNow = async function () {
+        let valid = true;
+        let firstProblem = null;
+
+        Object.keys(rules).forEach(id => {
             const field = document.getElementById(id);
-            const empty = field.value.trim() === '';
-            field.classList.toggle('is-invalid', empty);
-            if (empty) valid = false;
+
+            if (field.value.trim() === '') {
+                field.classList.add('is-invalid');
+                valid = false;
+                firstProblem = firstProblem || ['Fill in every payment detail first.', field];
+                return;
+            }
+
+            if (!checkField(id, true)) {
+                valid = false;
+                firstProblem = firstProblem || [rules[id][1], field];
+            }
         });
 
         if (!valid) {
-            WASD.toast('Fill in every payment detail first.', 'error');
+            WASD.toast(firstProblem[0], 'error');
+            firstProblem[1].focus();
             return;
         }
 

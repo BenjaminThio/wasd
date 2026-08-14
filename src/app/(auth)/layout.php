@@ -42,6 +42,20 @@
         <!-- The page's own stylesheet stays last, so the panel keeps winning. -->
         <link id="dynamic-page-style" rel="stylesheet"
               href="<?= htmlspecialchars($page->getCssUrl() ?: BASE_URL . '/src/app/blank.css') ?>">
+
+        <!--
+            Everything sign-in and sign-up share, loaded once by the shell so
+            neither page script can collide with the other's declarations when
+            the router swaps between them.
+
+            In the head, and deliberately not deferred. The page's own script is
+            inline in the body and calls WASDAuth.init() the moment it is
+            parsed, so this has to have run by then. Loaded at the end of the
+            body instead, init() threw a ReferenceError, no submit handler was
+            ever attached, and the form fell back to a native GET that put the
+            typed password in the address bar.
+        -->
+        <script src="<?= $asset('/public/js/wasd-auth.js') ?>"></script>
     </head>
     <body>
         <?php require __DIR__ . '/../../components/navbar/navbar.php' ?>

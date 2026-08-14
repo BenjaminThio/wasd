@@ -24,7 +24,12 @@
 
 .partners-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(21rem, 1fr));
+    /*
+       min() so the 21rem track can give way on a screen narrower than itself.
+       A bare minmax(21rem, 1fr) makes the column wider than the grid at 320px
+       and every card hangs 32px off the right of the page.
+    */
+    grid-template-columns: repeat(auto-fit, minmax(min(21rem, 100%), 1fr));
     gap: var(--space-4);
 }
 

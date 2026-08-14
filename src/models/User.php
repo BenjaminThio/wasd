@@ -8,11 +8,12 @@
             private string $password,
             private ?string $avatarPath,
             private array $cart = [],
-            private array $wishlist = []
+            private array $wishlist = [],
+            private bool $isAdmin = false
         ) {}
 
         // Factory method to easily create a User from a database row
-        public static function fromDatabaseRow(array $row, array $cart = [], array $wishlist = []): self 
+        public static function fromDatabaseRow(array $row, array $cart = [], array $wishlist = []): self
         {
             return new self(
                 id: $row['id'] ?? null,
@@ -21,7 +22,8 @@
                 password: $row['password'] ?? '',
                 avatarPath: $row['avatar_path'] ?? null,
                 cart: $cart,
-                wishlist: $wishlist
+                wishlist: $wishlist,
+                isAdmin: (bool)($row['is_admin'] ?? false)
             );
         }
 
@@ -31,6 +33,9 @@
         public function getEmail(): string { return $this->email; }
         public function getPassword(): string { return $this->password; }
         public function getAvatarPath(): ?string { return $this->avatarPath; }
+
+        /** Staff. Only these accounts may read the contact inbox. */
+        public function isAdmin(): bool { return $this->isAdmin; }
         
         /**
          * Only populated when a caller passes them in explicitly. Users::getById()

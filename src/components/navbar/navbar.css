@@ -273,6 +273,30 @@
     color: var(--color);
 }
 
+/* Unread count on the staff inbox link. margin-left:auto pushes it to the far
+   edge of the row, so it lines up regardless of how long the label is. */
+/* Like .nav-count above: the rule below has a display of its own, so the
+   browser's own [hidden] { display: none } loses to it without this. */
+.account-badge[hidden] {
+    display: none;
+}
+
+.account-badge {
+    margin-left: auto;
+    min-width: 1.15rem;
+    padding: 0 0.35rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    background: var(--cyan);
+    color: #06060d;
+    font-family: var(--mono-font);
+    font-size: var(--text-xs);
+    font-weight: 700;
+    line-height: 1.5;
+}
+
 .account-dropdown-line {
     height: 1px;
     background: var(--stroke);
