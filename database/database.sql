@@ -127,7 +127,15 @@ CREATE TABLE IF NOT EXISTS review (
     description TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE,
-    FOREIGN KEY (game_id) REFERENCES game(id) ON DELETE CASCADE
+    FOREIGN KEY (game_id) REFERENCES game(id) ON DELETE CASCADE,
+    -- One review per player per game. The endpoint already looks for an
+    -- existing row and edits it rather than adding a second, but that is a
+    -- check followed by a write: two submissions arriving together could both
+    -- pass the check and both insert. This constraint is what actually
+    -- guarantees the rule, and it is why a surrogate id is kept as the primary
+    -- key rather than making (user_id, game_id) the primary key: a review has
+    -- to be addressable by a single id so it can be edited and deleted.
+    CONSTRAINT uq_review_user_game UNIQUE (user_id, game_id)
 );
 
 -- Cart Table

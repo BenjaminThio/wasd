@@ -250,6 +250,27 @@
     function infiniteScroll(anchor, load) {
         if (!anchor) return { stop() {} };
 
+        /*
+           The observer starts loading this far before the anchor is actually on
+           screen, so the next batch is usually in place by the time the reader
+           gets there.
+
+           The follow-up check below MUST use the same number. An
+           IntersectionObserver only calls back when the answer changes, so if a
+           batch leaves the anchor inside this margin the observer still
+           considers it intersecting, stays quiet, and never fires again.
+           Measuring the follow-up against the bare viewport instead opened a
+           dead zone exactly one margin deep: land in it and nothing reloads,
+           however far the reader scrolls.
+
+           That is what stopped the developer dashboard at six projects. Six
+           short rows pushed the anchor a little way past the fold but still
+           inside the 300px margin, so the observer saw no change and the
+           follow-up saw nothing on screen. The store never hit it because
+           twelve cards push the anchor well clear of the margin.
+        */
+        const MARGIN = 300;
+
         let busy = false;
         let finished = false;
 
@@ -267,16 +288,17 @@
                 busy = false;
             }
 
-            // The first batch may not fill the viewport - keep going if so.
+            // Keep going while the anchor is anywhere the observer would still
+            // call intersecting, because from in there it will not call again.
             if (!finished && anchor.isConnected &&
-                anchor.getBoundingClientRect().top < window.innerHeight) {
+                anchor.getBoundingClientRect().top < window.innerHeight + MARGIN) {
                 run();
             }
         }
 
         const observer = new IntersectionObserver(entries => {
             if (entries[0].isIntersecting) run();
-        }, { rootMargin: '300px' });
+        }, { rootMargin: MARGIN + 'px' });
 
         observer.observe(anchor);
 

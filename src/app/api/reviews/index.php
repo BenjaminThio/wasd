@@ -89,8 +89,28 @@
             $database->update('review', $data, ['id' => (int)$existing['id'], 'user_id' => $user->getId()]);
             $reviewId = (int)$existing['id'];
         } else {
-            $database->insert('review', $data + ['user_id' => $user->getId(), 'game_id' => $gameId]);
-            $reviewId = $database->lastInsertId();
+            try {
+                $database->insert('review', $data + ['user_id' => $user->getId(), 'game_id' => $gameId]);
+                $reviewId = $database->lastInsertId();
+            } catch (PDOException $e) {
+                // The lookup above is a check followed by a write, so two
+                // submissions arriving together can both find nothing and both
+                // try to insert. UNIQUE (user_id, game_id) on the table is what
+                // stops the second one, and 23000 is that constraint firing.
+                // Treat it as the edit it was always meant to be.
+                if ($e->getCode() !== '23000') {
+                    throw $e;
+                }
+
+                $row = $database->query(
+                    'SELECT id FROM review WHERE user_id = ? AND game_id = ? LIMIT 1',
+                    [$user->getId(), $gameId]
+                )->fetch();
+
+                $reviewId = (int)$row['id'];
+                $database->update('review', $data, ['id' => $reviewId, 'user_id' => $user->getId()]);
+                $existing = $row;
+            }
         }
 
         Api::json([
